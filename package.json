@@ -1,0 +1,22 @@
+{
+  "name": "js-bottomsheet",
+  "version": "0.0.0",
+  "type": "module",
+  "module": "./bottomSheet.js",
+  "exports": {
+    "default": "./bottomSheet.js"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "host": "vite --host"
+  },
+  "devDependencies": {
+    "vite": "^3.1.0"
+  },
+  "dependencies": {
+    "animejs": "^3.2.1",
+    "js-bottomsheet": "^0.0.0"
+  }
+}
