@@ -28,7 +28,8 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  overscroll-behavior-y: contain;
+  overflow:hidden;
+  /* background-color: #535bf2; */
 }
 
 h1 {
@@ -69,4 +70,14 @@ button:focus-visible {
 
 div#bottomsheet-1 {
   display: none !important;
+  padding:16px;
+  /* overflow-y: scroll; */
+  height: 100%;
+  padding-top:0
+}
+
+p{
+  color: white;
+  padding-top:0;
+  margin-top:0;
 }

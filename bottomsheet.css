@@ -1,22 +1,22 @@
 .bottomsheet {
-  background-color: white;
+  background-color: black;
   width: 100%;
-  position: absolute;
+  position: fixed;
   height: 100%;
-  z-index: 400;
+  z-index: 999;
   top: 100%;
-  /* transform: translateY(100%); */
+  /* transform: translateY(-100%); */
   box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
   border-top-left-radius: 36px;
   border-top-right-radius: 36px;
   touch-action: none;
   min-height: -webkit-fill-available;
-  padding-bottom: 60px;
+  padding-bottom: 10px;
   /* padding:16px; */
   /* overflow-y: scroll; */
 }
 .modal{
-  background-color: white;
+  background-color: black;
   width: 70%;
   position: absolute;
   height: 70%;
@@ -53,4 +53,15 @@
 }
 .overlay.display{
   display: block;
+}
+
+#draggable-area{
+  padding: 30px 0;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  touch-action: none;
+  position: fixed;
+  /* background-color: black; */
 }
