@@ -73,11 +73,45 @@ div#bottomsheet-1 {
   padding:16px;
   /* overflow-y: scroll; */
   height: 100%;
-  padding-top:0
+  padding-top:0;
+  /* touch-action:none; */
 }
 
 p{
   color: white;
   padding-top:0;
   margin-top:0;
+}
+
+.flex{
+  display: flex;
+  overflow: scroll;
+  width: 100%;
+}
+
+.box{
+  min-width:200px;
+  height: 150px;
+  border-radius: 20px;
+  margin:10px;
+}
+.one{
+background-color: #ffcccc;
+}
+.two{
+background-color:#f2e6ff;
+}
+.three{
+background-color:  #e6ffe6;
+}
+.four{
+  background-color:#ccccff;
+}
+.five{
+background-color:  #ffe6cc;
+}
+input{
+  padding:10px;
+  border-radius: 10px;
+  margin: 5px;
 }

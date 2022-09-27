@@ -10,6 +10,7 @@ function BottomSheet(targetid, props) {
   <rect opacity="0.3" width="32" height="3" rx="1.5" fill="white"/>
   </svg>
   </div>`,
+    clickOutsideToClose = true,
   } = props;
   let targetBottomSheet = document.querySelector(`#${targetid}`);
   let newBottomSheet = document.querySelector(
@@ -26,7 +27,16 @@ function BottomSheet(targetid, props) {
     overlay.classList.add("overlay");
     displayOverlay(overlay);
   }
-
+  if (clickOutsideToClose) {
+    // document.body.addEventListener("click", (e) => {
+    //   console.log("close");
+    //   closeBottomSheet(newBottomSheet, overlay, isDisplayOverlay);
+    // });
+    // newBottomSheet?.addEventListener("click", (e) => {
+    //   console.log("closedkk");
+    //   e.stopPropagation();
+    // });
+  }
   document.body.appendChild(overlay);
 
   if (targetBottomSheet)
@@ -61,7 +71,17 @@ function createBottomSheet(
   const newBottomSheet = document.createElement("div");
   let currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
 
+  // document?.body?.addEventListener("click", (e) => {
+  //   if (e.target.tagName.toLowerCase() === "input") {
+  //     e.target.scrollIntoView({
+  //       behavior: "smooth",
+  //       block: "start",
+  //       inline: "start",
+  //     });
+  //   }
+  // });
   let lastSnapPoint = +snapPoints[snapPoints.length - 1].replace("%", "");
+  let firstSnapPoint = +snapPoints[0].replace("%", "");
   newBottomSheet.id = `bottomsheet-${targetBottomSheet.id}`;
   window.addEventListener("resize", () => {
     window.innerWidth < minWidthForModal
@@ -82,24 +102,27 @@ function createBottomSheet(
 
   newBottomSheet.style.overflow = "scroll";
 
-  handleDragGesture(
-    newBottomSheet,
-    currentSnapPoint,
-    lastSnapPoint,
-    snapPoints,
-    newBottomSheet,
-    targetBottomSheet,
-    minWidthForModal,
-    overlay,
-    isDisplayOverlay
-  );
-
   setTimeout(() => {
     document.querySelector(
       `#${newBottomSheet.id} #${targetBottomSheet.id}`
     ).style.marginTop = `${
       document.querySelector("#draggable-area").clientHeight
     }px`;
+    let innerScrollableContent = document.querySelector(
+      `#${newBottomSheet.id} #${targetBottomSheet.id}`
+    );
+    handleDragGesture(
+      innerScrollableContent,
+      currentSnapPoint,
+      lastSnapPoint,
+      snapPoints,
+      newBottomSheet,
+      targetBottomSheet,
+      minWidthForModal,
+      overlay,
+      isDisplayOverlay,
+      firstSnapPoint
+    );
 
     handleDragGesture(
       document.querySelector(`#draggable-area`),
@@ -110,7 +133,8 @@ function createBottomSheet(
       targetBottomSheet,
       minWidthForModal,
       overlay,
-      isDisplayOverlay
+      isDisplayOverlay,
+      firstSnapPoint
     );
   }, 10);
 
@@ -183,30 +207,44 @@ function handleDragGesture(
   targetBottomSheet,
   minWidthForModal,
   overlay,
-  isDisplayOverlay
+  isDisplayOverlay,
+  firstSnapPoint
 ) {
   const gesture = new Gesture(
     draggableTarget,
     {
-      onDrag: ({ active, movement: [mx, my], cancel, velocity: [vx, vy] }) => {
-        let minSnapPoint = 0;
-        let maxSnapPoint = Infinity;
-        currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
+      onDrag: ({
+        active,
+        movement: [mx, my],
+        cancel,
+        velocity: [vx, vy],
+        offset,
+      }) => {
         let innerScrollableContent = document.querySelector(
           `#${newBottomSheet.id} #${targetBottomSheet.id}`
-        );
-        if (window.innerWidth < minWidthForModal) {
-          // if(active){
+        ); // if (
+        //   -currentSnapPoint === lastSnapPoint &&
+        //   draggableTarget !== document.querySelector(`#draggable-area`)
+        // ) {
+        //   innerScrollableContent.style.overflow = "scroll";
+        // }
+        // else {
 
-          // }
+        currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
+
+        if (window.innerWidth < minWidthForModal) {
           if (my > 0) {
+            console.log(my);
             let type;
             if (
               innerScrollableContent.scrollTop !== 0 &&
-              -currentSnapPoint === lastSnapPoint &&
+              lastSetSnapPoint === lastSnapPoint &&
               draggableTarget !== document.querySelector(`#draggable-area`)
             ) {
               innerScrollableContent.style.overflow = "scroll";
+              innerScrollableContent.click();
+              newBottomSheet.click();
+              targetBottomSheet.click();
             } else {
               newBottomSheet.style.overflow = "hidden";
               innerScrollableContent.style.overflow = "hidden";
@@ -215,13 +253,12 @@ function handleDragGesture(
                 snapPoints,
                 newBottomSheet,
                 currentSnapPoint,
-                minSnapPoint,
-                null,
                 active,
                 lastSnapPoint,
                 type,
                 my,
-                vy
+                vy,
+                offset
               );
               if (-currentSnapPoint <= 0 && isDisplayOverlay)
                 hideOverlay(overlay);
@@ -233,26 +270,31 @@ function handleDragGesture(
               `#${newBottomSheet.id} #${targetBottomSheet.id}`
             ).style.overflow = "hidden";
 
-            if (-currentSnapPoint >= lastSnapPoint) {
+            if (
+              lastSetSnapPoint >= lastSnapPoint &&
+              innerScrollableContent.scrollTop === 0
+            ) {
               innerScrollableContent.style.overflow = "scroll";
+              targetBottomSheet.click();
+              innerScrollableContent.click();
+              newBottomSheet.click();
               innerScrollableContent.style.height = `${lastSnapPoint - 10}%`;
             } else {
               newBottomSheet.style.overflow = "hidden";
               innerScrollableContent.style.overflow = "hidden";
-            }
-            handleSnapPoints(
-              snapPoints,
-              newBottomSheet,
-              currentSnapPoint,
-              null,
-              maxSnapPoint,
-              active,
-              lastSnapPoint,
-              type,
-              my,
-              vy
-            );
 
+              handleSnapPoints(
+                snapPoints,
+                newBottomSheet,
+                currentSnapPoint,
+                active,
+                lastSnapPoint,
+                type,
+                my,
+                vy,
+                offset
+              );
+            }
             displayOverlay(overlay);
           }
         }
@@ -261,7 +303,18 @@ function handleDragGesture(
         document.body.style.overflow = "hidden";
       },
       onDragEnd: (state) => {
-        if (+currentSnapPoint >= -10 && isDisplayOverlay) hideOverlay(overlay);
+        let innerScrollableContent = document.querySelector(
+          `#${newBottomSheet.id} #${targetBottomSheet.id}`
+        );
+        // currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
+        if (+lastSetSnapPoint >= -10 && isDisplayOverlay) hideOverlay(overlay);
+
+        if (lastSetSnapPoint >= lastSnapPoint) {
+          innerScrollableContent.style.overflow = "scroll";
+          innerScrollableContent.focus();
+          newBottomSheet.focus();
+          targetBottomSheet.focus();
+        }
       },
     },
     {
@@ -274,18 +327,19 @@ function handleDragGesture(
     }
   );
 }
+
 function handleSnapPoints(
   snapPoints,
   newBottomSheet,
   currentSnapPoint,
-  minSnapPoint,
-  maxSnapPoint,
   active,
   lastSnapPoint,
   type,
   my,
   vy
 ) {
+  let minSnapPoint = 0;
+  let maxSnapPoint = Infinity;
   snapPoints.forEach((element) => {
     type = typeof element;
     let elem =
@@ -297,7 +351,7 @@ function handleSnapPoints(
         : +lastSetSnapPoint.replace("%", "");
 
     if (!active) {
-      if (maxSnapPoint === null) {
+      if (my > 0) {
         if (elem < last && elem > minSnapPoint) {
           minSnapPoint = elem;
         }
@@ -308,14 +362,13 @@ function handleSnapPoints(
       }
     }
   });
-
-  if (maxSnapPoint === null) {
+  if (my > 0) {
     moveBottomSheet(
       newBottomSheet,
       active
         ? +currentSnapPoint + my / 100
         : `-${minSnapPoint}${type === "number" ? "px " : "%"}`,
-      active ? "easeOutElastic" : `spring(1, 85, 13, ${vy})`
+      `spring(1, 85, 13, ${vy})`
     );
 
     if (!active) lastSetSnapPoint = minSnapPoint;
@@ -323,11 +376,11 @@ function handleSnapPoints(
     moveBottomSheet(
       newBottomSheet,
       active
-        ? -currentSnapPoint + my / 10 > lastSnapPoint - 30
+        ? -currentSnapPoint + my / 30 > lastSnapPoint - 30
           ? `-${lastSnapPoint}%`
           : Math.round(+currentSnapPoint + my / 30)
         : `-${maxSnapPoint}${type === "number" ? "px " : "%"}`,
-      active ? "easeOutElastic" : `spring(1, 85, 13, ${vy})`
+      `spring(1, 85, 13, ${vy})`
     );
     if (!active) lastSetSnapPoint = maxSnapPoint;
   }
