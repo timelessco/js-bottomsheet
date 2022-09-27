@@ -145,8 +145,9 @@ function openBottomSheet(
     targets: targetBottomSheet,
     translateY: `-${snapPoints[0]}`,
     easing: "spring(1, 85, 13, 3)",
+    duration: 0,
   });
-  lastSetSnapPoint = snapPoints[0];
+  lastSetSnapPoint = snapPoints[0].replace("%", "");
 }
 
 function closeBottomSheet(targetBottomSheet, overlay, isDisplayOverlay) {
@@ -236,7 +237,7 @@ function handleDragGesture(
             document.querySelector(
               `#${newBottomSheet.id} #${targetBottomSheet.id}`
             ).style.overflow = "hidden";
-
+            console.log("yhis");
             if (-currentSnapPoint >= lastSnapPoint) {
               innerScrollableContent.style.overflow = "scroll";
               innerScrollableContent.style.height = `${lastSnapPoint - 10}%`;
@@ -244,20 +245,20 @@ function handleDragGesture(
             } else {
               newBottomSheet.style.overflow = "hidden";
               innerScrollableContent.style.overflow = "hidden";
-            }
-            handleSnapPoints(
-              snapPoints,
-              newBottomSheet,
-              currentSnapPoint,
-              null,
-              maxSnapPoint,
-              active,
-              lastSnapPoint,
-              type,
-              my,
-              vy
-            );
 
+              handleSnapPoints(
+                snapPoints,
+                newBottomSheet,
+                currentSnapPoint,
+                null,
+                maxSnapPoint,
+                active,
+                lastSnapPoint,
+                type,
+                my,
+                vy
+              );
+            }
             displayOverlay(overlay);
           }
         }
