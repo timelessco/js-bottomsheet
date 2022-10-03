@@ -6,10 +6,7 @@ function BottomSheet(targetid, props) {
     snapPoints,
     isDisplayOverlay = true,
     minWidthForModal = 500,
-    draggableArea = `<div id="draggable-area"><svg width="32" height="3" viewBox="0 0 32 3" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect opacity="0.3" width="32" height="3" rx="1.5" fill="white"/>
-  </svg>
-  </div>`,
+    draggableArea = ``,
   } = props;
   let targetBottomSheet = document.querySelector(`#${targetid}`);
   let newBottomSheet = document.querySelector(
@@ -28,6 +25,19 @@ function BottomSheet(targetid, props) {
   }
 
   document.body.appendChild(overlay);
+
+  // document.body.addEventListener("click", (e) => {
+  //   closeBottomSheet(newBottomSheet, overlay, isDisplayOverlay);
+  // });
+
+  // newBottomSheet?.addEventListener("click", (e) => {
+  //   console.log("click");
+  //   e.preventDefault();
+  // });
+
+  // document.querySelectorAll("button").forEach((i) => {
+  //  i.
+  // });
 
   if (targetBottomSheet)
     if (!newBottomSheet)
@@ -86,12 +96,18 @@ function createBottomSheet(
     document.querySelector(
       `#${newBottomSheet.id} #${targetBottomSheet.id}`
     ).style.marginTop = `${
-      document.querySelector("#draggable-area").clientHeight
+      document.querySelector("#draggable-area")?.clientHeight
     }px`;
     let innerScrollableContent = document.querySelector(
       `#${newBottomSheet.id} #${targetBottomSheet.id}`
     );
-
+    // document.body.addEventListener("click", (e) => {
+    //   if (e.target.tagName.toLowerCase() === "input") {
+    //     moveBottomSheet(newBottomSheet, "-100%", `spring(1, 85, 15, 3)`);
+    //     e.preventDefault();
+    //   } else {
+    //   }
+    // });
     handleDragGesture(
       innerScrollableContent,
       currentSnapPoint,
@@ -123,11 +139,12 @@ function createBottomSheet(
     newBottomSheet.appendChild(targetBottomSheet.cloneNode(true));
   document.body.appendChild(newBottomSheet);
 }
-function moveBottomSheet(targetBottomSheet, translateY, ease) {
+function moveBottomSheet(targetBottomSheet, translateY, ease, duration) {
   anime({
     targets: targetBottomSheet,
     translateY: translateY,
     easing: ease,
+    duration,
   });
 }
 let lastSetSnapPoint;
@@ -144,7 +161,7 @@ function openBottomSheet(
   anime({
     targets: targetBottomSheet,
     translateY: `-${snapPoints[0]}`,
-    easing: "spring(1, 85, 13, 3)",
+    easing: "spring(1, 250, 35, 3)",
     duration: 0,
   });
   lastSetSnapPoint = snapPoints[0].replace("%", "");
@@ -156,7 +173,7 @@ function closeBottomSheet(targetBottomSheet, overlay, isDisplayOverlay) {
   anime({
     targets: targetBottomSheet,
     translateY: `10%`,
-    easing: "spring(1, 85, 13, 3)",
+    easing: "spring(1, 250, 35, 3)",
   });
   lastSetSnapPoint = "10%";
 }
@@ -192,7 +209,15 @@ function handleDragGesture(
   const gesture = new Gesture(
     draggableTarget,
     {
-      onDrag: ({ active, movement: [mx, my], cancel, velocity: [vx, vy] }) => {
+      onDrag: ({
+        active,
+        movement: [mx, my],
+        cancel,
+        velocity: [vx, vy],
+        xy,
+        offset,
+        distance: [dx, dy],
+      }) => {
         let minSnapPoint = 0;
         let maxSnapPoint = Infinity;
         currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
@@ -226,7 +251,11 @@ function handleDragGesture(
                 lastSnapPoint,
                 type,
                 my,
-                vy
+                vy,
+                xy,
+                offset,
+                dy,
+                draggableTarget
               );
               if (-currentSnapPoint <= 0 && isDisplayOverlay)
                 hideOverlay(overlay);
@@ -237,7 +266,6 @@ function handleDragGesture(
             document.querySelector(
               `#${newBottomSheet.id} #${targetBottomSheet.id}`
             ).style.overflow = "hidden";
-            console.log("yhis");
             if (-currentSnapPoint >= lastSnapPoint) {
               innerScrollableContent.style.overflow = "scroll";
               innerScrollableContent.style.height = `${lastSnapPoint - 10}%`;
@@ -256,7 +284,11 @@ function handleDragGesture(
                 lastSnapPoint,
                 type,
                 my,
-                vy
+                vy,
+                xy,
+                offset,
+                dy,
+                draggableTarget
               );
             }
             displayOverlay(overlay);
@@ -284,7 +316,7 @@ function handleDragGesture(
         filterTaps: true,
         rubberband: true,
         axis: "y",
-        bounds: { top: -100 },
+        // bounds: { top: -100 },
       },
     }
   );
@@ -299,52 +331,168 @@ function handleSnapPoints(
   lastSnapPoint,
   type,
   my,
-  vy
+  vy,
+  xy,
+  offset,
+  dy,
+  draggableTarget
 ) {
+  let convertXy = ((window.screen.height - xy[1]) / window.screen.height) * 100;
+
+  if (maxSnapPoint === null) {
+    if (active) {
+      moveBottomSheet(
+        newBottomSheet,
+        convertXy < 0 ? 0 : -convertXy,
+        `linear`,
+        30
+      );
+    }
+    if (!active) {
+      translateToPreviousSnapPoint(
+        snapPoints,
+        convertXy,
+        newBottomSheet,
+        vy,
+        lastSnapPoint
+      );
+    }
+    // } else {
+    //   translateToPreviousSnapPoint(snapPoints, convertXy, newBottomSheet, vy);
+    // }
+  } else {
+    if (active) {
+      moveBottomSheet(
+        newBottomSheet,
+        convertXy > 100 ? -100 : -convertXy,
+        `linear`,
+        30
+      );
+    }
+
+    if (!active) {
+      translateToNextSnapPoint(
+        snapPoints,
+        convertXy,
+        newBottomSheet,
+        vy,
+        lastSnapPoint,
+        false
+      );
+    }
+    //   } else {
+    //     translateToNextSnapPoint(
+    //       snapPoints,
+    //       convertXy,
+    //       newBottomSheet,
+    //       vy,
+    //       false
+    //     );
+    //   }
+  }
+}
+
+function translateToNextSnapPoint(
+  snapPoints,
+  convertXy,
+  newBottomSheet,
+  vy,
+  lastSnapPoint,
+  snappable
+) {
+  let maxSnapPoint = Infinity;
   snapPoints.forEach((element) => {
-    type = typeof element;
     let elem =
       typeof element === "number" ? element : +element.replace("%", "");
 
-    let last =
-      typeof lastSetSnapPoint === "number"
-        ? lastSetSnapPoint
-        : +lastSetSnapPoint.replace("%", "");
-
-    if (!active) {
-      if (maxSnapPoint === null) {
-        if (elem < last && elem > minSnapPoint) {
-          minSnapPoint = elem;
-        }
-      } else {
-        if (elem > last && elem < maxSnapPoint) {
-          maxSnapPoint = elem;
-        }
-      }
+    if (elem > convertXy && elem < maxSnapPoint) {
+      maxSnapPoint = elem;
     }
   });
+  if (maxSnapPoint !== Infinity) {
+    if (snappable) {
+      moveBottomSheet(
+        newBottomSheet,
+        `-${maxSnapPoint}`,
+        maxSnapPoint === lastSnapPoint
+          ? `spring(1, 85, 15, ${vy})`
+          : `spring(1, 85, 35, ${vy})`,
+        1
+      );
+      lastSetSnapPoint = maxSnapPoint;
+    } else {
+      if (vy > 0.5) {
+        moveBottomSheet(
+          newBottomSheet,
+          `-${maxSnapPoint}`,
+          maxSnapPoint === lastSnapPoint
+            ? `spring(1, 85, 15, ${vy})`
+            : `spring(1, 85, 35, ${vy})`,
+          1
+        );
+        lastSetSnapPoint = maxSnapPoint;
+      } else {
+        translateToPreviousSnapPoint(
+          snapPoints,
+          convertXy,
+          newBottomSheet,
+          vy,
+          lastSnapPoint,
+          true
+        );
+      }
+    }
+  }
+}
+function translateToPreviousSnapPoint(
+  snapPoints,
+  convertXy,
+  newBottomSheet,
+  vy,
+  lastSnapPoint,
+  snappable
+) {
+  let minSnapPoint = 0;
+  snapPoints.forEach((element) => {
+    let elem =
+      typeof element === "number" ? element : +element.replace("%", "");
 
-  if (maxSnapPoint === null) {
+    if (elem < convertXy && elem > minSnapPoint) {
+      minSnapPoint = elem;
+    }
+  });
+  // if (minSnapPoint !== 0) {
+  if (snappable) {
     moveBottomSheet(
       newBottomSheet,
-      active
-        ? +currentSnapPoint + my / 100
-        : `-${minSnapPoint}${type === "number" ? "px " : "%"}`,
-      active ? "easeOutElastic" : `spring(1, 85, 13, ${vy})`
+      `-${minSnapPoint}`,
+      minSnapPoint === lastSnapPoint
+        ? `spring(1, 85, 15, ${vy})`
+        : `spring(1, 85, 35, ${vy})`,
+      1
     );
-
-    if (!active) lastSetSnapPoint = minSnapPoint;
+    lastSetSnapPoint = minSnapPoint;
   } else {
-    moveBottomSheet(
-      newBottomSheet,
-      active
-        ? -currentSnapPoint + my / 10 > lastSnapPoint - 30
-          ? `-${lastSnapPoint}%`
-          : Math.round(+currentSnapPoint + my / 30)
-        : `-${maxSnapPoint}${type === "number" ? "px " : "%"}`,
-      active ? "easeOutElastic" : `spring(1, 85, 13, ${vy})`
-    );
-    if (!active) lastSetSnapPoint = maxSnapPoint;
+    if (vy > 0.5) {
+      moveBottomSheet(
+        newBottomSheet,
+        `-${minSnapPoint}`,
+        minSnapPoint === lastSnapPoint
+          ? `spring(1, 85, 15, ${vy})`
+          : `spring(1, 85, 35, ${vy})`,
+        1
+      );
+      lastSetSnapPoint = minSnapPoint;
+    } else {
+      translateToNextSnapPoint(
+        snapPoints,
+        convertXy,
+        newBottomSheet,
+        vy,
+        lastSnapPoint,
+        true
+      );
+    }
   }
 }
 export default BottomSheet;

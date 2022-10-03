@@ -12,6 +12,7 @@
   touch-action: none;
   min-height: -webkit-fill-available;
   padding-bottom: 10px;
+  will-change: transform;
   /* padding:16px; */
   /* overflow-y: scroll; */
 }
