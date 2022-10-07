@@ -161,7 +161,7 @@ function openBottomSheet(
   anime({
     targets: targetBottomSheet,
     translateY: `-${snapPoints[0]}`,
-    easing: "spring(1, 250, 35, 3)",
+    easing: "spring(1, 85, 45, 3)",
     duration: 0,
   });
   lastSetSnapPoint = snapPoints[0].replace("%", "");
@@ -173,7 +173,7 @@ function closeBottomSheet(targetBottomSheet, overlay, isDisplayOverlay) {
   anime({
     targets: targetBottomSheet,
     translateY: `10%`,
-    easing: "spring(1, 250, 35, 3)",
+    easing: "spring(1, 85, 45, 3)",
   });
   lastSetSnapPoint = "10%";
 }
@@ -224,15 +224,17 @@ function handleDragGesture(
         let innerScrollableContent = document.querySelector(
           `#${newBottomSheet.id} #${targetBottomSheet.id}`
         );
+
         if (window.innerWidth < minWidthForModal) {
           // if(active){
 
           // }
           if (my > 0) {
             let type;
+
             if (
-              innerScrollableContent.scrollTop !== 0 &&
-              -currentSnapPoint === lastSnapPoint &&
+              innerScrollableContent.scrollTop >= 1 &&
+              -currentSnapPoint >= lastSnapPoint - 10 &&
               draggableTarget !== document.querySelector(`#draggable-area`)
             ) {
               innerScrollableContent.style.overflow = "scroll";
@@ -343,7 +345,13 @@ function handleSnapPoints(
     if (active) {
       moveBottomSheet(
         newBottomSheet,
-        convertXy < 0 ? 0 : -convertXy,
+        draggableTarget === document.querySelector(`#draggable-area`)
+          ? convertXy < 0
+            ? 0
+            : -convertXy
+          : xy[1] / 50 + convertXy < 0
+          ? 0
+          : -xy[1] / 50 - convertXy,
         `linear`,
         30
       );
@@ -351,7 +359,9 @@ function handleSnapPoints(
     if (!active) {
       translateToPreviousSnapPoint(
         snapPoints,
-        convertXy,
+        draggableTarget === document.querySelector(`#draggable-area`)
+          ? convertXy
+          : xy[1] / 50 + convertXy,
         newBottomSheet,
         vy,
         lastSnapPoint
@@ -364,16 +374,23 @@ function handleSnapPoints(
     if (active) {
       moveBottomSheet(
         newBottomSheet,
-        convertXy > 100 ? -100 : -convertXy,
+        draggableTarget === document.querySelector(`#draggable-area`)
+          ? convertXy > 100
+            ? -100
+            : -convertXy
+          : xy[1] / 50 + convertXy > 100
+          ? 100
+          : -xy[1] / 50 - convertXy,
         `linear`,
         30
       );
     }
-
     if (!active) {
       translateToNextSnapPoint(
         snapPoints,
-        convertXy,
+        draggableTarget === document.querySelector(`#draggable-area`)
+          ? convertXy
+          : xy[1] / 50 + convertXy,
         newBottomSheet,
         vy,
         lastSnapPoint,
@@ -414,20 +431,16 @@ function translateToNextSnapPoint(
       moveBottomSheet(
         newBottomSheet,
         `-${maxSnapPoint}`,
-        maxSnapPoint === lastSnapPoint
-          ? `spring(1, 85, 15, ${vy})`
-          : `spring(1, 85, 35, ${vy})`,
+        `spring(1, 85, 14 ${vy})`,
         1
       );
       lastSetSnapPoint = maxSnapPoint;
     } else {
-      if (vy > 0.5) {
+      if (vy > 1) {
         moveBottomSheet(
           newBottomSheet,
           `-${maxSnapPoint}`,
-          maxSnapPoint === lastSnapPoint
-            ? `spring(1, 85, 15, ${vy})`
-            : `spring(1, 85, 35, ${vy})`,
+          `spring(1, 85, 14, ${vy})`,
           1
         );
         lastSetSnapPoint = maxSnapPoint;
@@ -466,20 +479,17 @@ function translateToPreviousSnapPoint(
     moveBottomSheet(
       newBottomSheet,
       `-${minSnapPoint}`,
-      minSnapPoint === lastSnapPoint
-        ? `spring(1, 85, 15, ${vy})`
-        : `spring(1, 85, 35, ${vy})`,
+      `spring(1, 85, 45, ${vy})`,
       1
     );
     lastSetSnapPoint = minSnapPoint;
   } else {
-    if (vy > 0.5) {
+    console.log(vy, "vy");
+    if (vy > 1) {
       moveBottomSheet(
         newBottomSheet,
         `-${minSnapPoint}`,
-        minSnapPoint === lastSnapPoint
-          ? `spring(1, 85, 15, ${vy})`
-          : `spring(1, 85, 35, ${vy})`,
+        `spring(1, 85, 45, ${vy})`,
         1
       );
       lastSetSnapPoint = minSnapPoint;

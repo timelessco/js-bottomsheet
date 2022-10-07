@@ -24,14 +24,18 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+ 
   height: 100vh;
-  overflow:hidden;
+  /* overflow:scroll; */
   /* background-color: #535bf2; */
 }
 
+.scorll{
+  padding: 14px;
+}
+.scorll div{
+padding-top: 5px;
+}
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
