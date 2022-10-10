@@ -26,6 +26,7 @@ body {
   place-items: center;
  
   height: 100vh;
+  min-width: 100%;
   /* overflow:scroll; */
   /* background-color: #535bf2; */
 }
