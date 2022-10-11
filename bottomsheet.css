@@ -14,6 +14,7 @@
   min-height: -webkit-fill-available;
   padding-bottom: 10px;
   will-change: transform;
+  pointer-events:auto
   /* padding:16px; */
   /* overflow-y: scroll; */
 }

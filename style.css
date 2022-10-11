@@ -73,8 +73,8 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-div#bottomsheet-1 {
-  display: none !important;
+div#bottomsheet-1, div#bottomsheet-2, #bottomsheet-3 {
+  display: none ;
   padding:16px;
   /* overflow-y: scroll; */
   height: 100%;
@@ -121,4 +121,15 @@ input{
   padding:10px;
   border-radius: 10px;
   margin: 5px;
+}
+#bottomsheet-bottomsheet-2{
+  background-color: #2D3748;
+}
+
+#target-2{
+  background-color: #ffe6cc;
+  color:black
+}
+#bottomsheet-bottomsheet-3{
+  background-color: #2c2152;
 }

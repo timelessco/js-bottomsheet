@@ -7,6 +7,7 @@ function BottomSheet(targetid, props) {
     isDisplayOverlay = true,
     minWidthForModal = 500,
     draggableArea = ``,
+    onOpen = () => {},
   } = props;
   let targetBottomSheet = document.querySelector(`#${targetid}`);
   let newBottomSheet = document.querySelector(
@@ -46,7 +47,8 @@ function BottomSheet(targetid, props) {
         overlay,
         isDisplayOverlay,
         minWidthForModal,
-        draggableArea
+        draggableArea,
+        onOpen
       );
     else
       lastSetSnapPoint < window.innerHeight
@@ -55,7 +57,8 @@ function BottomSheet(targetid, props) {
             newBottomSheet,
             snapPoints,
             overlay,
-            isDisplayOverlay
+            isDisplayOverlay,
+            onOpen
           );
 }
 
@@ -65,7 +68,8 @@ function createBottomSheet(
   overlay,
   isDisplayOverlay,
   minWidthForModal,
-  draggableArea
+  draggableArea,
+  onOpen
 ) {
   const newBottomSheet = document.createElement("div");
   let currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
@@ -87,7 +91,13 @@ function createBottomSheet(
 
   newBottomSheet.insertAdjacentHTML("beforeend", draggableArea);
 
-  openBottomSheet(newBottomSheet, snapPoints, overlay, isDisplayOverlay);
+  openBottomSheet(
+    newBottomSheet,
+    snapPoints,
+    overlay,
+    isDisplayOverlay,
+    onOpen
+  );
 
   newBottomSheet.style.overflow = "scroll";
 
@@ -100,13 +110,6 @@ function createBottomSheet(
     let innerScrollableContent = document.querySelector(
       `#${newBottomSheet.id} #${targetBottomSheet.id}`
     );
-    // document.body.addEventListener("click", (e) => {
-    //   if (e.target.tagName.toLowerCase() === "input") {
-    //     moveBottomSheet(newBottomSheet, "-100%", `spring(1, 85, 15, 3)`);
-    //     e.preventDefault();
-    //   } else {
-    //   }
-    // });
     handleDragGesture(
       newBottomSheet,
       currentSnapPoint,
@@ -118,25 +121,20 @@ function createBottomSheet(
       overlay,
       isDisplayOverlay
     );
-
-    // handleDragGesture(
-    //   document.querySelector(`#draggable-area`),
-    //   currentSnapPoint,
-    //   lastSnapPoint,
-    //   snapPoints,
-    //   newBottomSheet,
-    //   targetBottomSheet,
-    //   minWidthForModal,
-    //   overlay,
-    //   isDisplayOverlay
-    // );
   }, 10);
 
   newBottomSheet.style.overflow = "scroll";
 
-  if (targetBottomSheet && targetBottomSheet.cloneNode(true))
+  if (targetBottomSheet && targetBottomSheet.cloneNode(true)) {
     newBottomSheet.appendChild(targetBottomSheet.cloneNode(true));
+    targetBottomSheet.remove();
+  }
   document.body.appendChild(newBottomSheet);
+  if (document.querySelector(`.bottomsheet #${targetBottomSheet.id}`)) {
+    document.querySelector(
+      `.bottomsheet #${targetBottomSheet.id}`
+    ).style.display = "block";
+  }
 }
 function moveBottomSheet(targetBottomSheet, top, ease, duration) {
   anime({
@@ -152,7 +150,8 @@ function openBottomSheet(
   targetBottomSheet,
   snapPoints,
   overlay,
-  isDisplayOverlay
+  isDisplayOverlay,
+  onOpen
 ) {
   document.body.style.overflow = "hidden";
 
@@ -179,6 +178,10 @@ function openBottomSheet(
 
   lastSetSnapPoint =
     window.innerHeight - convertToPx(snapPoints[0].replace("%", ""));
+  console.log("opensheet");
+  setTimeout(() => {
+    onOpen();
+  }, 10);
 }
 
 function closeBottomSheet(targetBottomSheet, overlay, isDisplayOverlay) {
@@ -229,6 +232,7 @@ function handleDragGesture(
         offset,
         distance: [dx, dy],
         target,
+        tap,
       }) => {
         let minSnapPoint = 0;
         let maxSnapPoint = Infinity;
@@ -236,6 +240,11 @@ function handleDragGesture(
         let innerScrollableContent = document.querySelector(
           `#${newBottomSheet.id} #${targetBottomSheet.id}`
         );
+        if (tap) {
+          if (target && target.getAttribute("data-bottomsheet-id")) {
+            // console.log(target, "target");
+          }
+        }
         if (window.innerWidth < minWidthForModal) {
           if (my > 0) {
             let type;
@@ -267,7 +276,7 @@ function handleDragGesture(
             } else {
               if (
                 innerScrollableContent.scrollTop >= 1 &&
-                currentSnapPoint <= 100 &&
+                currentSnapPoint <= convertToPx(100 - lastSnapPoint) &&
                 target !== document.querySelector(`#draggable-area`)
               ) {
                 innerScrollableContent.style.overflow = "scroll";
@@ -304,9 +313,12 @@ function handleDragGesture(
               `#${newBottomSheet.id} #${targetBottomSheet.id}`
             ).style.overflow = "hidden";
 
-            if (currentSnapPoint <= 10) {
+            if (currentSnapPoint <= convertToPx(100 - lastSnapPoint)) {
+              console.log("inside");
               innerScrollableContent.style.overflow = "scroll";
-              innerScrollableContent.style.height = `${lastSnapPoint - 10}%`;
+              innerScrollableContent.style.height = `${convertToPx(
+                lastSnapPoint - 10
+              )}px`;
               // innerScrollableContent.click();
             } else {
               newBottomSheet.style.overflow = "hidden";
@@ -345,13 +357,18 @@ function handleDragGesture(
         // currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
         if (+lastSetSnapPoint >= -10 && isDisplayOverlay) hideOverlay(overlay);
         currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
-
-        if ((currentSnapPoint <= 100 || lastSetSnapPoint === 0) && my < 0) {
+        console.log(currentSnapPoint, lastSnapPoint);
+        if (
+          (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
+            lastSetSnapPoint === 0) &&
+          my < 0
+        ) {
           innerScrollableContent.style.overflow = "scroll";
           innerScrollableContent.click();
         }
         if (
-          (currentSnapPoint <= 100 || lastSetSnapPoint === 0) &&
+          (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
+            lastSetSnapPoint === 0) &&
           my > 0 &&
           innerScrollableContent.offsetTop === 0
         ) {
@@ -366,6 +383,7 @@ function handleDragGesture(
         filterTaps: true,
         rubberband: true,
         axis: "y",
+        preventDefault: false,
       },
     }
   );
@@ -373,6 +391,7 @@ function handleDragGesture(
 let oldOffset;
 let snapped = false;
 let dragFlag = 0;
+
 function handleSnapPoints(
   snapPoints,
   newBottomSheet,
@@ -392,9 +411,6 @@ function handleSnapPoints(
 ) {
   let convertXy = ((window.screen.height - xy[1]) / window.screen.height) * 100;
 
-  // if (dragFlag === 0) {
-  //   offset[1] = 650;
-  // }
   let actualOffset = snapped ? oldOffset : offset[1];
 
   if (maxSnapPoint === null) {
@@ -470,16 +486,6 @@ function handleSnapPoints(
         : "";
       snapped = true;
     }
-
-    // } else {
-    //   translateToNextSnapPoint(
-    //     snapPoints,
-    //     convertXy,
-    //     newBottomSheet,
-    //     vy,
-    //     false
-    //   );
-    // }
   }
 }
 
@@ -595,5 +601,3 @@ function convertToPx(percentage) {
   return Math.round((window.innerHeight * percentage) / 100);
 }
 export default BottomSheet;
-
-// export default BottomSheet;
