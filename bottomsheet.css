@@ -75,11 +75,26 @@
 
 #modal-close{
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-end;
   position: sticky;
   top:0;
   padding:4px;
+}
+#side-left{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: sticky;
+  top:0;
+  padding:2px;
+}
+#side-right{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: sticky;
+  top:0;
 }
 .side-sheet{
   background-color: black;
@@ -88,13 +103,14 @@
   overflow: scroll;
   display: block;
   /* top:50% !important; */
-  max-width: 50%;
+  max-width: 40%;
   height: 100% !important;
-  margin:auto;
-  right:0; 
-  transform: translateY(-50%); 
+  /* margin:auto; */
+  /* right:0;  */
+  left: unset;
+  /* transform: translateY(-50%);  */
   box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
-  border-radius: 30px;
+  border-radius: 0px;
   touch-action: none;
   padding: 10px;
 }

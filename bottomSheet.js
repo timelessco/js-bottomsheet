@@ -11,11 +11,22 @@ function BottomSheet(props) {
     trigger = "",
     content = "",
     init = () => {},
-    webLayout = "Modal",
-    modalCloseIcon = `<svg width="14" height="12" viewBox="0 0 39 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+    webLayout = "sideSheetRight",
+    modalCloseIcon = `<svg width="16" height="12" viewBox="0 0 39 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M33.112 36.9133C34.3649 38.15 36.3963 38.15 37.6492 36.9133C38.9022 35.6766 38.9022 33.6716 37.6492 32.435L24.0375 19L37.6492 5.56496C38.9022 4.3283 38.9022 2.32328 37.6492 1.08662C36.3963 -0.150042 34.3649 -0.150042 33.112 1.08662L19.5002 14.5216L5.88835 1.08655C4.63541 -0.150108 2.60401 -0.150107 1.35108 1.08655C0.0981471 2.32321 0.0981459 4.32824 1.35108 5.5649L14.9629 19L1.35108 32.435C0.0981434 33.6717 0.0981443 35.6767 1.35108 36.9134C2.60401 38.15 4.63541 38.15 5.88834 36.9134L19.5002 23.4783L33.112 36.9133Z" fill="white"/>
     </svg>
     `,
+    sideSheetLeftIcon = `
+    <svg width="16" height="14" viewBox="0 0 26 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M24.5046 40.8036C23.2926 42.0804 21.2623 42.1465 19.9698 40.9513L1.76653 24.118C0.474022 22.9228 0.408779 20.9188 1.62081 19.6421L18.6906 1.66043C19.9026 0.383653 21.9329 0.317552 23.2254 1.51279C24.5179 2.70802 24.5832 4.71199 23.3712 5.98876L8.49597 21.6586L24.3589 36.3277C25.6514 37.5229 25.7166 39.5269 24.5046 40.8036Z" fill="white"/>
+    </svg> 
+    `,
+    sideSheetRightIcon = `<svg width="16" height="14" viewBox="0 0 25 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.21057 1.34418C2.46351 0.107522 4.49491 0.107522 5.74784 1.34418L23.3937 18.7608C24.6466 19.9975 24.6466 22.0025 23.3937 23.2392L5.74784 40.6559C4.49491 41.8925 2.46351 41.8925 1.21057 40.6559C-0.0423591 39.4192 -0.0423591 37.4142 1.21057 36.1775L16.5878 21L1.21057 5.82253C-0.0423591 4.58586 -0.0423591 2.58084 1.21057 1.34418Z" fill="white"/>
+    </svg>   
+    `,
+    cleanUpOnClose = true,
+    sideSheetSnapPoints = [],
   } = props;
   if (trigger && document.querySelector(`#${trigger}`)) {
     document.querySelector(`#${trigger}`).addEventListener("click", () => {
@@ -29,7 +40,10 @@ function BottomSheet(props) {
         draggableArea,
         onOpen,
         modalCloseIcon,
-        webLayout
+        webLayout,
+        sideSheetLeftIcon,
+        sideSheetRightIcon,
+        cleanUpOnClose
       );
     });
   }
@@ -44,7 +58,10 @@ function bottomsheetRequirements(
   draggableArea,
   onOpen,
   modalCloseIcon,
-  webLayout
+  webLayout,
+  sideSheetLeftIcon,
+  sideSheetRightIcon,
+  cleanUpOnClose
 ) {
   let targetid = document
     .querySelector(`#${trigger}`)
@@ -68,7 +85,7 @@ function bottomsheetRequirements(
   //   displayOverlay(overlay);
   // }
   // document.body.appendChild(overlay);
-  let isModal = window.innerWidth < minWidthForWeb ? false : true;
+  let isWeb = window.innerWidth < minWidthForWeb ? false : true;
 
   if (targetBottomSheet) {
     createBottomSheet(
@@ -82,13 +99,18 @@ function bottomsheetRequirements(
       content,
       init,
       modalCloseIcon,
-      webLayout
+      webLayout,
+      sideSheetLeftIcon,
+      sideSheetRightIcon,
+      isWeb,
+      cleanUpOnClose
     );
-    // lastSetSnapPoint < window.innerHeight
-    //   ? closeBottomSheet(newBottomSheet, isDisplayOverlay)
-    //   :
-    lastSetSnapPoint > window.innerHeight
-      ? openBottomSheet(
+    console.log(lastSetSnapPoint);
+    lastSetSnapPoint &&
+    lastSetSnapPoint < window.innerHeight &&
+    window.innerWidth < minWidthForWeb
+      ? closeBottomSheet(targetBottomSheet, isDisplayOverlay, cleanUpOnClose)
+      : openBottomSheet(
           targetBottomSheet,
           snapPoints,
           // overlay,
@@ -98,9 +120,10 @@ function bottomsheetRequirements(
           init,
           minWidthForWeb,
           draggableArea,
-          isModal
-        )
-      : "";
+          isWeb,
+          webLayout
+        );
+    // : "";
   }
 }
 function createBottomSheet(
@@ -114,44 +137,39 @@ function createBottomSheet(
   content,
   init,
   modalCloseIcon,
-  webLayout
+  webLayout,
+  sideSheetLeftIcon,
+  sideSheetRightIcon,
+  isWeb,
+  cleanUpOnClose
 ) {
   // const newBottomSheet = document.createElement("div");
+  // lastSetSnapPoint = null;
   targetBottomSheet.style.display = "block";
   let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
 
   let lastSnapPoint = +snapPoints[snapPoints.length - 1].replace("%", "");
-  let isModal = window.innerWidth < minWidthForWeb ? false : true;
+  // let isWeb = window.innerWidth < minWidthForWeb ? false : true;
 
   let modalClose = document.createElement("div");
   modalClose.id = "modal-close";
+  modalClose.addEventListener("click", () =>
+    closeModal(targetBottomSheet, cleanUpOnClose)
+  );
+  let sideSheetLeft = document.createElement("div");
+  sideSheetLeft.id = "side-left";
+  sideSheetLeft.addEventListener("click", () =>
+    closeLeftSideSheet(targetBottomSheet, cleanUpOnClose)
+  );
+  let sideSheetRight = document.createElement("div");
+  sideSheetRight.id = "side-right";
+  sideSheetRight.addEventListener("click", () =>
+    closeRightSideSheet(targetBottomSheet, cleanUpOnClose)
+  );
   modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
-  if (
-    document.querySelector(`#${targetBottomSheet.id} #modal-close`) &&
-    !isModal
-  ) {
-    targetBottomSheet.removeChild(modalClose);
-  }
-  if (
-    !document.querySelector(`#${targetBottomSheet.id} #modal-close`) &&
-    isModal
-  ) {
-    targetBottomSheet.prepend(modalClose);
-  }
-  if (window.innerWidth < minWidthForWeb) {
-    targetBottomSheet.classList.add("bottomsheet"),
-      targetBottomSheet.classList.remove("modal");
-  } else {
-    if (webLayout === "Modal") {
-      targetBottomSheet.classList.add("modal");
-    } else {
-      targetBottomSheet.classList.add("side-sheet");
-    }
-    targetBottomSheet.classList.remove("bottomsheet");
-  }
-
+  sideSheetLeft.insertAdjacentHTML("afterbegin", sideSheetLeftIcon);
+  sideSheetRight.insertAdjacentHTML("afterbegin", sideSheetRightIcon);
   let draggableId = "";
-
   if (typeof draggableArea === "string") {
     draggableArea = new DOMParser().parseFromString(draggableArea, "text/xml");
     draggableId = draggableArea.childNodes[0].id;
@@ -159,27 +177,45 @@ function createBottomSheet(
   } else {
     draggableId = draggableArea?.id;
   }
-  if (
-    !document.querySelector(`#${targetBottomSheet.id} #${draggableId}`) &&
-    window.innerWidth < minWidthForWeb
-  ) {
-    targetBottomSheet.prepend(draggableArea);
-  }
 
-  isModal = windowResizeListener(
+  handleCloseIcons(
+    targetBottomSheet,
+    webLayout,
+    modalClose,
+    sideSheetLeft,
+    sideSheetRight,
+    isWeb,
+    minWidthForWeb,
+    draggableArea,
+    draggableId
+  );
+
+  // if (
+  //   !document.querySelector(`#${targetBottomSheet.id} #${draggableId}`) &&
+  //   !isWeb
+  // ) {
+  //   targetBottomSheet.prepend(draggableArea);
+  // }
+
+  isWeb = windowResizeListener(
     targetBottomSheet,
     draggableArea,
     minWidthForWeb,
     draggableId,
-    modalCloseIcon,
+    modalClose,
     snapPoints,
     isDisplayOverlay,
     onOpen,
     content,
     init,
-    isModal
+    isWeb,
+    webLayout,
+    sideSheetLeft,
+    sideSheetRight
   );
-
+  setTimeout(() => {
+    onOpen();
+  }, 10);
   openBottomSheet(
     targetBottomSheet,
     snapPoints,
@@ -190,7 +226,8 @@ function createBottomSheet(
     init,
     minWidthForWeb,
     draggableArea,
-    isModal
+    isWeb,
+    webLayout
   );
 
   targetBottomSheet.style.overflow = "scroll";
@@ -222,53 +259,47 @@ function windowResizeListener(
   draggableArea,
   minWidthForWeb,
   draggableId,
-  modalCloseIcon,
+  modalClose,
   snapPoints,
   isDisplayOverlay,
   onOpen,
   content,
   init,
-  isModal
+  isWeb,
+  webLayout,
+  sideSheetLeft,
+  sideSheetRight
 ) {
-  let modalClose = document.createElement("div");
-  modalClose.id = "modal-close";
-  modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
-
   window.addEventListener("resize", () => {
-    if (window.innerWidth < minWidthForWeb) {
-      targetBottomSheet.classList.add("bottomsheet");
-      targetBottomSheet.classList.remove("modal");
-      if (!document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)) {
-        targetBottomSheet.prepend(draggableArea);
-      }
-      if (document.querySelector(`#${targetBottomSheet.id} #modal-close`)) {
-        targetBottomSheet.removeChild(modalClose);
-      }
-      return false;
-    } else {
-      targetBottomSheet.classList.add("modal"),
-        targetBottomSheet.classList.remove("bottomsheet");
-      if (document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)) {
-        targetBottomSheet.removeChild(draggableArea);
-      }
-      if (!document.querySelector(`#${targetBottomSheet.id} #modal-close`)) {
-        targetBottomSheet.prepend(modalClose);
-      }
-      openBottomSheet(
-        targetBottomSheet,
-        snapPoints,
-        // overlay,
-        isDisplayOverlay,
-        onOpen,
-        content,
-        init,
-        minWidthForWeb,
-        draggableArea,
-        isModal
-      );
-      return true;
-    }
+    handleCloseIcons(
+      targetBottomSheet,
+      webLayout,
+      modalClose,
+      sideSheetLeft,
+      sideSheetRight,
+      isWeb,
+      minWidthForWeb,
+      draggableArea,
+      draggableId
+    );
+    if (window.innerWidth < minWidthForWeb) isWeb = false;
+    else isWeb = true;
+    // openBottomSheet(
+    //   targetBottomSheet,
+    //   snapPoints,
+    //   // overlay,
+    //   isDisplayOverlay,
+    //   onOpen,
+    //   content,
+    //   init,
+    //   minWidthForWeb,
+    //   draggableArea,
+    //   isWeb,
+    //   webLayout
+    // );
+    return isWeb;
   });
+  return isWeb;
 }
 function moveBottomSheet(targetBottomSheet, top, ease, duration) {
   anime({
@@ -290,43 +321,74 @@ function openBottomSheet(
   init,
   minWidthForWeb,
   draggableArea,
-  isModal
+  isWeb,
+  webLayout
 ) {
   document.body.style.overflow = "hidden";
-
   // isDisplayOverlay ? displayOverlay(overlay) : "";
-  targetBottomSheet.style.top = convertToPx(100);
-  if (!isModal) {
+  if (isWeb) {
+    if (webLayout === "sideSheetLeft") {
+      targetBottomSheet.style.top = 0;
+      targetBottomSheet.style.left = `-100%`;
+      setTimeout(() => {
+        anime({
+          targets: targetBottomSheet,
+          left: "0",
+          easing: "spring(1, 85, 45, 3)",
+          duration: 0,
+        });
+      }, 100);
+    } else if (webLayout === "sideSheetRight") {
+      targetBottomSheet.style.top = 0;
+      targetBottomSheet.style.right = `-100%`;
+      setTimeout(() => {
+        anime({
+          targets: targetBottomSheet,
+          right: "0",
+          easing: "spring(1, 85, 45, 3)",
+          duration: 0,
+        });
+      }, 100);
+    } else {
+      targetBottomSheet.style.top = "50%";
+      targetBottomSheet.style.opacity = 0;
+      targetBottomSheet.style.transform = "translate(-50%,-50%) scale(0.9)";
+      anime({
+        targets: targetBottomSheet,
+        opacity: 1,
+        scale: 1,
+        easing: "spring(1, 85, 45, 2)",
+        duration: 1,
+      });
+    }
+  } else {
+    targetBottomSheet.style.top = convertToPx(100);
+
     anime({
       targets: targetBottomSheet,
       top: `${convertToPx(100)}px`,
       easing: "linear",
       duration: 0,
     });
+    setTimeout(() => {
+      anime({
+        targets: targetBottomSheet,
+        top: `${
+          window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
+        }px`,
+        easing: "spring(1, 85, 45, 3)",
+        opacity: 1,
+        duration: 0,
+      });
+    }, 10);
   }
-  setTimeout(() => {
-    anime({
-      targets: targetBottomSheet,
-      top: isModal
-        ? "50%"
-        : `${
-            window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
-          }px`,
-      easing: "spring(1, 85, 45, 3)",
-      opacity: 1,
-      duration: 0,
-    });
-  }, 10);
-
   lastSetSnapPoint =
     window.innerHeight - convertToPx(snapPoints[0].replace("%", ""));
-  setTimeout(() => {
-    onOpen();
-  }, 10);
 }
 
-function closeBottomSheet(targetBottomSheet, isDisplayOverlay) {
+function closeBottomSheet(targetBottomSheet, isDisplayOverlay, cleanUpOnClose) {
   // isDisplayOverlay ? hideOverlay(overlay) : "";
+  console.log("close");
   document.body.style.overflow = "scroll";
   anime({
     targets: targetBottomSheet,
@@ -334,6 +396,11 @@ function closeBottomSheet(targetBottomSheet, isDisplayOverlay) {
     easing: "spring(1, 85, 45, 3)",
   });
   lastSetSnapPoint = convertToPx(100);
+  setTimeout(() => {
+    if (lastSetSnapPoint >= window.innerHeight && cleanUpOnClose) {
+      cleanUp(targetBottomSheet);
+    }
+  }, 500);
 }
 
 // function displayOverlay(overlay) {
@@ -749,8 +816,107 @@ function translateToPreviousSnapPoint(
     }
   }
 }
+function handleCloseIcons(
+  targetBottomSheet,
+  webLayout,
+  modalClose,
+  sideSheetLeft,
+  sideSheetRight,
+  isWeb,
+  minWidthForWeb,
+  draggableArea,
+  draggableId
+) {
+  if (isWeb) {
+    if (document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)) {
+      targetBottomSheet.removeChild(draggableArea);
+    }
+    if (webLayout === "Modal") {
+      targetBottomSheet.classList.add("modal");
+    } else {
+      targetBottomSheet.classList.add("side-sheet");
+    }
+    targetBottomSheet.classList.remove("bottomsheet");
+    if (
+      !document.querySelector(`#${targetBottomSheet.id} #modal-close`) &&
+      webLayout === "Modal"
+    ) {
+      targetBottomSheet.prepend(modalClose);
+    } else if (
+      !document.querySelector(`#${targetBottomSheet.id} #side-left`) &&
+      webLayout === "sideSheetLeft"
+    ) {
+      targetBottomSheet.prepend(sideSheetLeft);
+    } else if (
+      !document.querySelector(`#${targetBottomSheet.id} #side-right`) &&
+      webLayout === "sideSheetRight"
+    ) {
+      targetBottomSheet.prepend(sideSheetRight);
+    }
+  } else {
+    if (!document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)) {
+      targetBottomSheet.prepend(draggableArea);
+    }
+    if (document.querySelector(`#${targetBottomSheet.id} #modal-close`)) {
+      targetBottomSheet.removeChild(modalClose);
+    }
+    if (document.querySelector(`#${targetBottomSheet.id} #side-left`)) {
+      targetBottomSheet.removeChild(sideSheetLeft);
+    }
+    if (document.querySelector(`#${targetBottomSheet.id} #side-right`)) {
+      targetBottomSheet.removeChild(sideSheetRight);
+    }
 
+    targetBottomSheet.classList.add("bottomsheet"),
+      targetBottomSheet.classList.remove("modal");
+    targetBottomSheet.classList.remove("side-sheet");
+  }
+}
+function closeLeftSideSheet(targetBottomSheet, cleanUpOnClose) {
+  anime({
+    targets: targetBottomSheet,
+    left: `-${targetBottomSheet.offsetWidth}px` || "-60%",
+    easing: "spring(1, 85, 45, 3)",
+    duration: 0,
+  });
+  cleanUpOnClose
+    ? setTimeout(() => {
+        cleanUp(targetBottomSheet);
+      }, 500)
+    : "";
+}
+function closeRightSideSheet(targetBottomSheet, cleanUpOnClose) {
+  anime({
+    targets: targetBottomSheet,
+    right: `-${targetBottomSheet.offsetWidth}px` || "-60%",
+    easing: "spring(1, 85, 45, 3)",
+    duration: 0,
+  });
+  cleanUpOnClose
+    ? setTimeout(() => {
+        cleanUp(targetBottomSheet);
+      }, 500)
+    : "";
+}
+function closeModal(targetBottomSheet, cleanUpOnClose) {
+  anime({
+    targets: targetBottomSheet,
+    opacity: 0,
+    scale: 0.9,
+    easing: "spring(1, 85, 45, 2)",
+    duration: 0,
+  });
+  cleanUpOnClose
+    ? setTimeout(() => {
+        cleanUp(targetBottomSheet);
+      }, 500)
+    : "";
+}
 function convertToPx(percentage) {
   return Math.round((window.innerHeight * percentage) / 100);
+}
+
+function cleanUp(targetBottomSheet) {
+  targetBottomSheet.remove();
 }
 export default BottomSheet;

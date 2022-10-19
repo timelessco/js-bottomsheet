@@ -30,6 +30,7 @@ BottomSheet({
     <rect opacity="0.3" width="32" height="3" rx="1.5" fill="white"/>
     </svg>
     </div>`,
+  webLayout: "Modal",
   content: await fetchContent(1),
   onOpen: async () => {
     BottomSheet({
@@ -42,6 +43,7 @@ BottomSheet({
         </svg>
         </div>`,
       content: await fetchContent(2),
+      webLayout: "sideSheetLeft",
       onOpen: async () => {
         BottomSheet({
           trigger: "target-3",
@@ -52,6 +54,7 @@ BottomSheet({
     <rect opacity="0.3" width="32" height="3" rx="1.5" fill="white"/>
     </svg>
     </div>`,
+          webLayout: "sideSheetRight",
           content: await fetchContent(3),
         });
       },
