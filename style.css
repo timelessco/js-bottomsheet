@@ -73,16 +73,6 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-div#bottomsheet-1, div#bottomsheet-2, #bottomsheet-3 {
-  display: none ;
-  padding:16px;
-  /* overflow-y: scroll; */
-  height: 100%;
-  padding-top:0;
-  -webkit-overflow-scrolling: touch;
-
-  /* touch-action:none; */
-}
 
 p{
   color: white;
@@ -122,14 +112,20 @@ input{
   border-radius: 10px;
   margin: 5px;
 }
-#bottomsheet-bottomsheet-2{
+#bottomsheet-2{
   background-color: #2D3748;
 }
 
-#target-2{
-  background-color: #ffe6cc;
-  color:black
-}
-#bottomsheet-bottomsheet-3{
+#bottomsheet-3{
   background-color: #2c2152;
 }
+
+/* .list-items:nth-of-type(1){
+background-color: white;
+display: inline;
+margin: 5px;
+border-radius: 6px;
+padding:1px;
+color:black;
+cursor: pointer;
+} */

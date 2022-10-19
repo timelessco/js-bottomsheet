@@ -1,38 +1,41 @@
-.bottomsheet {
-  background-color: black;
- width: 100%;
+
+[data-bottomsheet]{
   position: fixed;
-  height: 100%;
-  z-index: 999;
-  left:0;
-  top: 100%;
-  /* transform: translateY(-100%); */
-  box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
-  border-top-left-radius: 36px;
-  border-top-right-radius: 36px;
-  touch-action: none;
-  min-height: -webkit-fill-available;
-  padding-bottom: 10px;
-  will-change: transform;
-  pointer-events:auto
-  /* padding:16px; */
-  /* overflow-y: scroll; */
+  display: none;
+  background-color: black;
+  width: 100%;
+   position: fixed;
+   height: 100%;
+   z-index: 999;
+   left:0;
+   top: 100%;
+   /* transform: translateY(-100%); */
+   box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
+   border-top-left-radius: 36px;
+   border-top-right-radius: 36px;
+   min-height: -webkit-fill-available;
+   padding-bottom: 10px;
+   will-change: transform;
+   overflow: scroll;
+   touch-action: none;
+   color: white;
 }
 .modal{
   background-color: black;
-  width: 70%;
-  position: absolute;
-  height: 70%;
+  position: absolute; 
   z-index: 400;
   overflow: scroll;
   display: block;
-  /* margin:auto; */
-  /* left:50%;
-  top: 50%;
-  transform: translate(-50%, -50%); */
+  /* top:50% !important; */
+  max-width: 50%;
+  height: 50% !important;
+  margin:auto;
+  left:50%; 
+  transform: translate(-50%,-50%); 
   box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
-  border-radius: 36px;
+  border-radius: 30px;
   touch-action: none;
+  padding: 10px;
 }
 
 .bottomsheet div#bottomsheet-1, .modal div#bottomsheet-1{
@@ -64,7 +67,34 @@
   display:flex;
   align-items:center;
   justify-content: center;
+  position: sticky;
+  top:0;
+  z-index: 100;
+  background-color: inherit;
+}
+
+#modal-close{
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  position: sticky;
+  top:0;
+  padding:4px;
+}
+.side-sheet{
+  background-color: black;
+  position: absolute; 
+  z-index: 400;
+  overflow: scroll;
+  display: block;
+  /* top:50% !important; */
+  max-width: 50%;
+  height: 100% !important;
+  margin:auto;
+  right:0; 
+  transform: translateY(-50%); 
+  box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
+  border-radius: 30px;
   touch-action: none;
-  position: fixed;
-  /* background-color: black; */
+  padding: 10px;
 }

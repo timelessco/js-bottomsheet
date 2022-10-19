@@ -1,140 +1,274 @@
 import { Gesture } from "@use-gesture/vanilla";
 import anime from "animejs/lib/anime.es.js";
 
-function BottomSheet(targetid, props) {
+function BottomSheet(props) {
   let {
-    snapPoints,
-    isDisplayOverlay = true,
-    minWidthForModal = 500,
+    snapPoints = ["100%"],
+    isDisplayOverlay = false,
+    minWidthForWeb = 500,
     draggableArea = ``,
     onOpen = () => {},
+    trigger = "",
+    content = "",
+    init = () => {},
+    webLayout = "Modal",
+    modalCloseIcon = `<svg width="14" height="12" viewBox="0 0 39 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M33.112 36.9133C34.3649 38.15 36.3963 38.15 37.6492 36.9133C38.9022 35.6766 38.9022 33.6716 37.6492 32.435L24.0375 19L37.6492 5.56496C38.9022 4.3283 38.9022 2.32328 37.6492 1.08662C36.3963 -0.150042 34.3649 -0.150042 33.112 1.08662L19.5002 14.5216L5.88835 1.08655C4.63541 -0.150108 2.60401 -0.150107 1.35108 1.08655C0.0981471 2.32321 0.0981459 4.32824 1.35108 5.5649L14.9629 19L1.35108 32.435C0.0981434 33.6717 0.0981443 35.6767 1.35108 36.9134C2.60401 38.15 4.63541 38.15 5.88834 36.9134L19.5002 23.4783L33.112 36.9133Z" fill="white"/>
+    </svg>
+    `,
   } = props;
-  let targetBottomSheet = document.querySelector(`#${targetid}`);
-  let newBottomSheet = document.querySelector(
-    `#bottomsheet-${targetBottomSheet.id}`
-  );
-  const overlay = document.querySelector(".overlay")
-    ? document.querySelector(".overlay")
-    : document.createElement("div");
-
-  let currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
-
-  targetBottomSheet.style.display = "hidden";
-  if (isDisplayOverlay) {
-    overlay.classList.add("overlay");
-    displayOverlay(overlay);
-  }
-
-  document.body.appendChild(overlay);
-
-  // document.body.addEventListener("click", (e) => {
-  //   closeBottomSheet(newBottomSheet, overlay, isDisplayOverlay);
-  // });
-
-  // newBottomSheet?.addEventListener("click", (e) => {
-  //   console.log("click");
-  //   e.preventDefault();
-  // });
-
-  // document.querySelectorAll("button").forEach((i) => {
-  //  i.
-  // });
-  if (targetBottomSheet)
-    if (!newBottomSheet)
-      createBottomSheet(
-        targetBottomSheet,
-        snapPoints,
-        overlay,
+  if (trigger && document.querySelector(`#${trigger}`)) {
+    document.querySelector(`#${trigger}`).addEventListener("click", () => {
+      bottomsheetRequirements(
+        trigger,
+        content,
         isDisplayOverlay,
-        minWidthForModal,
+        init,
+        snapPoints,
+        minWidthForWeb,
         draggableArea,
-        onOpen
+        onOpen,
+        modalCloseIcon,
+        webLayout
       );
-    else
-      lastSetSnapPoint < window.innerHeight
-        ? closeBottomSheet(newBottomSheet, overlay, isDisplayOverlay)
-        : openBottomSheet(
-            newBottomSheet,
-            snapPoints,
-            overlay,
-            isDisplayOverlay,
-            onOpen
-          );
+    });
+  }
 }
+function bottomsheetRequirements(
+  trigger,
+  content,
+  isDisplayOverlay,
+  init,
+  snapPoints,
+  minWidthForWeb,
+  draggableArea,
+  onOpen,
+  modalCloseIcon,
+  webLayout
+) {
+  let targetid = document
+    .querySelector(`#${trigger}`)
+    .getAttribute("data-bottomsheet-id");
 
+  let targetBottomSheet = document.querySelector(`#${targetid}`);
+
+  if (init) {
+    init();
+  }
+  if (content && !targetBottomSheet) {
+    document.body.insertAdjacentHTML("beforeend", content);
+    targetBottomSheet = document.querySelector(`#${targetid}`);
+  }
+  // const overlay = document.querySelector(".overlay")
+  //   ? document.querySelector(".overlay")
+  //   : document.createElement("div");
+
+  // if (isDisplayOverlay) {
+  //   overlay.classList.add("overlay");
+  //   displayOverlay(overlay);
+  // }
+  // document.body.appendChild(overlay);
+  let isModal = window.innerWidth < minWidthForWeb ? false : true;
+
+  if (targetBottomSheet) {
+    createBottomSheet(
+      targetBottomSheet,
+      snapPoints,
+      // overlay,
+      isDisplayOverlay,
+      minWidthForWeb,
+      draggableArea,
+      onOpen,
+      content,
+      init,
+      modalCloseIcon,
+      webLayout
+    );
+    // lastSetSnapPoint < window.innerHeight
+    //   ? closeBottomSheet(newBottomSheet, isDisplayOverlay)
+    //   :
+    lastSetSnapPoint > window.innerHeight
+      ? openBottomSheet(
+          targetBottomSheet,
+          snapPoints,
+          // overlay,
+          isDisplayOverlay,
+          onOpen,
+          content,
+          init,
+          minWidthForWeb,
+          draggableArea,
+          isModal
+        )
+      : "";
+  }
+}
 function createBottomSheet(
   targetBottomSheet,
   snapPoints,
-  overlay,
+  // overlay,
   isDisplayOverlay,
-  minWidthForModal,
+  minWidthForWeb,
   draggableArea,
-  onOpen
+  onOpen,
+  content,
+  init,
+  modalCloseIcon,
+  webLayout
 ) {
-  const newBottomSheet = document.createElement("div");
-  let currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
+  // const newBottomSheet = document.createElement("div");
+  targetBottomSheet.style.display = "block";
+  let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
 
   let lastSnapPoint = +snapPoints[snapPoints.length - 1].replace("%", "");
-  newBottomSheet.id = `bottomsheet-${targetBottomSheet.id}`;
-  window.addEventListener("resize", () => {
-    window.innerWidth < minWidthForModal
-      ? (newBottomSheet.classList.add("bottomsheet"),
-        newBottomSheet.classList.remove("modal"))
-      : (newBottomSheet.classList.add("modal"),
-        newBottomSheet.classList.remove("bottomsheet"));
-  });
-  window.innerWidth < minWidthForModal
-    ? (newBottomSheet.classList.add("bottomsheet"),
-      newBottomSheet.classList.remove("modal"))
-    : (newBottomSheet.classList.add("modal"),
-      newBottomSheet.classList.remove("bottomsheet"));
+  let isModal = window.innerWidth < minWidthForWeb ? false : true;
 
-  newBottomSheet.insertAdjacentHTML("beforeend", draggableArea);
+  let modalClose = document.createElement("div");
+  modalClose.id = "modal-close";
+  modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
+  if (
+    document.querySelector(`#${targetBottomSheet.id} #modal-close`) &&
+    !isModal
+  ) {
+    targetBottomSheet.removeChild(modalClose);
+  }
+  if (
+    !document.querySelector(`#${targetBottomSheet.id} #modal-close`) &&
+    isModal
+  ) {
+    targetBottomSheet.prepend(modalClose);
+  }
+  if (window.innerWidth < minWidthForWeb) {
+    targetBottomSheet.classList.add("bottomsheet"),
+      targetBottomSheet.classList.remove("modal");
+  } else {
+    if (webLayout === "Modal") {
+      targetBottomSheet.classList.add("modal");
+    } else {
+      targetBottomSheet.classList.add("side-sheet");
+    }
+    targetBottomSheet.classList.remove("bottomsheet");
+  }
 
-  openBottomSheet(
-    newBottomSheet,
+  let draggableId = "";
+
+  if (typeof draggableArea === "string") {
+    draggableArea = new DOMParser().parseFromString(draggableArea, "text/xml");
+    draggableId = draggableArea.childNodes[0].id;
+    draggableArea = draggableArea.childNodes[0];
+  } else {
+    draggableId = draggableArea?.id;
+  }
+  if (
+    !document.querySelector(`#${targetBottomSheet.id} #${draggableId}`) &&
+    window.innerWidth < minWidthForWeb
+  ) {
+    targetBottomSheet.prepend(draggableArea);
+  }
+
+  isModal = windowResizeListener(
+    targetBottomSheet,
+    draggableArea,
+    minWidthForWeb,
+    draggableId,
+    modalCloseIcon,
     snapPoints,
-    overlay,
     isDisplayOverlay,
-    onOpen
+    onOpen,
+    content,
+    init,
+    isModal
   );
 
-  newBottomSheet.style.overflow = "scroll";
+  openBottomSheet(
+    targetBottomSheet,
+    snapPoints,
+    // overlay,
+    isDisplayOverlay,
+    onOpen,
+    content,
+    init,
+    minWidthForWeb,
+    draggableArea,
+    isModal
+  );
+
+  targetBottomSheet.style.overflow = "scroll";
 
   setTimeout(() => {
-    document.querySelector(
-      `#${newBottomSheet.id} #${targetBottomSheet.id}`
-    ).style.marginTop = `${
-      document.querySelector("#draggable-area")?.clientHeight
-    }px`;
-    let innerScrollableContent = document.querySelector(
-      `#${newBottomSheet.id} #${targetBottomSheet.id}`
-    );
     handleDragGesture(
-      newBottomSheet,
+      targetBottomSheet,
       currentSnapPoint,
       lastSnapPoint,
       snapPoints,
-      newBottomSheet,
       targetBottomSheet,
-      minWidthForModal,
-      overlay,
-      isDisplayOverlay
+      minWidthForWeb,
+      // overlay,
+      isDisplayOverlay,
+      draggableId
     );
   }, 10);
 
-  newBottomSheet.style.overflow = "scroll";
+  targetBottomSheet.style.overflow = "scroll";
 
-  if (targetBottomSheet && targetBottomSheet.cloneNode(true)) {
-    newBottomSheet.appendChild(targetBottomSheet.cloneNode(true));
-    targetBottomSheet.remove();
-  }
-  document.body.appendChild(newBottomSheet);
   if (document.querySelector(`.bottomsheet #${targetBottomSheet.id}`)) {
     document.querySelector(
       `.bottomsheet #${targetBottomSheet.id}`
     ).style.display = "block";
   }
+}
+function windowResizeListener(
+  targetBottomSheet,
+  draggableArea,
+  minWidthForWeb,
+  draggableId,
+  modalCloseIcon,
+  snapPoints,
+  isDisplayOverlay,
+  onOpen,
+  content,
+  init,
+  isModal
+) {
+  let modalClose = document.createElement("div");
+  modalClose.id = "modal-close";
+  modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth < minWidthForWeb) {
+      targetBottomSheet.classList.add("bottomsheet");
+      targetBottomSheet.classList.remove("modal");
+      if (!document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)) {
+        targetBottomSheet.prepend(draggableArea);
+      }
+      if (document.querySelector(`#${targetBottomSheet.id} #modal-close`)) {
+        targetBottomSheet.removeChild(modalClose);
+      }
+      return false;
+    } else {
+      targetBottomSheet.classList.add("modal"),
+        targetBottomSheet.classList.remove("bottomsheet");
+      if (document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)) {
+        targetBottomSheet.removeChild(draggableArea);
+      }
+      if (!document.querySelector(`#${targetBottomSheet.id} #modal-close`)) {
+        targetBottomSheet.prepend(modalClose);
+      }
+      openBottomSheet(
+        targetBottomSheet,
+        snapPoints,
+        // overlay,
+        isDisplayOverlay,
+        onOpen,
+        content,
+        init,
+        minWidthForWeb,
+        draggableArea,
+        isModal
+      );
+      return true;
+    }
+  });
 }
 function moveBottomSheet(targetBottomSheet, top, ease, duration) {
   anime({
@@ -149,27 +283,35 @@ let lastSetSnapPoint;
 function openBottomSheet(
   targetBottomSheet,
   snapPoints,
-  overlay,
+  // overlay,
   isDisplayOverlay,
-  onOpen
+  onOpen,
+  content,
+  init,
+  minWidthForWeb,
+  draggableArea,
+  isModal
 ) {
   document.body.style.overflow = "hidden";
 
-  isDisplayOverlay ? displayOverlay(overlay) : "";
+  // isDisplayOverlay ? displayOverlay(overlay) : "";
   targetBottomSheet.style.top = convertToPx(100);
-
-  anime({
-    targets: targetBottomSheet,
-    top: `${convertToPx(100)}px`,
-    easing: "linear",
-    duration: 0,
-  });
+  if (!isModal) {
+    anime({
+      targets: targetBottomSheet,
+      top: `${convertToPx(100)}px`,
+      easing: "linear",
+      duration: 0,
+    });
+  }
   setTimeout(() => {
     anime({
       targets: targetBottomSheet,
-      top: `${
-        window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
-      }px`,
+      top: isModal
+        ? "50%"
+        : `${
+            window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
+          }px`,
       easing: "spring(1, 85, 45, 3)",
       opacity: 1,
       duration: 0,
@@ -178,15 +320,14 @@ function openBottomSheet(
 
   lastSetSnapPoint =
     window.innerHeight - convertToPx(snapPoints[0].replace("%", ""));
-  console.log("opensheet");
   setTimeout(() => {
     onOpen();
   }, 10);
 }
 
-function closeBottomSheet(targetBottomSheet, overlay, isDisplayOverlay) {
-  isDisplayOverlay ? hideOverlay(overlay) : "";
-  // document.body.style.overflow = "scroll";
+function closeBottomSheet(targetBottomSheet, isDisplayOverlay) {
+  // isDisplayOverlay ? hideOverlay(overlay) : "";
+  document.body.style.overflow = "scroll";
   anime({
     targets: targetBottomSheet,
     top: `${convertToPx(100)}px`,
@@ -195,9 +336,9 @@ function closeBottomSheet(targetBottomSheet, overlay, isDisplayOverlay) {
   lastSetSnapPoint = convertToPx(100);
 }
 
-function displayOverlay(overlay) {
-  overlay.classList.add("display");
-}
+// function displayOverlay(overlay) {
+//   overlay.classList.add("display");
+// }
 
 function hideOverlay(overlay) {
   if (overlay.classList.contains("display")) {
@@ -215,10 +356,9 @@ function handleDragGesture(
   lastSnapPoint,
   snapPoints,
   newBottomSheet,
-  targetBottomSheet,
-  minWidthForModal,
-  overlay,
-  isDisplayOverlay
+  minWidthForWeb,
+  isDisplayOverlay,
+  draggableId
 ) {
   const gesture = new Gesture(
     draggableTarget,
@@ -226,33 +366,24 @@ function handleDragGesture(
       onDrag: ({
         active,
         movement: [mx, my],
-        cancel,
         velocity: [vx, vy],
         xy,
         offset,
         distance: [dx, dy],
         target,
-        tap,
       }) => {
         let minSnapPoint = 0;
         let maxSnapPoint = Infinity;
         currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
-        let innerScrollableContent = document.querySelector(
-          `#${newBottomSheet.id} #${targetBottomSheet.id}`
-        );
-        if (tap) {
-          if (target && target.getAttribute("data-bottomsheet-id")) {
-            // console.log(target, "target");
-          }
-        }
-        if (window.innerWidth < minWidthForModal) {
+        if (window.innerWidth < minWidthForWeb) {
           if (my > 0) {
             let type;
-            if (target === document.querySelector(`#draggable-area`)) {
-              document.querySelector(`#draggable-area`).focus();
-              document.querySelector(`#draggable-area`).click();
+            if (target === document.querySelector(`#${draggableId}`)) {
+              // document.querySelector(`#${draggableId}`).focus();
+              // document.querySelector(`#${draggableId}`).click();
               newBottomSheet.style.overflow = "hidden";
-              innerScrollableContent.style.overflow = "hidden";
+              newBottomSheet.style.touchAction = "none";
+
               let newOffset = offset[1];
               handleSnapPoints(
                 snapPoints,
@@ -271,19 +402,21 @@ function handleDragGesture(
                 draggableTarget,
                 newOffset
               );
-              if (currentSnapPoint <= 10 && isDisplayOverlay)
-                hideOverlay(overlay);
+              // if (currentSnapPoint <= 10 && isDisplayOverlay)
+              //   hideOverlay(overlay);
             } else {
               if (
-                innerScrollableContent.scrollTop >= 1 &&
+                newBottomSheet.scrollTop >= 1 &&
                 currentSnapPoint <= convertToPx(100 - lastSnapPoint) &&
-                target !== document.querySelector(`#draggable-area`)
+                target !== document.querySelector(`#${draggableId}`)
               ) {
-                innerScrollableContent.style.overflow = "scroll";
-                // innerScrollableContent.click();
+                newBottomSheet.style.overflow = "scroll";
+                newBottomSheet.style.touchAction = "auto";
+                newBottomSheet.click();
               } else {
                 newBottomSheet.style.overflow = "hidden";
-                innerScrollableContent.style.overflow = "hidden";
+                newBottomSheet.style.touchAction = "none";
+
                 let newOffset = offset[1];
                 handleSnapPoints(
                   snapPoints,
@@ -302,27 +435,26 @@ function handleDragGesture(
                   draggableTarget,
                   newOffset
                 );
-                if (currentSnapPoint <= 10 && isDisplayOverlay)
-                  hideOverlay(overlay);
+                // if (currentSnapPoint <= 10 && isDisplayOverlay)
+                //   hideOverlay(overlay);
               }
             }
           } else {
             let type;
-            newBottomSheet.style.overflow = "hidden";
-            document.querySelector(
-              `#${newBottomSheet.id} #${targetBottomSheet.id}`
-            ).style.overflow = "hidden";
-
+            // document.querySelector(
+            //   `#${newBottomSheet.id} #${targetBottomSheet.id}`
+            // ).style.overflow = "hidden";
             if (currentSnapPoint <= convertToPx(100 - lastSnapPoint)) {
-              console.log("inside");
-              innerScrollableContent.style.overflow = "scroll";
-              innerScrollableContent.style.height = `${convertToPx(
+              newBottomSheet.style.overflow = "scroll";
+              newBottomSheet.style.height = `${convertToPx(
                 lastSnapPoint - 10
               )}px`;
-              // innerScrollableContent.click();
+              newBottomSheet.style.touchAction = "auto";
+              newBottomSheet.click();
             } else {
               newBottomSheet.style.overflow = "hidden";
-              innerScrollableContent.style.overflow = "hidden";
+              newBottomSheet.style.touchAction = "none";
+
               let newOffset = offset[1];
 
               handleSnapPoints(
@@ -343,7 +475,7 @@ function handleDragGesture(
                 newOffset
               );
             }
-            displayOverlay(overlay);
+            // displayOverlay(overlay);
           }
         }
       },
@@ -351,36 +483,34 @@ function handleDragGesture(
         document.body.style.overflow = "hidden";
       },
       onDragEnd: ({ movement: [mx, my] }) => {
-        let innerScrollableContent = document.querySelector(
-          `#${newBottomSheet.id} #${targetBottomSheet.id}`
-        );
-        // currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
-        if (+lastSetSnapPoint >= -10 && isDisplayOverlay) hideOverlay(overlay);
+        // if (+lastSetSnapPoint >= -10 && isDisplayOverlay) hideOverlay(overlay);
         currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
-        console.log(currentSnapPoint, lastSnapPoint);
         if (
           (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
             lastSetSnapPoint === 0) &&
           my < 0
         ) {
-          innerScrollableContent.style.overflow = "scroll";
-          innerScrollableContent.click();
+          newBottomSheet.style.overflow = "scroll";
+          newBottomSheet.click();
+          newBottomSheet.style.touchAction = "auto";
         }
-        if (
-          (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
-            lastSetSnapPoint === 0) &&
-          my > 0 &&
-          innerScrollableContent.offsetTop === 0
-        ) {
-          innerScrollableContent.style.overflow = "hidden";
-          innerScrollableContent.click();
-        }
+        // if (
+        //   (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
+        //     lastSetSnapPoint === 0) &&
+        //   my > 0 &&
+        //   newBottomSheet.offsetTop === 0
+        // ) {
+        //   newBottomSheet.style.overflow = "hidden";
+        //   newBottomSheet.style.touchAction = "none";
+
+        //   newBottomSheet.click();
+        // }
         dragFlag++;
       },
     },
     {
       drag: {
-        filterTaps: true,
+        filterTaps: false,
         rubberband: true,
         axis: "y",
         preventDefault: false,
@@ -411,7 +541,8 @@ function handleSnapPoints(
 ) {
   let convertXy = ((window.screen.height - xy[1]) / window.screen.height) * 100;
 
-  let actualOffset = snapped ? oldOffset : offset[1];
+  let actualOffset =
+    dragFlag === 0 ? convertToPx(snapPoints[0].replace("%", "")) : offset[1];
 
   if (maxSnapPoint === null) {
     if (active) {
@@ -420,8 +551,8 @@ function handleSnapPoints(
         `${
           actualOffset > window.innerHeight
             ? window.innerHeight
-            : actualOffset < 0
-            ? 0
+            : actualOffset < convertToPx(100 - lastSnapPoint)
+            ? convertToPx(100 - lastSnapPoint)
             : actualOffset
         }px`,
         `spring(1, 250, 25, ${dragFlag === 0 ? 0.3 : 25})`,
@@ -433,7 +564,11 @@ function handleSnapPoints(
     if (!active) {
       translateToPreviousSnapPoint(
         snapPoints,
-        actualOffset > window.innerHeight ? window.innerHeight : actualOffset,
+        actualOffset > window.innerHeight
+          ? window.innerHeight
+          : actualOffset < convertToPx(100 - lastSnapPoint)
+          ? convertToPx(100 - lastSnapPoint)
+          : actualOffset,
         newBottomSheet,
         vy,
         lastSnapPoint,
@@ -444,6 +579,8 @@ function handleSnapPoints(
             snapPoints,
             actualOffset > window.innerHeight
               ? window.innerHeight
+              : actualOffset < convertToPx(100 - lastSnapPoint)
+              ? convertToPx(100 - lastSnapPoint)
               : actualOffset,
             newBottomSheet,
             vy,
@@ -452,12 +589,19 @@ function handleSnapPoints(
           ))
         : "";
       snapped = true;
+      oldOffset = offset[1];
     }
   } else {
     if (active) {
       moveBottomSheet(
         newBottomSheet,
-        `${actualOffset < 0 ? 0 : actualOffset}px`,
+        `${
+          actualOffset > window.innerHeight
+            ? window.innerHeight
+            : actualOffset < convertToPx(100 - lastSnapPoint)
+            ? convertToPx(100 - lastSnapPoint)
+            : actualOffset
+        }px`,
         `spring(1, 250, 25,  ${dragFlag === 0 ? 0.3 : 25})`,
         1
       );
@@ -467,7 +611,11 @@ function handleSnapPoints(
     if (!active) {
       translateToNextSnapPoint(
         snapPoints,
-        actualOffset < 0 ? 0 : actualOffset,
+        actualOffset > window.innerHeight
+          ? window.innerHeight
+          : actualOffset < convertToPx(100 - lastSnapPoint)
+          ? convertToPx(100 - lastSnapPoint)
+          : actualOffset,
         newBottomSheet,
         vy,
         lastSnapPoint,
@@ -476,7 +624,11 @@ function handleSnapPoints(
       ) !== undefined
         ? (offset[1] = translateToNextSnapPoint(
             snapPoints,
-            actualOffset < 0 ? 0 : actualOffset,
+            actualOffset > window.innerHeight
+              ? window.innerHeight
+              : actualOffset < convertToPx(100 - lastSnapPoint)
+              ? convertToPx(100 - lastSnapPoint)
+              : actualOffset,
             newBottomSheet,
             vy,
             lastSnapPoint,
@@ -485,6 +637,7 @@ function handleSnapPoints(
           ))
         : "";
       snapped = true;
+      oldOffset = offset[1];
     }
   }
 }
@@ -565,7 +718,7 @@ function translateToPreviousSnapPoint(
       minSnapPoint = convertToPx(elem);
     }
   });
-  // if (minSnapPoint !== 0) {
+
   if (snappable) {
     moveBottomSheet(
       newBottomSheet,
