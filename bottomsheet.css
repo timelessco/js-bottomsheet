@@ -6,7 +6,7 @@
   width: 100%;
    position: fixed;
    height: 100%;
-   z-index: 999;
+   /* z-index: 999; */
    left:0;
    top: 100%;
    /* transform: translateY(-100%); */
@@ -23,7 +23,7 @@
 .modal{
   background-color: black;
   position: absolute; 
-  z-index: 400;
+  /* z-index: 400; */
   overflow: scroll;
   display: block;
   /* top:50% !important; */
@@ -55,7 +55,7 @@
     right: 0;
     bottom: 0;
     background-color: rgba(0,0,0,0.5); 
-    z-index: 2; 
+    /* z-index: 2;  */
 }
 .overlay.display{
   display: block;
@@ -99,11 +99,11 @@
 .side-sheet{
   background-color: black;
   position: absolute; 
-  z-index: 400;
+  /* z-index: 400; */
   overflow: scroll;
   display: block;
   /* top:50% !important; */
-  max-width: 40%;
+ width: 0px;
   height: 100% !important;
   /* margin:auto; */
   /* right:0;  */
@@ -112,5 +112,4 @@
   box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
   border-radius: 0px;
   touch-action: none;
-  padding: 10px;
 }

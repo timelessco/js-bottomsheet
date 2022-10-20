@@ -4,7 +4,7 @@ import anime from "animejs/lib/anime.es.js";
 function BottomSheet(props) {
   let {
     snapPoints = ["100%"],
-    isDisplayOverlay = false,
+    displayOverlay = true,
     minWidthForWeb = 500,
     draggableArea = ``,
     onOpen = () => {},
@@ -26,14 +26,14 @@ function BottomSheet(props) {
     </svg>   
     `,
     cleanUpOnClose = true,
-    sideSheetSnapPoints = [],
+    sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
   } = props;
   if (trigger && document.querySelector(`#${trigger}`)) {
     document.querySelector(`#${trigger}`).addEventListener("click", () => {
       bottomsheetRequirements(
         trigger,
         content,
-        isDisplayOverlay,
+        displayOverlay,
         init,
         snapPoints,
         minWidthForWeb,
@@ -43,7 +43,8 @@ function BottomSheet(props) {
         webLayout,
         sideSheetLeftIcon,
         sideSheetRightIcon,
-        cleanUpOnClose
+        cleanUpOnClose,
+        sideSheetSnapPoints
       );
     });
   }
@@ -51,7 +52,7 @@ function BottomSheet(props) {
 function bottomsheetRequirements(
   trigger,
   content,
-  isDisplayOverlay,
+  displayOverlay,
   init,
   snapPoints,
   minWidthForWeb,
@@ -61,7 +62,8 @@ function bottomsheetRequirements(
   webLayout,
   sideSheetLeftIcon,
   sideSheetRightIcon,
-  cleanUpOnClose
+  cleanUpOnClose,
+  sideSheetSnapPoints
 ) {
   let targetid = document
     .querySelector(`#${trigger}`)
@@ -76,23 +78,26 @@ function bottomsheetRequirements(
     document.body.insertAdjacentHTML("beforeend", content);
     targetBottomSheet = document.querySelector(`#${targetid}`);
   }
-  // const overlay = document.querySelector(".overlay")
-  //   ? document.querySelector(".overlay")
-  //   : document.createElement("div");
+  const overlay = document.querySelector(`#${targetBottomSheet.id}-overlay`)
+    ? document.querySelector(`#${targetBottomSheet.id}-overlay`)
+    : document.createElement("div");
+  overlay.id = `${targetBottomSheet.id}-overlay`;
 
-  // if (isDisplayOverlay) {
-  //   overlay.classList.add("overlay");
-  //   displayOverlay(overlay);
-  // }
-  // document.body.appendChild(overlay);
+  if (displayOverlay) {
+    overlay.classList.add("overlay");
+    addOverlay(overlay);
+    document.body.insertBefore(overlay, targetBottomSheet);
+
+    // document.body.appendChild(overlay);
+  }
   let isWeb = window.innerWidth < minWidthForWeb ? false : true;
 
   if (targetBottomSheet) {
     createBottomSheet(
       targetBottomSheet,
       snapPoints,
-      // overlay,
-      isDisplayOverlay,
+      overlay,
+      displayOverlay,
       minWidthForWeb,
       draggableArea,
       onOpen,
@@ -103,34 +108,18 @@ function bottomsheetRequirements(
       sideSheetLeftIcon,
       sideSheetRightIcon,
       isWeb,
-      cleanUpOnClose
+      cleanUpOnClose,
+      sideSheetSnapPoints
     );
-    console.log(lastSetSnapPoint);
-    lastSetSnapPoint &&
-    lastSetSnapPoint < window.innerHeight &&
-    window.innerWidth < minWidthForWeb
-      ? closeBottomSheet(targetBottomSheet, isDisplayOverlay, cleanUpOnClose)
-      : openBottomSheet(
-          targetBottomSheet,
-          snapPoints,
-          // overlay,
-          isDisplayOverlay,
-          onOpen,
-          content,
-          init,
-          minWidthForWeb,
-          draggableArea,
-          isWeb,
-          webLayout
-        );
+
     // : "";
   }
 }
 function createBottomSheet(
   targetBottomSheet,
   snapPoints,
-  // overlay,
-  isDisplayOverlay,
+  overlay,
+  displayOverlay,
   minWidthForWeb,
   draggableArea,
   onOpen,
@@ -141,7 +130,8 @@ function createBottomSheet(
   sideSheetLeftIcon,
   sideSheetRightIcon,
   isWeb,
-  cleanUpOnClose
+  cleanUpOnClose,
+  sideSheetSnapPoints
 ) {
   // const newBottomSheet = document.createElement("div");
   // lastSetSnapPoint = null;
@@ -154,17 +144,27 @@ function createBottomSheet(
   let modalClose = document.createElement("div");
   modalClose.id = "modal-close";
   modalClose.addEventListener("click", () =>
-    closeModal(targetBottomSheet, cleanUpOnClose)
+    closeModal(targetBottomSheet, cleanUpOnClose, overlay, sideSheetSnapPoints)
   );
   let sideSheetLeft = document.createElement("div");
   sideSheetLeft.id = "side-left";
   sideSheetLeft.addEventListener("click", () =>
-    closeLeftSideSheet(targetBottomSheet, cleanUpOnClose)
+    closeLeftSideSheet(
+      targetBottomSheet,
+      cleanUpOnClose,
+      overlay,
+      sideSheetSnapPoints
+    )
   );
   let sideSheetRight = document.createElement("div");
   sideSheetRight.id = "side-right";
   sideSheetRight.addEventListener("click", () =>
-    closeRightSideSheet(targetBottomSheet, cleanUpOnClose)
+    closeRightSideSheet(
+      targetBottomSheet,
+      cleanUpOnClose,
+      overlay,
+      sideSheetSnapPoints
+    )
   );
   modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
   sideSheetLeft.insertAdjacentHTML("afterbegin", sideSheetLeftIcon);
@@ -187,7 +187,10 @@ function createBottomSheet(
     isWeb,
     minWidthForWeb,
     draggableArea,
-    draggableId
+    draggableId,
+    cleanUpOnClose,
+    overlay,
+    sideSheetSnapPoints
   );
 
   // if (
@@ -204,7 +207,7 @@ function createBottomSheet(
     draggableId,
     modalClose,
     snapPoints,
-    isDisplayOverlay,
+    displayOverlay,
     onOpen,
     content,
     init,
@@ -216,19 +219,46 @@ function createBottomSheet(
   setTimeout(() => {
     onOpen();
   }, 10);
-  openBottomSheet(
-    targetBottomSheet,
-    snapPoints,
-    // overlay,
-    isDisplayOverlay,
-    onOpen,
-    content,
-    init,
-    minWidthForWeb,
-    draggableArea,
-    isWeb,
-    webLayout
-  );
+  if (
+    lastSetSnapPoint &&
+    lastSetSnapPoint < window.innerHeight &&
+    window.innerWidth < minWidthForWeb
+  ) {
+    closeBottomSheet(
+      targetBottomSheet,
+      displayOverlay,
+      cleanUpOnClose,
+      hideOverlay,
+      overlay
+    );
+  } else {
+    openBottomSheet(
+      targetBottomSheet,
+      snapPoints,
+      overlay,
+      displayOverlay,
+      onOpen,
+      content,
+      init,
+      minWidthForWeb,
+      draggableArea,
+      isWeb,
+      webLayout
+    );
+  }
+  // openBottomSheet(
+  //   targetBottomSheet,
+  //   snapPoints,
+  //   // overlay,
+  //   displayOverlay,
+  //   onOpen,
+  //   content,
+  //   init,
+  //   minWidthForWeb,
+  //   draggableArea,
+  //   isWeb,
+  //   webLayout
+  // );
 
   targetBottomSheet.style.overflow = "scroll";
 
@@ -240,9 +270,9 @@ function createBottomSheet(
       snapPoints,
       targetBottomSheet,
       minWidthForWeb,
-      // overlay,
-      isDisplayOverlay,
-      draggableId
+      displayOverlay,
+      draggableId,
+      overlay
     );
   }, 10);
 
@@ -261,7 +291,7 @@ function windowResizeListener(
   draggableId,
   modalClose,
   snapPoints,
-  isDisplayOverlay,
+  displayOverlay,
   onOpen,
   content,
   init,
@@ -280,7 +310,10 @@ function windowResizeListener(
       isWeb,
       minWidthForWeb,
       draggableArea,
-      draggableId
+      draggableId,
+      cleanUpOnClose,
+      overlay,
+      sideSheetSnapPoints
     );
     if (window.innerWidth < minWidthForWeb) isWeb = false;
     else isWeb = true;
@@ -288,7 +321,7 @@ function windowResizeListener(
     //   targetBottomSheet,
     //   snapPoints,
     //   // overlay,
-    //   isDisplayOverlay,
+    //   displayOverlay,
     //   onOpen,
     //   content,
     //   init,
@@ -314,8 +347,8 @@ let lastSetSnapPoint;
 function openBottomSheet(
   targetBottomSheet,
   snapPoints,
-  // overlay,
-  isDisplayOverlay,
+  overlay,
+  displayOverlay,
   onOpen,
   content,
   init,
@@ -325,7 +358,7 @@ function openBottomSheet(
   webLayout
 ) {
   document.body.style.overflow = "hidden";
-  // isDisplayOverlay ? displayOverlay(overlay) : "";
+  displayOverlay ? addOverlay(overlay) : "";
   if (isWeb) {
     if (webLayout === "sideSheetLeft") {
       targetBottomSheet.style.top = 0;
@@ -386,9 +419,14 @@ function openBottomSheet(
     window.innerHeight - convertToPx(snapPoints[0].replace("%", ""));
 }
 
-function closeBottomSheet(targetBottomSheet, isDisplayOverlay, cleanUpOnClose) {
-  // isDisplayOverlay ? hideOverlay(overlay) : "";
-  console.log("close");
+function closeBottomSheet(
+  targetBottomSheet,
+  displayOverlay,
+  cleanUpOnClose,
+  hideOverlay,
+  overlay
+) {
+  displayOverlay ? hideOverlay(overlay) : "";
   document.body.style.overflow = "scroll";
   anime({
     targets: targetBottomSheet,
@@ -398,19 +436,20 @@ function closeBottomSheet(targetBottomSheet, isDisplayOverlay, cleanUpOnClose) {
   lastSetSnapPoint = convertToPx(100);
   setTimeout(() => {
     if (lastSetSnapPoint >= window.innerHeight && cleanUpOnClose) {
-      cleanUp(targetBottomSheet);
+      cleanUp(targetBottomSheet, overlay);
     }
   }, 500);
 }
 
-// function displayOverlay(overlay) {
-//   overlay.classList.add("display");
-// }
+function addOverlay(overlay) {
+  overlay.classList.add("display");
+}
 
 function hideOverlay(overlay) {
-  if (overlay.classList.contains("display")) {
+  if (overlay?.classList?.contains("display")) {
     overlay.classList.remove("display");
   }
+  overlay.remove();
 }
 
 function getCurrentSnapPoint(newBottomSheet) {
@@ -424,8 +463,9 @@ function handleDragGesture(
   snapPoints,
   newBottomSheet,
   minWidthForWeb,
-  isDisplayOverlay,
-  draggableId
+  displayOverlay,
+  draggableId,
+  overlay
 ) {
   const gesture = new Gesture(
     draggableTarget,
@@ -467,9 +507,10 @@ function handleDragGesture(
                 offset,
                 dy,
                 draggableTarget,
-                newOffset
+                newOffset,
+                overlay
               );
-              // if (currentSnapPoint <= 10 && isDisplayOverlay)
+              // if (currentSnapPoint <= 10 && displayOverlay)
               //   hideOverlay(overlay);
             } else {
               if (
@@ -500,9 +541,10 @@ function handleDragGesture(
                   offset,
                   dy,
                   draggableTarget,
-                  newOffset
+                  newOffset,
+                  overlay
                 );
-                // if (currentSnapPoint <= 10 && isDisplayOverlay)
+                // if (currentSnapPoint <= 10 && displayOverlay)
                 //   hideOverlay(overlay);
               }
             }
@@ -539,10 +581,11 @@ function handleDragGesture(
                 offset,
                 dy,
                 draggableTarget,
-                newOffset
+                newOffset,
+                overlay
               );
             }
-            // displayOverlay(overlay);
+            // addOverlay(overlay);
           }
         }
       },
@@ -550,7 +593,7 @@ function handleDragGesture(
         document.body.style.overflow = "hidden";
       },
       onDragEnd: ({ movement: [mx, my] }) => {
-        // if (+lastSetSnapPoint >= -10 && isDisplayOverlay) hideOverlay(overlay);
+        // if (+lastSetSnapPoint >= -10 && displayOverlay) hideOverlay(overlay);
         currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
         if (
           (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
@@ -604,7 +647,8 @@ function handleSnapPoints(
   offset,
   dy,
   draggableTarget,
-  newOffset
+  newOffset,
+  overlay
 ) {
   let convertXy = ((window.screen.height - xy[1]) / window.screen.height) * 100;
 
@@ -627,7 +671,6 @@ function handleSnapPoints(
       );
       snapped = false;
     }
-
     if (!active) {
       translateToPreviousSnapPoint(
         snapPoints,
@@ -640,7 +683,8 @@ function handleSnapPoints(
         vy,
         lastSnapPoint,
         dy,
-        false
+        false,
+        overlay
       ) !== undefined
         ? (offset[1] = translateToPreviousSnapPoint(
             snapPoints,
@@ -652,7 +696,8 @@ function handleSnapPoints(
             newBottomSheet,
             vy,
             lastSnapPoint,
-            false
+            false,
+            overlay
           ))
         : "";
       snapped = true;
@@ -687,7 +732,8 @@ function handleSnapPoints(
         vy,
         lastSnapPoint,
         dy,
-        false
+        false,
+        overlay
       ) !== undefined
         ? (offset[1] = translateToNextSnapPoint(
             snapPoints,
@@ -700,7 +746,8 @@ function handleSnapPoints(
             vy,
             lastSnapPoint,
             dy,
-            false
+            false,
+            overlay
           ))
         : "";
       snapped = true;
@@ -716,7 +763,8 @@ function translateToNextSnapPoint(
   vy,
   lastSnapPoint,
   dy,
-  snappable
+  snappable,
+  overlay
 ) {
   let maxSnapPoint = Infinity;
   snapPoints.forEach((element) => {
@@ -758,7 +806,8 @@ function translateToNextSnapPoint(
           vy,
           lastSnapPoint,
           dy,
-          true
+          true,
+          overlay
         );
       }
     }
@@ -771,7 +820,8 @@ function translateToPreviousSnapPoint(
   vy,
   lastSnapPoint,
   dy,
-  snappable
+  snappable,
+  overlay
 ) {
   let minSnapPoint = 0;
   snapPoints.forEach((element) => {
@@ -793,6 +843,7 @@ function translateToPreviousSnapPoint(
       `spring(1, 250, 15, ${vy})`
     );
     lastSetSnapPoint = window.innerHeight - minSnapPoint;
+    if (lastSetSnapPoint >= window.innerHeight) hideOverlay(overlay);
     return lastSetSnapPoint;
   } else {
     if (vy > 0.9 || dy > 150) {
@@ -802,6 +853,8 @@ function translateToPreviousSnapPoint(
         `spring(1, 250, 15, ${vy})`
       );
       lastSetSnapPoint = window.innerHeight - minSnapPoint;
+      if (lastSetSnapPoint >= window.innerHeight) hideOverlay(overlay);
+
       return lastSetSnapPoint;
     } else {
       return translateToNextSnapPoint(
@@ -811,7 +864,8 @@ function translateToPreviousSnapPoint(
         vy,
         lastSnapPoint,
         dy,
-        true
+        true,
+        overlay
       );
     }
   }
@@ -825,7 +879,10 @@ function handleCloseIcons(
   isWeb,
   minWidthForWeb,
   draggableArea,
-  draggableId
+  draggableId,
+  cleanUpOnClose,
+  overlay,
+  sideSheetSnapPoints
 ) {
   if (isWeb) {
     if (document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)) {
@@ -847,11 +904,23 @@ function handleCloseIcons(
       webLayout === "sideSheetLeft"
     ) {
       targetBottomSheet.prepend(sideSheetLeft);
+      closeLeftSideSheet(
+        targetBottomSheet,
+        cleanUpOnClose,
+        overlay,
+        sideSheetSnapPoints
+      );
     } else if (
       !document.querySelector(`#${targetBottomSheet.id} #side-right`) &&
       webLayout === "sideSheetRight"
     ) {
       targetBottomSheet.prepend(sideSheetRight);
+      closeRightSideSheet(
+        targetBottomSheet,
+        cleanUpOnClose,
+        overlay,
+        sideSheetSnapPoints
+      );
     }
   } else {
     if (!document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)) {
@@ -872,33 +941,112 @@ function handleCloseIcons(
     targetBottomSheet.classList.remove("side-sheet");
   }
 }
-function closeLeftSideSheet(targetBottomSheet, cleanUpOnClose) {
-  anime({
-    targets: targetBottomSheet,
-    left: `-${targetBottomSheet.offsetWidth}px` || "-60%",
-    easing: "spring(1, 85, 45, 3)",
-    duration: 0,
-  });
-  cleanUpOnClose
-    ? setTimeout(() => {
-        cleanUp(targetBottomSheet);
-      }, 500)
-    : "";
+function closeLeftSideSheet(
+  targetBottomSheet,
+  cleanUpOnClose,
+  overlay,
+  sideSheetSnapPoints
+) {
+  if (
+    convertToPercentage(targetBottomSheet.clientWidth) >= 0 &&
+    convertToPercentage(targetBottomSheet.clientWidth) <
+      +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
+  ) {
+    console.log("higher", convertToPercentage(targetBottomSheet.clientWidth));
+    let max = Infinity;
+    sideSheetSnapPoints.map((i) => {
+      if (
+        +i.replace("%", "") >
+          convertToPercentage(targetBottomSheet.clientWidth) &&
+        +i.replace("%", "") < max
+      ) {
+        max = +i.replace("%", "");
+      }
+      anime({
+        targets: targetBottomSheet,
+        width: `${max}%`,
+        easing: "spring(1, 85, 45, 3)",
+        duration: 0,
+      });
+    });
+  } else {
+    let min = 0;
+    sideSheetSnapPoints.map((i) => {
+      if (
+        +i.replace("%", "") <
+          convertToPercentage(targetBottomSheet.clientWidth) &&
+        +i.replace("%", "") > min
+      ) {
+        min = +i.replace("%", "");
+      }
+      anime({
+        targets: targetBottomSheet,
+        width: `${min}%`,
+        easing: "spring(1, 85, 45, 3)",
+        duration: 0,
+      });
+    });
+  }
+
+  // cleanUpOnClose
+  //   ? setTimeout(() => {
+  //       cleanUp(targetBottomSheet, overlay);
+  //     }, 500)
+  //   : "";
 }
-function closeRightSideSheet(targetBottomSheet, cleanUpOnClose) {
-  anime({
-    targets: targetBottomSheet,
-    right: `-${targetBottomSheet.offsetWidth}px` || "-60%",
-    easing: "spring(1, 85, 45, 3)",
-    duration: 0,
-  });
-  cleanUpOnClose
-    ? setTimeout(() => {
-        cleanUp(targetBottomSheet);
-      }, 500)
-    : "";
+function closeRightSideSheet(
+  targetBottomSheet,
+  cleanUpOnClose,
+  overlay,
+  sideSheetSnapPoints
+) {
+  if (
+    convertToPercentage(targetBottomSheet.clientWidth) >= 0 &&
+    convertToPercentage(targetBottomSheet.clientWidth) <
+      +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
+  ) {
+    console.log("higher", convertToPercentage(targetBottomSheet.clientWidth));
+    let max = Infinity;
+    sideSheetSnapPoints.map((i) => {
+      if (
+        +i.replace("%", "") >
+          convertToPercentage(targetBottomSheet.clientWidth) &&
+        +i.replace("%", "") < max
+      ) {
+        max = +i.replace("%", "");
+      }
+      anime({
+        targets: targetBottomSheet,
+        width: `${max}%`,
+        easing: "spring(1, 85, 45, 3)",
+        duration: 0,
+      });
+    });
+  } else {
+    let min = 0;
+    sideSheetSnapPoints.map((i) => {
+      if (
+        +i.replace("%", "") <
+          convertToPercentage(targetBottomSheet.clientWidth) &&
+        +i.replace("%", "") > min
+      ) {
+        min = +i.replace("%", "");
+      }
+      anime({
+        targets: targetBottomSheet,
+        width: `${min}%`,
+        easing: "spring(1, 85, 45, 3)",
+        duration: 0,
+      });
+    });
+  }
 }
-function closeModal(targetBottomSheet, cleanUpOnClose) {
+function closeModal(
+  targetBottomSheet,
+  cleanUpOnClose,
+  overlay,
+  sideSheetSnapPoints
+) {
   anime({
     targets: targetBottomSheet,
     opacity: 0,
@@ -908,15 +1056,18 @@ function closeModal(targetBottomSheet, cleanUpOnClose) {
   });
   cleanUpOnClose
     ? setTimeout(() => {
-        cleanUp(targetBottomSheet);
+        cleanUp(targetBottomSheet, overlay);
       }, 500)
     : "";
 }
 function convertToPx(percentage) {
   return Math.round((window.innerHeight * percentage) / 100);
 }
-
-function cleanUp(targetBottomSheet) {
+function convertToPercentage(px) {
+  return Math.round((px / window.innerWidth) * 100);
+}
+function cleanUp(targetBottomSheet, overlay) {
   targetBottomSheet.remove();
+  hideOverlay(overlay);
 }
 export default BottomSheet;
