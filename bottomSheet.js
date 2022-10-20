@@ -214,7 +214,10 @@ function createBottomSheet(
     isWeb,
     webLayout,
     sideSheetLeft,
-    sideSheetRight
+    sideSheetRight,
+    cleanUpOnClose,
+    overlay,
+    sideSheetSnapPoints
   );
   setTimeout(() => {
     onOpen();
@@ -298,7 +301,10 @@ function windowResizeListener(
   isWeb,
   webLayout,
   sideSheetLeft,
-  sideSheetRight
+  sideSheetRight,
+  cleanUpOnClose,
+  overlay,
+  sideSheetSnapPoints
 ) {
   window.addEventListener("resize", () => {
     handleCloseIcons(
