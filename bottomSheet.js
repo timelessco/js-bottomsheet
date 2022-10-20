@@ -1,7 +1,7 @@
 import { Gesture } from "@use-gesture/vanilla";
 import anime from "animejs/lib/anime.es.js";
 
-function BottomSheet(props) {
+async function BottomSheet(props) {
   let {
     snapPoints = ["100%"],
     displayOverlay = true,
@@ -28,6 +28,8 @@ function BottomSheet(props) {
     cleanUpOnClose = true,
     sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
   } = props;
+
+  content = typeof content !== "string" ? await content : content;
   if (trigger && document.querySelector(`#${trigger}`)) {
     document.querySelector(`#${trigger}`).addEventListener("click", () => {
       bottomsheetRequirements(
@@ -958,7 +960,6 @@ function closeLeftSideSheet(
     convertToPercentage(targetBottomSheet.clientWidth) <
       +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
   ) {
-    console.log("higher", convertToPercentage(targetBottomSheet.clientWidth));
     let max = Infinity;
     sideSheetSnapPoints.map((i) => {
       if (
@@ -1011,7 +1012,6 @@ function closeRightSideSheet(
     convertToPercentage(targetBottomSheet.clientWidth) <
       +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
   ) {
-    console.log("higher", convertToPercentage(targetBottomSheet.clientWidth));
     let max = Infinity;
     sideSheetSnapPoints.map((i) => {
       if (
