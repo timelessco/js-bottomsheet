@@ -11,7 +11,7 @@ async function BottomSheet(props) {
     trigger = "",
     content = "",
     init = () => {},
-    webLayout = "sideSheetRight",
+    webLayout = "Modal",
     modalCloseIcon = `<svg width="16" height="12" viewBox="0 0 39 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M33.112 36.9133C34.3649 38.15 36.3963 38.15 37.6492 36.9133C38.9022 35.6766 38.9022 33.6716 37.6492 32.435L24.0375 19L37.6492 5.56496C38.9022 4.3283 38.9022 2.32328 37.6492 1.08662C36.3963 -0.150042 34.3649 -0.150042 33.112 1.08662L19.5002 14.5216L5.88835 1.08655C4.63541 -0.150108 2.60401 -0.150107 1.35108 1.08655C0.0981471 2.32321 0.0981459 4.32824 1.35108 5.5649L14.9629 19L1.35108 32.435C0.0981434 33.6717 0.0981443 35.6767 1.35108 36.9134C2.60401 38.15 4.63541 38.15 5.88834 36.9134L19.5002 23.4783L33.112 36.9133Z" fill="white"/>
     </svg>
@@ -30,26 +30,30 @@ async function BottomSheet(props) {
   } = props;
 
   content = typeof content !== "string" ? await content : content;
-  if (trigger && document.querySelector(`#${trigger}`)) {
-    document.querySelector(`#${trigger}`).addEventListener("click", () => {
-      bottomsheetRequirements(
-        trigger,
-        content,
-        displayOverlay,
-        init,
-        snapPoints,
-        minWidthForWeb,
-        draggableArea,
-        onOpen,
-        modalCloseIcon,
-        webLayout,
-        sideSheetLeftIcon,
-        sideSheetRightIcon,
-        cleanUpOnClose,
-        sideSheetSnapPoints
+  setTimeout(() => {
+    if (trigger && document.querySelector(`#${trigger}`)) {
+      document.querySelectorAll(`#${trigger}`).forEach((i) =>
+        i.addEventListener("click", () => {
+          bottomsheetRequirements(
+            trigger,
+            content,
+            displayOverlay,
+            init,
+            snapPoints,
+            minWidthForWeb,
+            draggableArea,
+            onOpen,
+            modalCloseIcon,
+            webLayout,
+            sideSheetLeftIcon,
+            sideSheetRightIcon,
+            cleanUpOnClose,
+            sideSheetSnapPoints
+          );
+        })
       );
-    });
-  }
+    }
+  }, 400);
 }
 function bottomsheetRequirements(
   trigger,
@@ -80,21 +84,29 @@ function bottomsheetRequirements(
     document.body.insertAdjacentHTML("beforeend", content);
     targetBottomSheet = document.querySelector(`#${targetid}`);
   }
-  const overlay = document.querySelector(`#${targetBottomSheet.id}-overlay`)
-    ? document.querySelector(`#${targetBottomSheet.id}-overlay`)
+  const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
+    ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
-  overlay.id = `${targetBottomSheet.id}-overlay`;
+  overlay.id = `${targetBottomSheet?.id}-overlay`;
 
   if (displayOverlay) {
     overlay.classList.add("overlay");
     addOverlay(overlay);
     document.body.insertBefore(overlay, targetBottomSheet);
-
+    overlay.addEventListener("click", () => {
+      closeBottomSheet(
+        targetBottomSheet,
+        displayOverlay,
+        cleanUpOnClose,
+        hideOverlay,
+        overlay
+      );
+    });
     // document.body.appendChild(overlay);
   }
   let isWeb = window.innerWidth < minWidthForWeb ? false : true;
 
-  if (targetBottomSheet) {
+  if (document.querySelectorAll(`#${targetBottomSheet?.id}`).length < 2) {
     createBottomSheet(
       targetBottomSheet,
       snapPoints,
@@ -113,8 +125,23 @@ function bottomsheetRequirements(
       cleanUpOnClose,
       sideSheetSnapPoints
     );
-
     // : "";
+  } else {
+    // else {
+    openBottomSheet(
+      targetBottomSheet,
+      snapPoints,
+      overlay,
+      displayOverlay,
+      onOpen,
+      content,
+      init,
+      minWidthForWeb,
+      draggableArea,
+      isWeb,
+      webLayout
+    );
+    // }
   }
 }
 function createBottomSheet(
@@ -172,14 +199,19 @@ function createBottomSheet(
   sideSheetLeft.insertAdjacentHTML("afterbegin", sideSheetLeftIcon);
   sideSheetRight.insertAdjacentHTML("afterbegin", sideSheetRightIcon);
   let draggableId = "";
-  if (typeof draggableArea === "string") {
-    draggableArea = new DOMParser().parseFromString(draggableArea, "text/xml");
-    draggableId = draggableArea.childNodes[0].id;
-    draggableArea = draggableArea.childNodes[0];
-  } else {
-    draggableId = draggableArea?.id;
+  if (draggableArea) {
+    if (typeof draggableArea === "string") {
+      draggableArea = new DOMParser().parseFromString(
+        draggableArea,
+        "text/xml"
+      );
+      draggableId = draggableArea.childNodes[0].id;
+      draggableArea = draggableArea.childNodes[0];
+    } else {
+      draggableId = draggableArea?.id;
+    }
+    draggableArea.setAttribute("data-draggable", "1");
   }
-
   handleCloseIcons(
     targetBottomSheet,
     webLayout,
@@ -457,7 +489,7 @@ function hideOverlay(overlay) {
   if (overlay?.classList?.contains("display")) {
     overlay.classList.remove("display");
   }
-  overlay.remove();
+  if (overlay) overlay.remove();
 }
 
 function getCurrentSnapPoint(newBottomSheet) {
@@ -493,7 +525,10 @@ function handleDragGesture(
         if (window.innerWidth < minWidthForWeb) {
           if (my > 0) {
             let type;
-            if (target === document.querySelector(`#${draggableId}`)) {
+            if (
+              draggableId &&
+              target === document.querySelector(`#${draggableId}`)
+            ) {
               // document.querySelector(`#${draggableId}`).focus();
               // document.querySelector(`#${draggableId}`).click();
               newBottomSheet.style.overflow = "hidden";
@@ -518,13 +553,13 @@ function handleDragGesture(
                 newOffset,
                 overlay
               );
-              // if (currentSnapPoint <= 10 && displayOverlay)
-              //   hideOverlay(overlay);
+              if (lastSetSnapPoint >= window.innerHeight) hideOverlay(overlay);
             } else {
               if (
                 newBottomSheet.scrollTop >= 1 &&
                 currentSnapPoint <= convertToPx(100 - lastSnapPoint) &&
-                target !== document.querySelector(`#${draggableId}`)
+                (!draggableId ||
+                  target !== document.querySelector(`#${draggableId}`))
               ) {
                 newBottomSheet.style.overflow = "scroll";
                 newBottomSheet.style.touchAction = "auto";
@@ -552,8 +587,8 @@ function handleDragGesture(
                   newOffset,
                   overlay
                 );
-                // if (currentSnapPoint <= 10 && displayOverlay)
-                //   hideOverlay(overlay);
+                if (lastSetSnapPoint >= window.innerHeight)
+                  hideOverlay(overlay);
               }
             }
           } else {
@@ -893,7 +928,10 @@ function handleCloseIcons(
   sideSheetSnapPoints
 ) {
   if (isWeb) {
-    if (document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)) {
+    if (
+      draggableArea &&
+      document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)
+    ) {
       targetBottomSheet.removeChild(draggableArea);
     }
     if (webLayout === "Modal") {
@@ -931,7 +969,10 @@ function handleCloseIcons(
       );
     }
   } else {
-    if (!document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)) {
+    if (
+      draggableId &&
+      !document.querySelector(`#${targetBottomSheet?.id} #${draggableId}`)
+    ) {
       targetBottomSheet.prepend(draggableArea);
     }
     if (document.querySelector(`#${targetBottomSheet.id} #modal-close`)) {
@@ -1074,6 +1115,37 @@ function convertToPercentage(px) {
 }
 function cleanUp(targetBottomSheet, overlay) {
   targetBottomSheet.remove();
+  targetBottomSheet.innerHTML = "";
   hideOverlay(overlay);
+}
+
+export async function replaceInnerContent(bottomsheetID, content) {
+  content = typeof content !== "string" ? await content : content;
+  let draggableItem;
+  if (content && bottomsheetID && document.getElementById(`${bottomsheetID}`)) {
+    // if (
+    //   document.getElementById(`${bottomsheetID}`) &&
+    //   document.getElementById(`${bottomsheetID}`)?.childNodes &&
+    //   document.getElementById(`${bottomsheetID}`)?.childNodes[0] &&
+    //   document
+    //     .getElementById(`${bottomsheetID}`)
+    //     ?.childNodes[0]?.getAttribute("data-draggable")
+    // ) {
+    draggableItem = document.getElementById(`${bottomsheetID}`).children[0];
+
+    // }
+    document.getElementById(`${bottomsheetID}`).innerHTML = "";
+    if (
+      draggableItem &&
+      (draggableItem?.getAttribute("data-draggable") ||
+        draggableItem.children[0] instanceof SVGElement)
+    ) {
+      document.getElementById(`${bottomsheetID}`).appendChild(draggableItem);
+    }
+    document
+      .getElementById(`${bottomsheetID}`)
+      .insertAdjacentHTML("beforeend", content);
+    // document.getElementById(`${bottomsheetID}`).innerHTML = content;
+  }
 }
 export default BottomSheet;

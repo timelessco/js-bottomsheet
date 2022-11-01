@@ -18,6 +18,8 @@
   "dependencies": {
     "@use-gesture/vanilla": "^10.2.20",
     "animejs": "^3.2.1",
-    "js-bottomsheet": "^0.0.0"
+    "js-bottomsheet": "^0.0.0",
+    "vanilla-js-carousel": "^3.1.2",
+    "scroll-snap-slider": "SamrithaS/scroll-snap-slider"
   }
 }
