@@ -213,6 +213,5 @@ async function getBottomsheet3content(key) {
     </li>`;
   })}
 </ul></div>`;
-  console.log(res, "res");
   return res.replaceAll(",", "");
 }

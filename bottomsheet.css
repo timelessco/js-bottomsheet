@@ -80,6 +80,8 @@
   position: sticky;
   top:0;
   padding:4px;
+  z-index: 100;
+
 }
 #side-left{
   display: flex;

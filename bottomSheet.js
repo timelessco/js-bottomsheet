@@ -99,7 +99,9 @@ function bottomsheetRequirements(
         displayOverlay,
         cleanUpOnClose,
         hideOverlay,
-        overlay
+        overlay,
+        isWeb,
+        webLayout
       );
     });
     // document.body.appendChild(overlay);
@@ -181,8 +183,8 @@ function createBottomSheet(
     closeLeftSideSheet(
       targetBottomSheet,
       cleanUpOnClose,
-      overlay,
-      sideSheetSnapPoints
+      overlay
+      // sideSheetSnapPoints
     )
   );
   let sideSheetRight = document.createElement("div");
@@ -464,15 +466,30 @@ function closeBottomSheet(
   displayOverlay,
   cleanUpOnClose,
   hideOverlay,
-  overlay
+  overlay,
+  isWeb,
+  webLayout
 ) {
   displayOverlay ? hideOverlay(overlay) : "";
   document.body.style.overflow = "scroll";
-  anime({
-    targets: targetBottomSheet,
-    top: `${convertToPx(100)}px`,
-    easing: "spring(1, 85, 45, 3)",
-  });
+
+  if (!isWeb) {
+    anime({
+      targets: targetBottomSheet,
+      top: `${convertToPx(100)}px`,
+      easing: "spring(1, 85, 45, 3)",
+    });
+  } else {
+    if (webLayout === "Modal") {
+      closeModal(
+        targetBottomSheet,
+        cleanUpOnClose,
+        overlay
+        // sideSheetSnapPoints
+      );
+    }
+  }
+
   lastSetSnapPoint = convertToPx(100);
   setTimeout(() => {
     if (lastSetSnapPoint >= window.innerHeight && cleanUpOnClose) {
@@ -953,8 +970,8 @@ function handleCloseIcons(
       closeLeftSideSheet(
         targetBottomSheet,
         cleanUpOnClose,
-        overlay,
-        sideSheetSnapPoints
+        overlay
+        // sideSheetSnapPoints
       );
     } else if (
       !document.querySelector(`#${targetBottomSheet.id} #side-right`) &&
@@ -1091,8 +1108,8 @@ function closeRightSideSheet(
 function closeModal(
   targetBottomSheet,
   cleanUpOnClose,
-  overlay,
-  sideSheetSnapPoints
+  overlay
+  // sideSheetSnapPoints
 ) {
   anime({
     targets: targetBottomSheet,
