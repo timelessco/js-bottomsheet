@@ -30,837 +30,735 @@ async function BottomSheet(props) {
   } = props;
 
   content = typeof content !== "string" ? await content : content;
+  let lastSetSnapPoint;
+  let oldOffset;
+  let snapped = false;
+  let dragFlag = 0;
+
   setTimeout(() => {
     if (trigger && document.querySelector(`#${trigger}`)) {
       document.querySelectorAll(`#${trigger}`).forEach((i) =>
         i.addEventListener("click", () => {
-          bottomsheetRequirements(
-            trigger,
-            content,
-            displayOverlay,
-            init,
-            snapPoints,
-            minWidthForWeb,
-            draggableArea,
-            onOpen,
-            modalCloseIcon,
-            webLayout,
-            sideSheetLeftIcon,
-            sideSheetRightIcon,
-            cleanUpOnClose,
-            sideSheetSnapPoints
-          );
+          bottomsheetRequirements();
         })
       );
     }
   }, 400);
-}
-function bottomsheetRequirements(
-  trigger,
-  content,
-  displayOverlay,
-  init,
-  snapPoints,
-  minWidthForWeb,
-  draggableArea,
-  onOpen,
-  modalCloseIcon,
-  webLayout,
-  sideSheetLeftIcon,
-  sideSheetRightIcon,
-  cleanUpOnClose,
-  sideSheetSnapPoints
-) {
-  let targetid = document
-    .querySelector(`#${trigger}`)
-    .getAttribute("data-bottomsheet-id");
 
-  let targetBottomSheet = document.querySelector(`#${targetid}`);
+  function bottomsheetRequirements() {
+    let targetid = document
+      .querySelector(`#${trigger}`)
+      .getAttribute("data-bottomsheet-id");
 
-  if (init) {
-    init();
-  }
-  if (content && !targetBottomSheet) {
-    document.body.insertAdjacentHTML("beforeend", content);
-    targetBottomSheet = document.querySelector(`#${targetid}`);
-  }
-  const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
-    ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
-    : document.createElement("div");
-  overlay.id = `${targetBottomSheet?.id}-overlay`;
+    let targetBottomSheet = document.querySelector(`#${targetid}`);
 
-  if (displayOverlay) {
-    overlay.classList.add("overlay");
-    addOverlay(overlay);
-    document.body.insertBefore(overlay, targetBottomSheet);
-    overlay.addEventListener("click", () => {
-      closeBottomSheet(
-        targetBottomSheet,
-        displayOverlay,
-        cleanUpOnClose,
-        hideOverlay,
-        overlay,
-        isWeb,
-        webLayout
-      );
-    });
-    // document.body.appendChild(overlay);
-  }
-  let isWeb = window.innerWidth < minWidthForWeb ? false : true;
-
-  if (document.querySelectorAll(`#${targetBottomSheet?.id}`).length < 2) {
-    createBottomSheet(
-      targetBottomSheet,
-      snapPoints,
-      overlay,
-      displayOverlay,
-      minWidthForWeb,
-      draggableArea,
-      onOpen,
-      content,
-      init,
-      modalCloseIcon,
-      webLayout,
-      sideSheetLeftIcon,
-      sideSheetRightIcon,
-      isWeb,
-      cleanUpOnClose,
-      sideSheetSnapPoints
-    );
-    // : "";
-  } else {
-    // else {
-    openBottomSheet(
-      targetBottomSheet,
-      snapPoints,
-      overlay,
-      displayOverlay,
-      onOpen,
-      content,
-      init,
-      minWidthForWeb,
-      draggableArea,
-      isWeb,
-      webLayout
-    );
-    // }
-  }
-}
-function createBottomSheet(
-  targetBottomSheet,
-  snapPoints,
-  overlay,
-  displayOverlay,
-  minWidthForWeb,
-  draggableArea,
-  onOpen,
-  content,
-  init,
-  modalCloseIcon,
-  webLayout,
-  sideSheetLeftIcon,
-  sideSheetRightIcon,
-  isWeb,
-  cleanUpOnClose,
-  sideSheetSnapPoints
-) {
-  // const newBottomSheet = document.createElement("div");
-  // lastSetSnapPoint = null;
-  targetBottomSheet.style.display = "block";
-  let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
-
-  let lastSnapPoint = +snapPoints[snapPoints.length - 1].replace("%", "");
-  // let isWeb = window.innerWidth < minWidthForWeb ? false : true;
-
-  let modalClose = document.createElement("div");
-  modalClose.id = "modal-close";
-  modalClose.addEventListener("click", () =>
-    closeModal(targetBottomSheet, cleanUpOnClose, overlay, sideSheetSnapPoints)
-  );
-  let sideSheetLeft = document.createElement("div");
-  sideSheetLeft.id = "side-left";
-  sideSheetLeft.addEventListener("click", () =>
-    closeLeftSideSheet(
-      targetBottomSheet,
-      cleanUpOnClose,
-      overlay
-      // sideSheetSnapPoints
-    )
-  );
-  let sideSheetRight = document.createElement("div");
-  sideSheetRight.id = "side-right";
-  sideSheetRight.addEventListener("click", () =>
-    closeRightSideSheet(
-      targetBottomSheet,
-      cleanUpOnClose,
-      overlay,
-      sideSheetSnapPoints
-    )
-  );
-  modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
-  sideSheetLeft.insertAdjacentHTML("afterbegin", sideSheetLeftIcon);
-  sideSheetRight.insertAdjacentHTML("afterbegin", sideSheetRightIcon);
-  let draggableId = "";
-  if (draggableArea) {
-    if (typeof draggableArea === "string") {
-      draggableArea = new DOMParser().parseFromString(
-        draggableArea,
-        "text/xml"
-      );
-      draggableId = draggableArea.childNodes[0].id;
-      draggableArea = draggableArea.childNodes[0];
-    } else {
-      draggableId = draggableArea?.id;
+    if (init) {
+      init();
     }
-    draggableArea.setAttribute("data-draggable", "1");
+    if (content && !targetBottomSheet) {
+      document.body.insertAdjacentHTML("beforeend", content);
+      targetBottomSheet = document.querySelector(`#${targetid}`);
+    }
+    const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
+      ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
+      : document.createElement("div");
+    overlay.id = `${targetBottomSheet?.id}-overlay`;
+
+    if (displayOverlay) {
+      overlay.classList.add("overlay");
+      addOverlay(overlay);
+      document.body.insertBefore(overlay, targetBottomSheet);
+      overlay.addEventListener("click", () => {
+        closeBottomSheet(targetBottomSheet, overlay, isWeb);
+      });
+      // document.body.appendChild(overlay);
+    }
+    let isWeb = window.innerWidth < minWidthForWeb ? false : true;
+
+    if (document.querySelectorAll(`#${targetBottomSheet?.id}`).length < 2) {
+      createBottomSheet(targetBottomSheet, isWeb, overlay);
+      // : "";
+    } else {
+      // else {
+      openBottomSheet(
+        targetBottomSheet,
+        // snapPoints,
+        overlay
+        // displayOverlay,
+        // onOpen,
+        // content,
+        // init,
+        // minWidthForWeb,
+        // draggableArea,
+        // isWeb,
+        // webLayout
+      );
+      // }
+    }
   }
-  handleCloseIcons(
-    targetBottomSheet,
-    webLayout,
-    modalClose,
-    sideSheetLeft,
-    sideSheetRight,
-    isWeb,
-    minWidthForWeb,
-    draggableArea,
-    draggableId,
-    cleanUpOnClose,
-    overlay,
-    sideSheetSnapPoints
-  );
 
-  // if (
-  //   !document.querySelector(`#${targetBottomSheet.id} #${draggableId}`) &&
-  //   !isWeb
-  // ) {
-  //   targetBottomSheet.prepend(draggableArea);
-  // }
+  function createBottomSheet(targetBottomSheet, isWeb, overlay) {
+    // const newBottomSheet = document.createElement("div");
+    // lastSetSnapPoint = null;
+    targetBottomSheet.style.display = "block";
+    let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
 
-  isWeb = windowResizeListener(
-    targetBottomSheet,
-    draggableArea,
-    minWidthForWeb,
-    draggableId,
-    modalClose,
-    snapPoints,
-    displayOverlay,
-    onOpen,
-    content,
-    init,
-    isWeb,
-    webLayout,
-    sideSheetLeft,
-    sideSheetRight,
-    cleanUpOnClose,
-    overlay,
-    sideSheetSnapPoints
-  );
-  setTimeout(() => {
-    onOpen();
-  }, 10);
-  if (
-    lastSetSnapPoint &&
-    lastSetSnapPoint < window.innerHeight &&
-    window.innerWidth < minWidthForWeb
-  ) {
-    closeBottomSheet(
-      targetBottomSheet,
-      displayOverlay,
-      cleanUpOnClose,
-      hideOverlay,
-      overlay
+    let lastSnapPoint = +snapPoints[snapPoints.length - 1].replace("%", "");
+    // let isWeb = window.innerWidth < minWidthForWeb ? false : true;
+
+    let modalClose = document.createElement("div");
+    modalClose.id = "modal-close";
+    modalClose.addEventListener("click", () =>
+      closeModal(targetBottomSheet, overlay)
     );
-  } else {
-    openBottomSheet(
-      targetBottomSheet,
-      snapPoints,
-      overlay,
-      displayOverlay,
-      onOpen,
-      content,
-      init,
-      minWidthForWeb,
-      draggableArea,
-      isWeb,
-      webLayout
+    let sideSheetLeft = document.createElement("div");
+    sideSheetLeft.id = "side-left";
+    sideSheetLeft.addEventListener("click", () =>
+      closeLeftSideSheet(targetBottomSheet)
     );
-  }
-  // openBottomSheet(
-  //   targetBottomSheet,
-  //   snapPoints,
-  //   // overlay,
-  //   displayOverlay,
-  //   onOpen,
-  //   content,
-  //   init,
-  //   minWidthForWeb,
-  //   draggableArea,
-  //   isWeb,
-  //   webLayout
-  // );
-
-  targetBottomSheet.style.overflow = "scroll";
-
-  setTimeout(() => {
-    handleDragGesture(
-      targetBottomSheet,
-      currentSnapPoint,
-      lastSnapPoint,
-      snapPoints,
-      targetBottomSheet,
-      minWidthForWeb,
-      displayOverlay,
-      draggableId,
-      overlay
+    let sideSheetRight = document.createElement("div");
+    sideSheetRight.id = "side-right";
+    sideSheetRight.addEventListener("click", () =>
+      closeRightSideSheet(targetBottomSheet)
     );
-  }, 10);
-
-  targetBottomSheet.style.overflow = "scroll";
-
-  if (document.querySelector(`.bottomsheet #${targetBottomSheet.id}`)) {
-    document.querySelector(
-      `.bottomsheet #${targetBottomSheet.id}`
-    ).style.display = "block";
-  }
-}
-function windowResizeListener(
-  targetBottomSheet,
-  draggableArea,
-  minWidthForWeb,
-  draggableId,
-  modalClose,
-  snapPoints,
-  displayOverlay,
-  onOpen,
-  content,
-  init,
-  isWeb,
-  webLayout,
-  sideSheetLeft,
-  sideSheetRight,
-  cleanUpOnClose,
-  overlay,
-  sideSheetSnapPoints
-) {
-  window.addEventListener("resize", () => {
+    modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
+    sideSheetLeft.insertAdjacentHTML("afterbegin", sideSheetLeftIcon);
+    sideSheetRight.insertAdjacentHTML("afterbegin", sideSheetRightIcon);
+    let draggableId = "";
+    if (draggableArea) {
+      if (typeof draggableArea === "string") {
+        draggableArea = new DOMParser().parseFromString(
+          draggableArea,
+          "text/xml"
+        );
+        draggableId = draggableArea.childNodes[0].id;
+        draggableArea = draggableArea.childNodes[0];
+      } else {
+        draggableId = draggableArea?.id;
+      }
+      draggableArea.setAttribute("data-draggable", "1");
+    }
     handleCloseIcons(
       targetBottomSheet,
-      webLayout,
-      modalClose,
       sideSheetLeft,
       sideSheetRight,
       isWeb,
-      minWidthForWeb,
-      draggableArea,
       draggableId,
-      cleanUpOnClose,
       overlay,
-      sideSheetSnapPoints
+      modalClose
     );
-    if (window.innerWidth < minWidthForWeb) isWeb = false;
-    else isWeb = true;
-    // openBottomSheet(
-    //   targetBottomSheet,
-    //   snapPoints,
-    //   // overlay,
-    //   displayOverlay,
-    //   onOpen,
-    //   content,
-    //   init,
-    //   minWidthForWeb,
-    //   draggableArea,
-    //   isWeb,
-    //   webLayout
-    // );
-    return isWeb;
-  });
-  return isWeb;
-}
-function moveBottomSheet(targetBottomSheet, top, ease, duration) {
-  anime({
-    targets: targetBottomSheet,
-    top: top,
-    easing: ease,
-    duration,
-  });
-}
-let lastSetSnapPoint;
-
-function openBottomSheet(
-  targetBottomSheet,
-  snapPoints,
-  overlay,
-  displayOverlay,
-  onOpen,
-  content,
-  init,
-  minWidthForWeb,
-  draggableArea,
-  isWeb,
-  webLayout
-) {
-  document.body.style.overflow = "hidden";
-  displayOverlay ? addOverlay(overlay) : "";
-  if (isWeb) {
-    if (webLayout === "sideSheetLeft") {
-      targetBottomSheet.style.top = 0;
-      targetBottomSheet.style.left = `-100%`;
-      setTimeout(() => {
-        anime({
-          targets: targetBottomSheet,
-          left: "0",
-          easing: "spring(1, 85, 45, 3)",
-          duration: 0,
-        });
-      }, 100);
-    } else if (webLayout === "sideSheetRight") {
-      targetBottomSheet.style.top = 0;
-      targetBottomSheet.style.right = `-100%`;
-      setTimeout(() => {
-        anime({
-          targets: targetBottomSheet,
-          right: "0",
-          easing: "spring(1, 85, 45, 3)",
-          duration: 0,
-        });
-      }, 100);
+    isWeb = windowResizeListener(
+      targetBottomSheet,
+      sideSheetLeft,
+      sideSheetRight,
+      isWeb,
+      overlay,
+      modalClose,
+      draggableId
+    );
+    setTimeout(() => {
+      onOpen();
+    }, 10);
+    if (
+      lastSetSnapPoint &&
+      lastSetSnapPoint < window.innerHeight &&
+      window.innerWidth < minWidthForWeb
+    ) {
+      closeBottomSheet(targetBottomSheet, overlay, isWeb);
     } else {
-      targetBottomSheet.style.top = "50%";
-      targetBottomSheet.style.opacity = 0;
-      targetBottomSheet.style.transform = "translate(-50%,-50%) scale(0.9)";
-      anime({
-        targets: targetBottomSheet,
-        opacity: 1,
-        scale: 1,
-        easing: "spring(1, 85, 45, 2)",
-        duration: 1,
-      });
+      openBottomSheet(targetBottomSheet, overlay, isWeb);
     }
-  } else {
-    targetBottomSheet.style.top = convertToPx(100);
+    targetBottomSheet.style.overflow = "scroll";
 
+    setTimeout(() => {
+      handleDragGesture(
+        targetBottomSheet,
+        currentSnapPoint,
+        lastSnapPoint,
+        targetBottomSheet,
+        draggableId,
+        overlay
+      );
+    }, 10);
+
+    targetBottomSheet.style.overflow = "scroll";
+
+    if (document.querySelector(`.bottomsheet #${targetBottomSheet.id}`)) {
+      document.querySelector(
+        `.bottomsheet #${targetBottomSheet.id}`
+      ).style.display = "block";
+    }
+  }
+
+  function windowResizeListener(
+    targetBottomSheet,
+    sideSheetLeft,
+    sideSheetRight,
+    isWeb,
+    overlay,
+    modalClose,
+    draggableId
+  ) {
+    window.addEventListener("resize", () => {
+      handleCloseIcons(
+        targetBottomSheet,
+        sideSheetLeft,
+        sideSheetRight,
+        isWeb,
+        draggableId,
+        overlay,
+        modalClose
+      );
+      if (window.innerWidth < minWidthForWeb) isWeb = false;
+      else isWeb = true;
+      return isWeb;
+    });
+    return isWeb;
+  }
+
+  function closeModal(
+    targetBottomSheet,
+    overlay
+    // sideSheetSnapPoints
+  ) {
     anime({
       targets: targetBottomSheet,
-      top: `${convertToPx(100)}px`,
-      easing: "linear",
+      opacity: 0,
+      scale: 0.9,
+      easing: "spring(1, 85, 45, 2)",
       duration: 0,
     });
-    setTimeout(() => {
+    cleanUpOnClose
+      ? setTimeout(() => {
+          cleanUp(targetBottomSheet, overlay);
+        }, 500)
+      : "";
+  }
+
+  function closeBottomSheet(targetBottomSheet, overlay, isWeb) {
+    displayOverlay ? hideOverlay(overlay) : "";
+    document.body.style.overflow = "scroll";
+
+    if (!isWeb) {
       anime({
         targets: targetBottomSheet,
-        top: `${
-          window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
-        }px`,
+        top: `${convertToPx(100)}px`,
         easing: "spring(1, 85, 45, 3)",
-        opacity: 1,
+      });
+    } else {
+      if (webLayout === "Modal") {
+        closeModal(targetBottomSheet, overlay);
+      }
+    }
+    lastSetSnapPoint = convertToPx(100);
+    setTimeout(() => {
+      if (lastSetSnapPoint >= window.innerHeight && cleanUpOnClose) {
+        cleanUp(targetBottomSheet, overlay);
+      }
+    }, 500);
+  }
+
+  function handleCloseIcons(
+    targetBottomSheet,
+    sideSheetLeft,
+    sideSheetRight,
+    isWeb,
+    draggableId,
+    overlay,
+    modalClose
+  ) {
+    if (isWeb) {
+      if (
+        draggableArea &&
+        document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)
+      ) {
+        targetBottomSheet.removeChild(draggableArea);
+      }
+      if (webLayout === "Modal") {
+        targetBottomSheet.classList.add("modal");
+      } else {
+        targetBottomSheet.classList.add("side-sheet");
+      }
+      targetBottomSheet.classList.remove("bottomsheet");
+      if (
+        !document.querySelector(`#${targetBottomSheet.id} #modal-close`) &&
+        webLayout === "Modal"
+      ) {
+        targetBottomSheet.prepend(modalClose);
+      } else if (
+        !document.querySelector(`#${targetBottomSheet.id} #side-left`) &&
+        webLayout === "sideSheetLeft"
+      ) {
+        targetBottomSheet.prepend(sideSheetLeft);
+        closeLeftSideSheet(targetBottomSheet);
+      } else if (
+        !document.querySelector(`#${targetBottomSheet.id} #side-right`) &&
+        webLayout === "sideSheetRight"
+      ) {
+        targetBottomSheet.prepend(sideSheetRight);
+        closeRightSideSheet(targetBottomSheet);
+      }
+    } else {
+      if (
+        draggableId &&
+        !document.querySelector(`#${targetBottomSheet?.id} #${draggableId}`)
+      ) {
+        targetBottomSheet.prepend(draggableArea);
+      }
+      if (document.querySelector(`#${targetBottomSheet.id} #modal-close`)) {
+        targetBottomSheet.removeChild(modalClose);
+      }
+      if (document.querySelector(`#${targetBottomSheet.id} #side-left`)) {
+        targetBottomSheet.removeChild(sideSheetLeft);
+      }
+      if (document.querySelector(`#${targetBottomSheet.id} #side-right`)) {
+        targetBottomSheet.removeChild(sideSheetRight);
+      }
+
+      targetBottomSheet.classList.add("bottomsheet"),
+        targetBottomSheet.classList.remove("modal");
+      targetBottomSheet.classList.remove("side-sheet");
+    }
+  }
+
+  function openBottomSheet(targetBottomSheet, overlay, isWeb) {
+    document.body.style.overflow = "hidden";
+    displayOverlay ? addOverlay(overlay) : "";
+    if (isWeb) {
+      if (webLayout === "sideSheetLeft") {
+        targetBottomSheet.style.top = 0;
+        targetBottomSheet.style.left = `-100%`;
+        setTimeout(() => {
+          anime({
+            targets: targetBottomSheet,
+            left: "0",
+            easing: "spring(1, 85, 45, 3)",
+            duration: 0,
+          });
+        }, 100);
+      } else if (webLayout === "sideSheetRight") {
+        targetBottomSheet.style.top = 0;
+        targetBottomSheet.style.right = `-100%`;
+        setTimeout(() => {
+          anime({
+            targets: targetBottomSheet,
+            right: "0",
+            easing: "spring(1, 85, 45, 3)",
+            duration: 0,
+          });
+        }, 100);
+      } else {
+        targetBottomSheet.style.top = "50%";
+        targetBottomSheet.style.opacity = 0;
+        targetBottomSheet.style.transform = "translate(-50%,-50%) scale(0.9)";
+        anime({
+          targets: targetBottomSheet,
+          opacity: 1,
+          scale: 1,
+          easing: "spring(1, 85, 45, 2)",
+          duration: 1,
+        });
+      }
+    } else {
+      targetBottomSheet.style.top = convertToPx(100);
+
+      anime({
+        targets: targetBottomSheet,
+        top: `${convertToPx(100)}px`,
+        easing: "linear",
         duration: 0,
       });
-    }, 10);
-  }
-  lastSetSnapPoint =
-    window.innerHeight - convertToPx(snapPoints[0].replace("%", ""));
-}
-
-function closeBottomSheet(
-  targetBottomSheet,
-  displayOverlay,
-  cleanUpOnClose,
-  hideOverlay,
-  overlay,
-  isWeb,
-  webLayout
-) {
-  displayOverlay ? hideOverlay(overlay) : "";
-  document.body.style.overflow = "scroll";
-
-  if (!isWeb) {
-    anime({
-      targets: targetBottomSheet,
-      top: `${convertToPx(100)}px`,
-      easing: "spring(1, 85, 45, 3)",
-    });
-  } else {
-    if (webLayout === "Modal") {
-      closeModal(
-        targetBottomSheet,
-        cleanUpOnClose,
-        overlay
-        // sideSheetSnapPoints
-      );
+      setTimeout(() => {
+        anime({
+          targets: targetBottomSheet,
+          top: `${
+            window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
+          }px`,
+          easing: "spring(1, 85, 45, 3)",
+          opacity: 1,
+          duration: 0,
+        });
+      }, 10);
     }
+    lastSetSnapPoint =
+      window.innerHeight - convertToPx(snapPoints[0].replace("%", ""));
   }
 
-  lastSetSnapPoint = convertToPx(100);
-  setTimeout(() => {
-    if (lastSetSnapPoint >= window.innerHeight && cleanUpOnClose) {
-      cleanUp(targetBottomSheet, overlay);
-    }
-  }, 500);
-}
-
-function addOverlay(overlay) {
-  overlay.classList.add("display");
-}
-
-function hideOverlay(overlay) {
-  if (overlay?.classList?.contains("display")) {
-    overlay.classList.remove("display");
-  }
-  if (overlay) overlay.remove();
-}
-
-function getCurrentSnapPoint(newBottomSheet) {
-  return newBottomSheet?.style?.top.replace("%", "").replace("px", "");
-}
-
-function handleDragGesture(
-  draggableTarget,
-  currentSnapPoint,
-  lastSnapPoint,
-  snapPoints,
-  newBottomSheet,
-  minWidthForWeb,
-  displayOverlay,
-  draggableId,
-  overlay
-) {
-  const gesture = new Gesture(
+  function handleDragGesture(
     draggableTarget,
-    {
-      onDrag: ({
-        active,
-        movement: [mx, my],
-        velocity: [vx, vy],
-        xy,
-        offset,
-        distance: [dx, dy],
-        target,
-      }) => {
-        let minSnapPoint = 0;
-        let maxSnapPoint = Infinity;
-        currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
-        if (window.innerWidth < minWidthForWeb) {
-          if (my > 0) {
-            let type;
-            if (
-              draggableId &&
-              target === document.querySelector(`#${draggableId}`)
-            ) {
-              // document.querySelector(`#${draggableId}`).focus();
-              // document.querySelector(`#${draggableId}`).click();
-              newBottomSheet.style.overflow = "hidden";
-              newBottomSheet.style.touchAction = "none";
-
-              let newOffset = offset[1];
-              handleSnapPoints(
-                snapPoints,
-                newBottomSheet,
-                currentSnapPoint,
-                minSnapPoint,
-                null,
-                active,
-                lastSnapPoint,
-                type,
-                my,
-                vy,
-                xy,
-                offset,
-                dy,
-                draggableTarget,
-                newOffset,
-                overlay
-              );
-              if (lastSetSnapPoint >= window.innerHeight) hideOverlay(overlay);
-            } else {
+    currentSnapPoint,
+    lastSnapPoint,
+    newBottomSheet,
+    draggableId,
+    overlay
+  ) {
+    const gesture = new Gesture(
+      draggableTarget,
+      {
+        onDrag: ({
+          active,
+          movement: [mx, my],
+          velocity: [vx, vy],
+          xy,
+          offset,
+          distance: [dx, dy],
+          target,
+        }) => {
+          let minSnapPoint = 0;
+          let maxSnapPoint = Infinity;
+          currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
+          if (window.innerWidth < minWidthForWeb) {
+            if (my > 0) {
+              let type;
               if (
-                newBottomSheet.scrollTop >= 1 &&
-                currentSnapPoint <= convertToPx(100 - lastSnapPoint) &&
-                (!draggableId ||
-                  target !== document.querySelector(`#${draggableId}`))
+                draggableId &&
+                target === document.querySelector(`#${draggableId}`)
               ) {
+                newBottomSheet.style.overflow = "hidden";
+                newBottomSheet.style.touchAction = "none";
+
+                let newOffset = offset[1];
+                handleSnapPoints(
+                  newBottomSheet,
+                  minSnapPoint,
+                  null,
+                  active,
+                  lastSnapPoint,
+                  my,
+                  vy,
+                  xy,
+                  offset,
+                  dy,
+                  overlay
+                );
+                if (lastSetSnapPoint >= window.innerHeight)
+                  hideOverlay(overlay);
+              } else {
+                if (
+                  newBottomSheet.scrollTop >= 1 &&
+                  currentSnapPoint <= convertToPx(100 - lastSnapPoint) &&
+                  (!draggableId ||
+                    target !== document.querySelector(`#${draggableId}`))
+                ) {
+                  newBottomSheet.style.overflow = "scroll";
+                  newBottomSheet.style.touchAction = "auto";
+                  newBottomSheet.click();
+                } else {
+                  newBottomSheet.style.overflow = "hidden";
+                  newBottomSheet.style.touchAction = "none";
+                  handleSnapPoints(
+                    newBottomSheet,
+                    minSnapPoint,
+                    null,
+                    active,
+                    lastSnapPoint,
+                    my,
+                    vy,
+                    xy,
+                    offset,
+                    dy,
+                    overlay
+                  );
+                  if (lastSetSnapPoint >= window.innerHeight)
+                    hideOverlay(overlay);
+                }
+              }
+            } else {
+              let type;
+              if (currentSnapPoint <= convertToPx(100 - lastSnapPoint)) {
                 newBottomSheet.style.overflow = "scroll";
+                newBottomSheet.style.height = `${convertToPx(
+                  lastSnapPoint - 10
+                )}px`;
                 newBottomSheet.style.touchAction = "auto";
                 newBottomSheet.click();
               } else {
                 newBottomSheet.style.overflow = "hidden";
                 newBottomSheet.style.touchAction = "none";
 
-                let newOffset = offset[1];
                 handleSnapPoints(
-                  snapPoints,
                   newBottomSheet,
-                  currentSnapPoint,
-                  minSnapPoint,
                   null,
+                  maxSnapPoint,
                   active,
-                  lastSnapPoint,
-                  type,
                   my,
                   vy,
                   xy,
                   offset,
                   dy,
-                  draggableTarget,
-                  newOffset,
                   overlay
                 );
-                if (lastSetSnapPoint >= window.innerHeight)
-                  hideOverlay(overlay);
               }
             }
-          } else {
-            let type;
-            // document.querySelector(
-            //   `#${newBottomSheet.id} #${targetBottomSheet.id}`
-            // ).style.overflow = "hidden";
-            if (currentSnapPoint <= convertToPx(100 - lastSnapPoint)) {
-              newBottomSheet.style.overflow = "scroll";
-              newBottomSheet.style.height = `${convertToPx(
-                lastSnapPoint - 10
-              )}px`;
-              newBottomSheet.style.touchAction = "auto";
-              newBottomSheet.click();
-            } else {
-              newBottomSheet.style.overflow = "hidden";
-              newBottomSheet.style.touchAction = "none";
-
-              let newOffset = offset[1];
-
-              handleSnapPoints(
-                snapPoints,
-                newBottomSheet,
-                currentSnapPoint,
-                null,
-                maxSnapPoint,
-                active,
-                lastSnapPoint,
-                type,
-                my,
-                vy,
-                xy,
-                offset,
-                dy,
-                draggableTarget,
-                newOffset,
-                overlay
-              );
-            }
-            // addOverlay(overlay);
           }
-        }
+        },
+        onDragStart: () => {
+          document.body.style.overflow = "hidden";
+        },
+        onDragEnd: ({ movement: [mx, my] }) => {
+          currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
+          if (
+            (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
+              lastSetSnapPoint === 0) &&
+            my < 0
+          ) {
+            newBottomSheet.style.overflow = "scroll";
+            newBottomSheet.click();
+            newBottomSheet.style.touchAction = "auto";
+          }
+          dragFlag++;
+        },
       },
-      onDragStart: () => {
-        document.body.style.overflow = "hidden";
-      },
-      onDragEnd: ({ movement: [mx, my] }) => {
-        // if (+lastSetSnapPoint >= -10 && displayOverlay) hideOverlay(overlay);
-        currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
-        if (
-          (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
-            lastSetSnapPoint === 0) &&
-          my < 0
-        ) {
-          newBottomSheet.style.overflow = "scroll";
-          newBottomSheet.click();
-          newBottomSheet.style.touchAction = "auto";
-        }
-        // if (
-        //   (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
-        //     lastSetSnapPoint === 0) &&
-        //   my > 0 &&
-        //   newBottomSheet.offsetTop === 0
-        // ) {
-        //   newBottomSheet.style.overflow = "hidden";
-        //   newBottomSheet.style.touchAction = "none";
+      {
+        drag: {
+          filterTaps: false,
+          rubberband: true,
+          axis: "y",
+          preventDefault: false,
+        },
+      }
+    );
+  }
 
-        //   newBottomSheet.click();
-        // }
-        dragFlag++;
-      },
-    },
-    {
-      drag: {
-        filterTaps: false,
-        rubberband: true,
-        axis: "y",
-        preventDefault: false,
-      },
-    }
-  );
-}
-let oldOffset;
-let snapped = false;
-let dragFlag = 0;
+  function handleSnapPoints(
+    newBottomSheet,
+    minSnapPoint,
+    maxSnapPoint,
+    active,
+    lastSnapPoint,
+    my,
+    vy,
+    xy,
+    offset,
+    dy,
+    overlay
+  ) {
+    let convertXy =
+      ((window.screen.height - xy[1]) / window.screen.height) * 100;
 
-function handleSnapPoints(
-  snapPoints,
-  newBottomSheet,
-  currentSnapPoint,
-  minSnapPoint,
-  maxSnapPoint,
-  active,
-  lastSnapPoint,
-  type,
-  my,
-  vy,
-  xy,
-  offset,
-  dy,
-  draggableTarget,
-  newOffset,
-  overlay
-) {
-  let convertXy = ((window.screen.height - xy[1]) / window.screen.height) * 100;
+    let actualOffset =
+      dragFlag === 0 ? convertToPx(snapPoints[0].replace("%", "")) : offset[1];
 
-  let actualOffset =
-    dragFlag === 0 ? convertToPx(snapPoints[0].replace("%", "")) : offset[1];
-
-  if (maxSnapPoint === null) {
-    if (active) {
-      moveBottomSheet(
-        newBottomSheet,
-        `${
-          actualOffset > window.innerHeight
-            ? window.innerHeight
-            : actualOffset < convertToPx(100 - lastSnapPoint)
-            ? convertToPx(100 - lastSnapPoint)
-            : actualOffset
-        }px`,
-        `spring(1, 250, 25, ${dragFlag === 0 ? 0.3 : 25})`,
-        1
-      );
-      snapped = false;
-    }
-    if (!active) {
-      translateToPreviousSnapPoint(
-        snapPoints,
-        actualOffset > window.innerHeight
-          ? window.innerHeight
-          : actualOffset < convertToPx(100 - lastSnapPoint)
-          ? convertToPx(100 - lastSnapPoint)
-          : actualOffset,
-        newBottomSheet,
-        vy,
-        lastSnapPoint,
-        dy,
-        false,
-        overlay
-      ) !== undefined
-        ? (offset[1] = translateToPreviousSnapPoint(
-            snapPoints,
+    if (maxSnapPoint === null) {
+      if (active) {
+        moveBottomSheet(
+          newBottomSheet,
+          `${
             actualOffset > window.innerHeight
               ? window.innerHeight
               : actualOffset < convertToPx(100 - lastSnapPoint)
               ? convertToPx(100 - lastSnapPoint)
-              : actualOffset,
+              : actualOffset
+          }px`,
+          `spring(1, 250, 25, ${dragFlag === 0 ? 0.3 : 25})`,
+          1
+        );
+        snapped = false;
+      }
+      if (!active) {
+        translateToPreviousSnapPoint(
+          actualOffset > window.innerHeight
+            ? window.innerHeight
+            : actualOffset < convertToPx(100 - lastSnapPoint)
+            ? convertToPx(100 - lastSnapPoint)
+            : actualOffset,
+          newBottomSheet,
+          vy,
+          lastSnapPoint,
+          dy,
+          false,
+          overlay
+        ) !== undefined
+          ? (offset[1] = translateToPreviousSnapPoint(
+              actualOffset > window.innerHeight
+                ? window.innerHeight
+                : actualOffset < convertToPx(100 - lastSnapPoint)
+                ? convertToPx(100 - lastSnapPoint)
+                : actualOffset,
+              newBottomSheet,
+              vy,
+              lastSnapPoint,
+              false,
+              overlay
+            ))
+          : "";
+        snapped = true;
+        oldOffset = offset[1];
+      }
+    } else {
+      if (active) {
+        moveBottomSheet(
+          newBottomSheet,
+          `${
+            actualOffset > window.innerHeight
+              ? window.innerHeight
+              : actualOffset < convertToPx(100 - lastSnapPoint)
+              ? convertToPx(100 - lastSnapPoint)
+              : actualOffset
+          }px`,
+          `spring(1, 250, 25,  ${dragFlag === 0 ? 0.3 : 25})`,
+          1
+        );
+        snapped = false;
+      }
+
+      if (!active) {
+        translateToNextSnapPoint(
+          actualOffset > window.innerHeight
+            ? window.innerHeight
+            : actualOffset < convertToPx(100 - lastSnapPoint)
+            ? convertToPx(100 - lastSnapPoint)
+            : actualOffset,
+          newBottomSheet,
+          vy,
+          lastSnapPoint,
+          dy,
+          false,
+          overlay
+        ) !== undefined
+          ? (offset[1] = translateToNextSnapPoint(
+              actualOffset > window.innerHeight
+                ? window.innerHeight
+                : actualOffset < convertToPx(100 - lastSnapPoint)
+                ? convertToPx(100 - lastSnapPoint)
+                : actualOffset,
+              newBottomSheet,
+              vy,
+              lastSnapPoint,
+              dy,
+              false,
+              overlay
+            ))
+          : "";
+        snapped = true;
+        oldOffset = offset[1];
+      }
+    }
+  }
+
+  function moveBottomSheet(targetBottomSheet, top, ease, duration) {
+    anime({
+      targets: targetBottomSheet,
+      top: top,
+      easing: ease,
+      duration,
+    });
+  }
+  function addOverlay(overlay) {
+    overlay.classList.add("display");
+  }
+
+  function hideOverlay(overlay) {
+    if (overlay?.classList?.contains("display")) {
+      overlay.classList.remove("display");
+    }
+    if (overlay) overlay.remove();
+  }
+
+  function getCurrentSnapPoint(newBottomSheet) {
+    return newBottomSheet?.style?.top.replace("%", "").replace("px", "");
+  }
+
+  function translateToNextSnapPoint(
+    convertXy,
+    newBottomSheet,
+    vy,
+    lastSnapPoint,
+    dy,
+    snappable,
+    overlay
+  ) {
+    let maxSnapPoint = Infinity;
+    snapPoints.forEach((element) => {
+      let elem =
+        typeof element === "number" ? element : +element.replace("%", "");
+
+      if (
+        convertToPx(elem) > window.innerHeight - convertXy &&
+        convertToPx(elem) < maxSnapPoint
+      ) {
+        maxSnapPoint = convertToPx(elem);
+      }
+    });
+
+    if (maxSnapPoint !== Infinity) {
+      if (snappable) {
+        moveBottomSheet(
+          newBottomSheet,
+          `${window.innerHeight - maxSnapPoint}px`,
+          `spring(1, 250, 15, ${vy})`,
+          1
+        );
+        lastSetSnapPoint = window.innerHeight - maxSnapPoint;
+        return lastSetSnapPoint;
+      } else {
+        if (vy > 0.9 || dy > 150) {
+          moveBottomSheet(
             newBottomSheet,
-            vy,
-            lastSnapPoint,
-            false,
-            overlay
-          ))
-        : "";
-      snapped = true;
-      oldOffset = offset[1];
-    }
-  } else {
-    if (active) {
-      moveBottomSheet(
-        newBottomSheet,
-        `${
-          actualOffset > window.innerHeight
-            ? window.innerHeight
-            : actualOffset < convertToPx(100 - lastSnapPoint)
-            ? convertToPx(100 - lastSnapPoint)
-            : actualOffset
-        }px`,
-        `spring(1, 250, 25,  ${dragFlag === 0 ? 0.3 : 25})`,
-        1
-      );
-      snapped = false;
-    }
-
-    if (!active) {
-      translateToNextSnapPoint(
-        snapPoints,
-        actualOffset > window.innerHeight
-          ? window.innerHeight
-          : actualOffset < convertToPx(100 - lastSnapPoint)
-          ? convertToPx(100 - lastSnapPoint)
-          : actualOffset,
-        newBottomSheet,
-        vy,
-        lastSnapPoint,
-        dy,
-        false,
-        overlay
-      ) !== undefined
-        ? (offset[1] = translateToNextSnapPoint(
-            snapPoints,
-            actualOffset > window.innerHeight
-              ? window.innerHeight
-              : actualOffset < convertToPx(100 - lastSnapPoint)
-              ? convertToPx(100 - lastSnapPoint)
-              : actualOffset,
+            `${window.innerHeight - maxSnapPoint}px`,
+            `spring(1, 250, 15, ${vy})`
+          );
+          lastSetSnapPoint = window.innerHeight - maxSnapPoint;
+          return lastSetSnapPoint;
+        } else {
+          return translateToPreviousSnapPoint(
+            convertXy,
             newBottomSheet,
             vy,
             lastSnapPoint,
             dy,
-            false,
+            true,
             overlay
-          ))
-        : "";
-      snapped = true;
-      oldOffset = offset[1];
+          );
+        }
+      }
     }
   }
-}
 
-function translateToNextSnapPoint(
-  snapPoints,
-  convertXy,
-  newBottomSheet,
-  vy,
-  lastSnapPoint,
-  dy,
-  snappable,
-  overlay
-) {
-  let maxSnapPoint = Infinity;
-  snapPoints.forEach((element) => {
-    let elem =
-      typeof element === "number" ? element : +element.replace("%", "");
+  function translateToPreviousSnapPoint(
+    convertXy,
+    newBottomSheet,
+    vy,
+    lastSnapPoint,
+    dy,
+    snappable,
+    overlay
+  ) {
+    let minSnapPoint = 0;
+    snapPoints.forEach((element) => {
+      let elem =
+        typeof element === "number" ? element : +element.replace("%", "");
 
-    if (
-      convertToPx(elem) > window.innerHeight - convertXy &&
-      convertToPx(elem) < maxSnapPoint
-    ) {
-      maxSnapPoint = convertToPx(elem);
-    }
-  });
+      if (
+        convertToPx(elem) < window.innerHeight - convertXy &&
+        convertToPx(elem) > minSnapPoint
+      ) {
+        minSnapPoint = convertToPx(elem);
+      }
+    });
 
-  if (maxSnapPoint !== Infinity) {
     if (snappable) {
       moveBottomSheet(
         newBottomSheet,
-        `${window.innerHeight - maxSnapPoint}px`,
-        `spring(1, 250, 15, ${vy})`,
-        1
+        `${window.innerHeight - minSnapPoint}px`,
+        `spring(1, 250, 15, ${vy})`
       );
-      lastSetSnapPoint = window.innerHeight - maxSnapPoint;
+      lastSetSnapPoint = window.innerHeight - minSnapPoint;
+      if (lastSetSnapPoint >= window.innerHeight) hideOverlay(overlay);
       return lastSetSnapPoint;
     } else {
       if (vy > 0.9 || dy > 150) {
         moveBottomSheet(
           newBottomSheet,
-          `${window.innerHeight - maxSnapPoint}px`,
+          `${window.innerHeight - minSnapPoint}px`,
           `spring(1, 250, 15, ${vy})`
         );
-        lastSetSnapPoint = window.innerHeight - maxSnapPoint;
+        lastSetSnapPoint = window.innerHeight - minSnapPoint;
+        if (lastSetSnapPoint >= window.innerHeight) hideOverlay(overlay);
+
         return lastSetSnapPoint;
       } else {
-        return translateToPreviousSnapPoint(
-          snapPoints,
+        return translateToNextSnapPoint(
           convertXy,
           newBottomSheet,
           vy,
@@ -872,285 +770,124 @@ function translateToNextSnapPoint(
       }
     }
   }
-}
-function translateToPreviousSnapPoint(
-  snapPoints,
-  convertXy,
-  newBottomSheet,
-  vy,
-  lastSnapPoint,
-  dy,
-  snappable,
-  overlay
-) {
-  let minSnapPoint = 0;
-  snapPoints.forEach((element) => {
-    let elem =
-      typeof element === "number" ? element : +element.replace("%", "");
 
+  function closeLeftSideSheet(targetBottomSheet) {
     if (
-      convertToPx(elem) < window.innerHeight - convertXy &&
-      convertToPx(elem) > minSnapPoint
+      convertToPercentage(targetBottomSheet.clientWidth) >= 0 &&
+      convertToPercentage(targetBottomSheet.clientWidth) <
+        +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
     ) {
-      minSnapPoint = convertToPx(elem);
-    }
-  });
-
-  if (snappable) {
-    moveBottomSheet(
-      newBottomSheet,
-      `${window.innerHeight - minSnapPoint}px`,
-      `spring(1, 250, 15, ${vy})`
-    );
-    lastSetSnapPoint = window.innerHeight - minSnapPoint;
-    if (lastSetSnapPoint >= window.innerHeight) hideOverlay(overlay);
-    return lastSetSnapPoint;
-  } else {
-    if (vy > 0.9 || dy > 150) {
-      moveBottomSheet(
-        newBottomSheet,
-        `${window.innerHeight - minSnapPoint}px`,
-        `spring(1, 250, 15, ${vy})`
-      );
-      lastSetSnapPoint = window.innerHeight - minSnapPoint;
-      if (lastSetSnapPoint >= window.innerHeight) hideOverlay(overlay);
-
-      return lastSetSnapPoint;
+      let max = Infinity;
+      sideSheetSnapPoints.map((i) => {
+        if (
+          +i.replace("%", "") >
+            convertToPercentage(targetBottomSheet.clientWidth) &&
+          +i.replace("%", "") < max
+        ) {
+          max = +i.replace("%", "");
+        }
+        anime({
+          targets: targetBottomSheet,
+          width: `${max}%`,
+          easing: "spring(1, 85, 45, 3)",
+          duration: 0,
+        });
+      });
     } else {
-      return translateToNextSnapPoint(
-        snapPoints,
-        convertXy,
-        newBottomSheet,
-        vy,
-        lastSnapPoint,
-        dy,
-        true,
-        overlay
-      );
+      let min = 0;
+      sideSheetSnapPoints.map((i) => {
+        if (
+          +i.replace("%", "") <
+            convertToPercentage(targetBottomSheet.clientWidth) &&
+          +i.replace("%", "") > min
+        ) {
+          min = +i.replace("%", "");
+        }
+        anime({
+          targets: targetBottomSheet,
+          width: `${min}%`,
+          easing: "spring(1, 85, 45, 3)",
+          duration: 0,
+        });
+      });
     }
   }
-}
-function handleCloseIcons(
-  targetBottomSheet,
-  webLayout,
-  modalClose,
-  sideSheetLeft,
-  sideSheetRight,
-  isWeb,
-  minWidthForWeb,
-  draggableArea,
-  draggableId,
-  cleanUpOnClose,
-  overlay,
-  sideSheetSnapPoints
-) {
-  if (isWeb) {
+  function closeRightSideSheet(targetBottomSheet) {
     if (
-      draggableArea &&
-      document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)
+      convertToPercentage(targetBottomSheet.clientWidth) >= 0 &&
+      convertToPercentage(targetBottomSheet.clientWidth) <
+        +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
     ) {
-      targetBottomSheet.removeChild(draggableArea);
-    }
-    if (webLayout === "Modal") {
-      targetBottomSheet.classList.add("modal");
+      let max = Infinity;
+      sideSheetSnapPoints.map((i) => {
+        if (
+          +i.replace("%", "") >
+            convertToPercentage(targetBottomSheet.clientWidth) &&
+          +i.replace("%", "") < max
+        ) {
+          max = +i.replace("%", "");
+        }
+        anime({
+          targets: targetBottomSheet,
+          width: `${max}%`,
+          easing: "spring(1, 85, 45, 3)",
+          duration: 0,
+        });
+      });
     } else {
-      targetBottomSheet.classList.add("side-sheet");
-    }
-    targetBottomSheet.classList.remove("bottomsheet");
-    if (
-      !document.querySelector(`#${targetBottomSheet.id} #modal-close`) &&
-      webLayout === "Modal"
-    ) {
-      targetBottomSheet.prepend(modalClose);
-    } else if (
-      !document.querySelector(`#${targetBottomSheet.id} #side-left`) &&
-      webLayout === "sideSheetLeft"
-    ) {
-      targetBottomSheet.prepend(sideSheetLeft);
-      closeLeftSideSheet(
-        targetBottomSheet,
-        cleanUpOnClose,
-        overlay
-        // sideSheetSnapPoints
-      );
-    } else if (
-      !document.querySelector(`#${targetBottomSheet.id} #side-right`) &&
-      webLayout === "sideSheetRight"
-    ) {
-      targetBottomSheet.prepend(sideSheetRight);
-      closeRightSideSheet(
-        targetBottomSheet,
-        cleanUpOnClose,
-        overlay,
-        sideSheetSnapPoints
-      );
-    }
-  } else {
-    if (
-      draggableId &&
-      !document.querySelector(`#${targetBottomSheet?.id} #${draggableId}`)
-    ) {
-      targetBottomSheet.prepend(draggableArea);
-    }
-    if (document.querySelector(`#${targetBottomSheet.id} #modal-close`)) {
-      targetBottomSheet.removeChild(modalClose);
-    }
-    if (document.querySelector(`#${targetBottomSheet.id} #side-left`)) {
-      targetBottomSheet.removeChild(sideSheetLeft);
-    }
-    if (document.querySelector(`#${targetBottomSheet.id} #side-right`)) {
-      targetBottomSheet.removeChild(sideSheetRight);
-    }
-
-    targetBottomSheet.classList.add("bottomsheet"),
-      targetBottomSheet.classList.remove("modal");
-    targetBottomSheet.classList.remove("side-sheet");
-  }
-}
-function closeLeftSideSheet(
-  targetBottomSheet,
-  cleanUpOnClose,
-  overlay,
-  sideSheetSnapPoints
-) {
-  if (
-    convertToPercentage(targetBottomSheet.clientWidth) >= 0 &&
-    convertToPercentage(targetBottomSheet.clientWidth) <
-      +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
-  ) {
-    let max = Infinity;
-    sideSheetSnapPoints.map((i) => {
-      if (
-        +i.replace("%", "") >
-          convertToPercentage(targetBottomSheet.clientWidth) &&
-        +i.replace("%", "") < max
-      ) {
-        max = +i.replace("%", "");
-      }
-      anime({
-        targets: targetBottomSheet,
-        width: `${max}%`,
-        easing: "spring(1, 85, 45, 3)",
-        duration: 0,
+      let min = 0;
+      sideSheetSnapPoints.map((i) => {
+        if (
+          +i.replace("%", "") <
+            convertToPercentage(targetBottomSheet.clientWidth) &&
+          +i.replace("%", "") > min
+        ) {
+          min = +i.replace("%", "");
+        }
+        anime({
+          targets: targetBottomSheet,
+          width: `${min}%`,
+          easing: "spring(1, 85, 45, 3)",
+          duration: 0,
+        });
       });
-    });
-  } else {
-    let min = 0;
-    sideSheetSnapPoints.map((i) => {
-      if (
-        +i.replace("%", "") <
-          convertToPercentage(targetBottomSheet.clientWidth) &&
-        +i.replace("%", "") > min
-      ) {
-        min = +i.replace("%", "");
-      }
-      anime({
-        targets: targetBottomSheet,
-        width: `${min}%`,
-        easing: "spring(1, 85, 45, 3)",
-        duration: 0,
-      });
-    });
+    }
   }
 
-  // cleanUpOnClose
-  //   ? setTimeout(() => {
-  //       cleanUp(targetBottomSheet, overlay);
-  //     }, 500)
-  //   : "";
-}
-function closeRightSideSheet(
-  targetBottomSheet,
-  cleanUpOnClose,
-  overlay,
-  sideSheetSnapPoints
-) {
-  if (
-    convertToPercentage(targetBottomSheet.clientWidth) >= 0 &&
-    convertToPercentage(targetBottomSheet.clientWidth) <
-      +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
-  ) {
-    let max = Infinity;
-    sideSheetSnapPoints.map((i) => {
-      if (
-        +i.replace("%", "") >
-          convertToPercentage(targetBottomSheet.clientWidth) &&
-        +i.replace("%", "") < max
-      ) {
-        max = +i.replace("%", "");
-      }
-      anime({
-        targets: targetBottomSheet,
-        width: `${max}%`,
-        easing: "spring(1, 85, 45, 3)",
-        duration: 0,
-      });
-    });
-  } else {
-    let min = 0;
-    sideSheetSnapPoints.map((i) => {
-      if (
-        +i.replace("%", "") <
-          convertToPercentage(targetBottomSheet.clientWidth) &&
-        +i.replace("%", "") > min
-      ) {
-        min = +i.replace("%", "");
-      }
-      anime({
-        targets: targetBottomSheet,
-        width: `${min}%`,
-        easing: "spring(1, 85, 45, 3)",
-        duration: 0,
-      });
-    });
+  function convertToPx(percentage) {
+    return Math.round((window.innerHeight * percentage) / 100);
   }
-}
-function closeModal(
-  targetBottomSheet,
-  cleanUpOnClose,
-  overlay
-  // sideSheetSnapPoints
-) {
-  anime({
-    targets: targetBottomSheet,
-    opacity: 0,
-    scale: 0.9,
-    easing: "spring(1, 85, 45, 2)",
-    duration: 0,
-  });
-  cleanUpOnClose
-    ? setTimeout(() => {
-        cleanUp(targetBottomSheet, overlay);
-      }, 500)
-    : "";
-}
-function convertToPx(percentage) {
-  return Math.round((window.innerHeight * percentage) / 100);
-}
-function convertToPercentage(px) {
-  return Math.round((px / window.innerWidth) * 100);
-}
-function cleanUp(targetBottomSheet, overlay) {
-  targetBottomSheet.remove();
-  targetBottomSheet.innerHTML = "";
-  hideOverlay(overlay);
+  function convertToPercentage(px) {
+    return Math.round((px / window.innerWidth) * 100);
+  }
+  function cleanUp(targetBottomSheet, overlay) {
+    targetBottomSheet.remove();
+    targetBottomSheet.innerHTML = "";
+    hideOverlay(overlay);
+  }
+  function moveSideSheet() {
+    console.log("move sidesheet");
+    // if (index) {
+    //   let snapPoints = BottomSheet.getSideSheetSnapPoints();
+    //   anime({
+    //     targets: targetBottomSheet,
+    //     width: `${snapPoints[index]}`,
+    //     easing: "spring(1, 85, 45, 3)",
+    //     duration: 0,
+    //   });
+    // }
+  }
+
+  // return {
+  //   moveSideSheet,
+  // };
 }
 
 export async function replaceInnerContent(bottomsheetID, content) {
   content = typeof content !== "string" ? await content : content;
   let draggableItem;
   if (content && bottomsheetID && document.getElementById(`${bottomsheetID}`)) {
-    // if (
-    //   document.getElementById(`${bottomsheetID}`) &&
-    //   document.getElementById(`${bottomsheetID}`)?.childNodes &&
-    //   document.getElementById(`${bottomsheetID}`)?.childNodes[0] &&
-    //   document
-    //     .getElementById(`${bottomsheetID}`)
-    //     ?.childNodes[0]?.getAttribute("data-draggable")
-    // ) {
     draggableItem = document.getElementById(`${bottomsheetID}`).children[0];
-
-    // }
     document.getElementById(`${bottomsheetID}`).innerHTML = "";
     if (
       draggableItem &&
@@ -1162,7 +899,6 @@ export async function replaceInnerContent(bottomsheetID, content) {
     document
       .getElementById(`${bottomsheetID}`)
       .insertAdjacentHTML("beforeend", content);
-    // document.getElementById(`${bottomsheetID}`).innerHTML = content;
   }
 }
 export default BottomSheet;
