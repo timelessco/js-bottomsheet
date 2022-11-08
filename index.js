@@ -101,7 +101,7 @@ Promise.resolve(fetchAllShows()).then((res) => {
           document?.querySelector(`#target-2`)?.getAttribute("data-key"),
           true
         ),
-        webLayout: "sideSheetLeft",
+        webLayout: "Modal",
         sideSheetSnapPoints: ["25%", "50%", "100%"],
         onOpen: async () => {
           BottomSheet({
