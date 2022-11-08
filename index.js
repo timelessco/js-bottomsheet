@@ -67,11 +67,11 @@ async function fetchAllShows() {
   })}`;
   return content.replaceAll(",", "");
 }
-
+let bottomsheet1;
 Promise.resolve(fetchAllShows()).then((res) => {
   document.querySelector(".scroll-snap-slider").innerHTML = res;
 
-  BottomSheet({
+  bottomsheet1 = BottomSheet({
     trigger: "target-1",
     snapPoints: ["100%"],
     displayOverlay: true,
@@ -86,49 +86,51 @@ Promise.resolve(fetchAllShows()).then((res) => {
       1
     ),
     onOpen: async () => {
-      setTimeout(() => {
-        BottomSheet({
-          trigger: "target-2",
-          snapPoints: ["100%"],
-          displayOverlay: true,
-          minWidthForModal: 600,
-          content: getBottomsheet2Content(
-            document?.querySelector(`#target-2`)?.getAttribute("key") ||
-              "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
-            document?.querySelector(`#target-2`)?.getAttribute("data-key"),
-            true
-          ),
-          // webLayout: "sideSheetLeft",
-          sideSheetSnapPoints: ["25%", "50%", "100%"],
-          onOpen: async () => {
-            BottomSheet({
-              trigger: "target-3",
-              snapPoints: ["37%"],
-              displayOverlay: true,
-              minWidthForModal: 600,
-              content: getBottomsheet3content(
-                document?.querySelector(`#target-3`)?.getAttribute("key") ||
-                  `prj-01g3b8b6fbx9xybeq532bshx5k`
-              ),
-              // webLayout: "sideSheetLeft",
-              sideSheetSnapPoints: ["25%", "50%", "100%"],
-            });
-          },
-        });
-        document.querySelectorAll(`#target-2`).forEach((i, id) => {
-          i.addEventListener("click", () => {
-            replaceInnerContent(
-              "bottomsheet-2",
-              getBottomsheet2Content(
-                i.getAttribute("key") ||
-                  "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
-                i.getAttribute("data-key"),
-                false
-              )
-            );
+      setTimeout(async () => {
+        console.log(await bottomsheet1, "thois");
+      }, 1000);
+
+      BottomSheet({
+        trigger: "target-2",
+        snapPoints: ["100%"],
+        displayOverlay: true,
+        minWidthForModal: 600,
+        content: getBottomsheet2Content(
+          document?.querySelector(`#target-2`)?.getAttribute("key") ||
+            "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
+          document?.querySelector(`#target-2`)?.getAttribute("data-key"),
+          true
+        ),
+        webLayout: "sideSheetLeft",
+        sideSheetSnapPoints: ["25%", "50%", "100%"],
+        onOpen: async () => {
+          BottomSheet({
+            trigger: "target-3",
+            snapPoints: ["37%"],
+            displayOverlay: true,
+            minWidthForModal: 600,
+            content: getBottomsheet3content(
+              document?.querySelector(`#target-3`)?.getAttribute("key") ||
+                `prj-01g3b8b6fbx9xybeq532bshx5k`
+            ),
+            // webLayout: "sideSheetLeft",
+            sideSheetSnapPoints: ["25%", "50%", "100%"],
           });
+        },
+      });
+      document.querySelectorAll(`#target-2`).forEach((i, id) => {
+        i.addEventListener("click", () => {
+          replaceInnerContent(
+            "bottomsheet-2",
+            getBottomsheet2Content(
+              i.getAttribute("key") ||
+                "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
+              i.getAttribute("data-key"),
+              false
+            )
+          );
         });
-      }, 300);
+      });
     },
   });
 

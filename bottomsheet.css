@@ -8,13 +8,13 @@
    height: 100%;
    /* z-index: 999; */
    left:0;
-   top: 100%;
-   /* transform: translateY(-100%); */
+   top: 0;
+   transform: translateY(-100%);
    box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
    /* border-top-left-radius: 36px;
    border-top-right-radius: 36px; */
    min-height: -webkit-fill-available;
-   padding-bottom: 10px;
+   /* padding-bottom: 10px; */
    will-change: transform;
    overflow: scroll;
    touch-action: none;
@@ -59,6 +59,7 @@
 }
 .overlay.display{
   display: block;
+  opacity: 0;
 }
 
 #draggable-area{
@@ -90,6 +91,8 @@
   position: sticky;
   top:0;
   padding:2px;
+  z-index: 100;
+
 }
 #side-right{
   display: flex;
@@ -97,6 +100,8 @@
   justify-content: flex-start;
   position: sticky;
   top:0;
+  z-index: 100;
+
 }
 .side-sheet{
   background-color: black;

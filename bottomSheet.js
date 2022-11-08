@@ -25,6 +25,7 @@ async function BottomSheet(props) {
     <path fill-rule="evenodd" clip-rule="evenodd" d="M1.21057 1.34418C2.46351 0.107522 4.49491 0.107522 5.74784 1.34418L23.3937 18.7608C24.6466 19.9975 24.6466 22.0025 23.3937 23.2392L5.74784 40.6559C4.49491 41.8925 2.46351 41.8925 1.21057 40.6559C-0.0423591 39.4192 -0.0423591 37.4142 1.21057 36.1775L16.5878 21L1.21057 5.82253C-0.0423591 4.58586 -0.0423591 2.58084 1.21057 1.34418Z" fill="white"/>
     </svg>   
     `,
+    defaultSideSheetClose = true,
     cleanUpOnClose = true,
     sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
   } = props;
@@ -51,7 +52,9 @@ async function BottomSheet(props) {
       .getAttribute("data-bottomsheet-id");
 
     let targetBottomSheet = document.querySelector(`#${targetid}`);
-
+    if (targetBottomSheet) {
+      targetBottomSheet.innerHTML = "";
+    }
     if (init) {
       init();
     }
@@ -113,14 +116,18 @@ async function BottomSheet(props) {
     );
     let sideSheetLeft = document.createElement("div");
     sideSheetLeft.id = "side-left";
-    sideSheetLeft.addEventListener("click", () =>
-      closeLeftSideSheet(targetBottomSheet)
-    );
+    defaultSideSheetClose
+      ? sideSheetLeft.addEventListener("click", () => {
+          closeLeftSideSheet(targetBottomSheet, overlay);
+        })
+      : "";
     let sideSheetRight = document.createElement("div");
     sideSheetRight.id = "side-right";
-    sideSheetRight.addEventListener("click", () =>
-      closeRightSideSheet(targetBottomSheet)
-    );
+    defaultSideSheetClose
+      ? sideSheetRight.addEventListener("click", () =>
+          closeRightSideSheet(targetBottomSheet)
+        )
+      : "";
     modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
     sideSheetLeft.insertAdjacentHTML("afterbegin", sideSheetLeftIcon);
     sideSheetRight.insertAdjacentHTML("afterbegin", sideSheetRightIcon);
@@ -158,7 +165,7 @@ async function BottomSheet(props) {
     );
     setTimeout(() => {
       onOpen();
-    }, 10);
+    }, 300);
     if (
       lastSetSnapPoint &&
       lastSetSnapPoint < window.innerHeight &&
@@ -168,7 +175,9 @@ async function BottomSheet(props) {
     } else {
       openBottomSheet(targetBottomSheet, overlay, isWeb);
     }
+    targetBottomSheet.click();
     targetBottomSheet.style.overflow = "scroll";
+    targetBottomSheet.style.touchAction = "auto";
 
     setTimeout(() => {
       handleDragGesture(
@@ -179,9 +188,7 @@ async function BottomSheet(props) {
         draggableId,
         overlay
       );
-    }, 10);
-
-    targetBottomSheet.style.overflow = "scroll";
+    }, 400);
 
     if (document.querySelector(`.bottomsheet #${targetBottomSheet.id}`)) {
       document.querySelector(
@@ -233,6 +240,7 @@ async function BottomSheet(props) {
           cleanUp(targetBottomSheet, overlay);
         }, 500)
       : "";
+    hideOverlay(overlay);
   }
 
   function closeBottomSheet(targetBottomSheet, overlay, isWeb) {
@@ -242,20 +250,25 @@ async function BottomSheet(props) {
     if (!isWeb) {
       anime({
         targets: targetBottomSheet,
-        top: `${convertToPx(100)}px`,
+        translateY: `${convertToPx(100)}px`,
         easing: "spring(1, 85, 45, 3)",
       });
     } else {
       if (webLayout === "Modal") {
         closeModal(targetBottomSheet, overlay);
+      } else if (webLayout === "sideSheetLeft") {
+        closeLeftSideSheet(targetBottomSheet, overlay);
+      } else {
+        closeRightSideSheet(targetBottomSheet, overlay);
       }
     }
     lastSetSnapPoint = convertToPx(100);
     setTimeout(() => {
-      if (lastSetSnapPoint >= window.innerHeight && cleanUpOnClose) {
-        cleanUp(targetBottomSheet, overlay);
+      if (lastSetSnapPoint >= window.innerHeight) {
+        cleanUpOnClose ? cleanUp(targetBottomSheet, overlay) : "";
       }
     }, 500);
+    hideOverlay(overlay);
   }
 
   function handleCloseIcons(
@@ -290,7 +303,7 @@ async function BottomSheet(props) {
         webLayout === "sideSheetLeft"
       ) {
         targetBottomSheet.prepend(sideSheetLeft);
-        closeLeftSideSheet(targetBottomSheet);
+        // closeLeftSideSheet(targetBottomSheet);
       } else if (
         !document.querySelector(`#${targetBottomSheet.id} #side-right`) &&
         webLayout === "sideSheetRight"
@@ -332,8 +345,9 @@ async function BottomSheet(props) {
           anime({
             targets: targetBottomSheet,
             left: "0",
-            easing: "spring(1, 85, 45, 3)",
-            duration: 0,
+            width: sideSheetSnapPoints[0],
+            easing: "spring(1, 85, 35, 5)",
+            duration: 1,
           });
         }, 100);
       } else if (webLayout === "sideSheetRight") {
@@ -343,8 +357,9 @@ async function BottomSheet(props) {
           anime({
             targets: targetBottomSheet,
             right: "0",
-            easing: "spring(1, 85, 45, 3)",
-            duration: 0,
+            width: sideSheetSnapPoints[0],
+            easing: "spring(1, 85, 35, 5)",
+            duration: 1,
           });
         }, 100);
       } else {
@@ -355,30 +370,30 @@ async function BottomSheet(props) {
           targets: targetBottomSheet,
           opacity: 1,
           scale: 1,
-          easing: "spring(1, 85, 45, 2)",
+          easing: "spring(1, 85, 35, 5)",
           duration: 1,
         });
       }
     } else {
-      targetBottomSheet.style.top = convertToPx(100);
+      // targetBottomSheet.style.top = convertToPx(100);
 
       anime({
         targets: targetBottomSheet,
-        top: `${convertToPx(100)}px`,
+        translateY: `${convertToPx(100)}px`,
         easing: "linear",
-        duration: 0,
+        duration: 1,
       });
       setTimeout(() => {
         anime({
           targets: targetBottomSheet,
-          top: `${
+          translateY: `${
             window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
           }px`,
-          easing: "spring(1, 85, 45, 3)",
+          easing: "spring(1, 85, 15, 3)",
           opacity: 1,
-          duration: 0,
+          duration: 1,
         });
-      }, 10);
+      }, 60);
     }
     lastSetSnapPoint =
       window.innerHeight - convertToPx(snapPoints[0].replace("%", ""));
@@ -403,6 +418,7 @@ async function BottomSheet(props) {
           offset,
           distance: [dx, dy],
           target,
+          cancel,
         }) => {
           let minSnapPoint = 0;
           let maxSnapPoint = Infinity;
@@ -465,6 +481,9 @@ async function BottomSheet(props) {
               }
             } else {
               let type;
+              // if (currentSnapPoint === 0) {
+              //   cancel();
+              // } else
               if (currentSnapPoint <= convertToPx(100 - lastSnapPoint)) {
                 newBottomSheet.style.overflow = "scroll";
                 newBottomSheet.style.height = `${convertToPx(
@@ -536,9 +555,7 @@ async function BottomSheet(props) {
     let convertXy =
       ((window.screen.height - xy[1]) / window.screen.height) * 100;
 
-    let actualOffset =
-      dragFlag === 0 ? convertToPx(snapPoints[0].replace("%", "")) : offset[1];
-
+    let actualOffset = offset[1];
     if (maxSnapPoint === null) {
       if (active) {
         moveBottomSheet(
@@ -547,10 +564,12 @@ async function BottomSheet(props) {
             actualOffset > window.innerHeight
               ? window.innerHeight
               : actualOffset < convertToPx(100 - lastSnapPoint)
-              ? convertToPx(100 - lastSnapPoint)
+              ? convertToPx(100 - lastSnapPoint) !== 0
+                ? convertToPx(100 - lastSnapPoint) + actualOffset
+                : convertToPx(100 - lastSnapPoint)
               : actualOffset
           }px`,
-          `spring(1, 250, 25, ${dragFlag === 0 ? 0.3 : 25})`,
+          `spring(1, 250, 25, 25)`,
           1
         );
         snapped = false;
@@ -560,7 +579,9 @@ async function BottomSheet(props) {
           actualOffset > window.innerHeight
             ? window.innerHeight
             : actualOffset < convertToPx(100 - lastSnapPoint)
-            ? convertToPx(100 - lastSnapPoint)
+            ? convertToPx(100 - lastSnapPoint) !== 0
+              ? convertToPx(100 - lastSnapPoint) + actualOffset
+              : convertToPx(100 - lastSnapPoint)
             : actualOffset,
           newBottomSheet,
           vy,
@@ -573,11 +594,14 @@ async function BottomSheet(props) {
               actualOffset > window.innerHeight
                 ? window.innerHeight
                 : actualOffset < convertToPx(100 - lastSnapPoint)
-                ? convertToPx(100 - lastSnapPoint)
+                ? convertToPx(100 - lastSnapPoint) !== 0
+                  ? convertToPx(100 - lastSnapPoint) + actualOffset
+                  : convertToPx(100 - lastSnapPoint)
                 : actualOffset,
               newBottomSheet,
               vy,
               lastSnapPoint,
+              dy,
               false,
               overlay
             ))
@@ -596,7 +620,7 @@ async function BottomSheet(props) {
               ? convertToPx(100 - lastSnapPoint)
               : actualOffset
           }px`,
-          `spring(1, 250, 25,  ${dragFlag === 0 ? 0.3 : 25})`,
+          `spring(1, 250, 25, 25)`,
           1
         );
         snapped = false;
@@ -639,20 +663,34 @@ async function BottomSheet(props) {
   function moveBottomSheet(targetBottomSheet, top, ease, duration) {
     anime({
       targets: targetBottomSheet,
-      top: top,
+      translateY: top,
       easing: ease,
       duration,
     });
   }
   function addOverlay(overlay) {
     overlay.classList.add("display");
+    anime({
+      targets: overlay,
+      opacity: 1,
+      easing: "spring(1, 85, 35, 3)",
+      duration: 0,
+    });
   }
 
   function hideOverlay(overlay) {
-    if (overlay?.classList?.contains("display")) {
-      overlay.classList.remove("display");
-    }
-    if (overlay) overlay.remove();
+    anime({
+      targets: overlay,
+      opacity: 0,
+      easing: "spring(1, 85, 35, 3)",
+      duration: 0,
+    });
+    setTimeout(() => {
+      if (overlay?.classList?.contains("display")) {
+        overlay.classList.remove("display");
+      }
+      if (overlay) overlay.remove();
+    }, 300);
   }
 
   function getCurrentSnapPoint(newBottomSheet) {
@@ -771,87 +809,95 @@ async function BottomSheet(props) {
     }
   }
 
-  function closeLeftSideSheet(targetBottomSheet) {
-    if (
-      convertToPercentage(targetBottomSheet.clientWidth) >= 0 &&
-      convertToPercentage(targetBottomSheet.clientWidth) <
-        +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
-    ) {
-      let max = Infinity;
-      sideSheetSnapPoints.map((i) => {
-        if (
-          +i.replace("%", "") >
-            convertToPercentage(targetBottomSheet.clientWidth) &&
-          +i.replace("%", "") < max
-        ) {
-          max = +i.replace("%", "");
-        }
-        anime({
-          targets: targetBottomSheet,
-          width: `${max}%`,
-          easing: "spring(1, 85, 45, 3)",
-          duration: 0,
-        });
-      });
-    } else {
-      let min = 0;
-      sideSheetSnapPoints.map((i) => {
-        if (
-          +i.replace("%", "") <
-            convertToPercentage(targetBottomSheet.clientWidth) &&
-          +i.replace("%", "") > min
-        ) {
-          min = +i.replace("%", "");
-        }
-        anime({
-          targets: targetBottomSheet,
-          width: `${min}%`,
-          easing: "spring(1, 85, 45, 3)",
-          duration: 0,
-        });
-      });
-    }
+  function closeLeftSideSheet(targetBottomSheet, overlay) {
+    // if (
+    //   convertToPercentage(targetBottomSheet.clientWidth) >= 0 &&
+    //   convertToPercentage(targetBottomSheet.clientWidth) <
+    //     +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
+    // ) {
+    //   let max = Infinity;
+    //   sideSheetSnapPoints.map((i) => {
+    //     if (
+    //       +i.replace("%", "") >
+    //         convertToPercentage(targetBottomSheet.clientWidth) &&
+    //       +i.replace("%", "") < max
+    //     ) {
+    //       max = +i.replace("%", "");
+    //     }
+    //     anime({
+    //       targets: targetBottomSheet,
+    //       width: `${max}%`,
+    //       easing: "spring(1, 85, 45, 3)",
+    //       duration: 0,
+    //     });
+    //   });
+    // } else {
+    //   let min = 0;
+    //   sideSheetSnapPoints.map((i) => {
+    //     if (
+    //       +i.replace("%", "") <
+    //         convertToPercentage(targetBottomSheet.clientWidth) &&
+    //       +i.replace("%", "") > min
+    //     ) {
+    //       min = +i.replace("%", "");
+    //     }
+    anime({
+      targets: targetBottomSheet,
+      width: 0,
+      easing: "spring(1, 85, 45, 3)",
+      duration: 0,
+    });
+    setTimeout(() => {
+      cleanUpOnClose ? cleanUp(targetBottomSheet, overlay) : "";
+    }, 400);
+    hideOverlay(overlay);
+    //   });
+    // }
   }
   function closeRightSideSheet(targetBottomSheet) {
-    if (
-      convertToPercentage(targetBottomSheet.clientWidth) >= 0 &&
-      convertToPercentage(targetBottomSheet.clientWidth) <
-        +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
-    ) {
-      let max = Infinity;
-      sideSheetSnapPoints.map((i) => {
-        if (
-          +i.replace("%", "") >
-            convertToPercentage(targetBottomSheet.clientWidth) &&
-          +i.replace("%", "") < max
-        ) {
-          max = +i.replace("%", "");
-        }
-        anime({
-          targets: targetBottomSheet,
-          width: `${max}%`,
-          easing: "spring(1, 85, 45, 3)",
-          duration: 0,
-        });
-      });
-    } else {
-      let min = 0;
-      sideSheetSnapPoints.map((i) => {
-        if (
-          +i.replace("%", "") <
-            convertToPercentage(targetBottomSheet.clientWidth) &&
-          +i.replace("%", "") > min
-        ) {
-          min = +i.replace("%", "");
-        }
-        anime({
-          targets: targetBottomSheet,
-          width: `${min}%`,
-          easing: "spring(1, 85, 45, 3)",
-          duration: 0,
-        });
-      });
-    }
+    // if (
+    //   convertToPercentage(targetBottomSheet.clientWidth) >= 0 &&
+    //   convertToPercentage(targetBottomSheet.clientWidth) <
+    //     +sideSheetSnapPoints[sideSheetSnapPoints.length - 1].replace("%", "")
+    // ) {
+    //   let max = Infinity;
+    //   sideSheetSnapPoints.map((i) => {
+    //     if (
+    //       +i.replace("%", "") >
+    //         convertToPercentage(targetBottomSheet.clientWidth) &&
+    //       +i.replace("%", "") < max
+    //     ) {
+    //       max = +i.replace("%", "");
+    //     }
+    //     anime({
+    //       targets: targetBottomSheet,
+    //       width: `${max}%`,
+    //       easing: "spring(1, 85, 45, 3)",
+    //       duration: 0,
+    //     });
+    //   });
+    // } else {
+    //   let min = 0;
+    //   sideSheetSnapPoints.map((i) => {
+    //     if (
+    //       +i.replace("%", "") <
+    //         convertToPercentage(targetBottomSheet.clientWidth) &&
+    //       +i.replace("%", "") > min
+    //     ) {
+    //       min = +i.replace("%", "");
+    //     }
+    anime({
+      targets: targetBottomSheet,
+      width: 0,
+      easing: "spring(1, 85, 45, 3)",
+      duration: 0,
+    });
+    setTimeout(() => {
+      cleanUpOnClose ? cleanUp(targetBottomSheet, overlay) : "";
+    }, 400);
+    hideOverlay(overlay);
+    //   });
+    // }
   }
 
   function convertToPx(percentage) {
@@ -863,9 +909,9 @@ async function BottomSheet(props) {
   function cleanUp(targetBottomSheet, overlay) {
     targetBottomSheet.remove();
     targetBottomSheet.innerHTML = "";
-    hideOverlay(overlay);
+    // hideOverlay(overlay);
   }
-  function moveSideSheet() {
+  function moveSideSheet(param) {
     console.log("move sidesheet");
     // if (index) {
     //   let snapPoints = BottomSheet.getSideSheetSnapPoints();
@@ -878,6 +924,11 @@ async function BottomSheet(props) {
     // }
   }
 
+  const self = {
+    moveSideSheet: "hi",
+  };
+
+  return self;
   // return {
   //   moveSideSheet,
   // };
