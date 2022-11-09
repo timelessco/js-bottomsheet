@@ -80,7 +80,7 @@ Promise.resolve(fetchAllShows()).then((res) => {
     //   <rect opacity="0.3" width="32" height="3" rx="1.5" fill="white"/>
     //   </svg>
     //   </div>`,
-    webLayout: "Modal",
+    webLayout: "sideSheetLeft",
     content: fetchContent(
       document.querySelector(`#target-1`).attributes.key.value,
       1
@@ -102,17 +102,15 @@ Promise.resolve(fetchAllShows()).then((res) => {
           true
         ),
         webLayout: "Modal",
-        sideSheetSnapPoints: ["25%", "50%", "100%"],
+        sideSheetSnapPoints: ["50%", "100%"],
         onOpen: async () => {
           BottomSheet({
-            trigger: "target-3",
-            snapPoints: ["37%"],
+            // trigger: "target-3",
+            snapPoints: ["10%", "37%"],
             displayOverlay: true,
             minWidthForModal: 600,
-            content: getBottomsheet3content(
-              document?.querySelector(`#target-3`)?.getAttribute("key") ||
-                `prj-01g3b8b6fbx9xybeq532bshx5k`
-            ),
+            openOnLoad: true,
+            content: getBottomsheet3content(`prj-01g3b8b6fbx9xybeq532bshx5k`),
             // webLayout: "sideSheetLeft",
             sideSheetSnapPoints: ["25%", "50%", "100%"],
           });
@@ -160,6 +158,23 @@ function getBottomsheet2Content(src, key, bottomsheet = false) {
         style="position: absolute; color: transparent"
     />
   </div>
+ 
+  ${bottomsheet ? `</div>` : ""}
+`;
+}
+
+async function getBottomsheet3content(key) {
+  let products;
+  if (key !== undefined) {
+    products = await fetch(
+      `https://strapi.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`
+    )
+      .then((res) => res.json())
+      .then(async (json) => {
+        return json.data[0];
+      });
+  }
+  let res = `<div id="bottomsheet-3" data-bottomsheet>
   <div
     class="see-all"
     id="target-3"
@@ -190,23 +205,6 @@ function getBottomsheet2Content(src, key, bottomsheet = false) {
     </div>
     <span class="uppercase">see all episodes</span>
   </div>
-  ${bottomsheet ? `</div>` : ""}
-`;
-}
-
-async function getBottomsheet3content(key) {
-  let products;
-  if (key !== undefined) {
-    products = await fetch(
-      `https://strapi.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`
-    )
-      .then((res) => res.json())
-      .then(async (json) => {
-        return json.data[0];
-      });
-  }
-  let res = `<div id="bottomsheet-3" data-bottomsheet>
-  <h4>See all episodes</h4>
 
   <ul class="scroll-snap-slider">
   ${products?.videos.map((items, index) => {

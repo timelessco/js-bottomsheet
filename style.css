@@ -29,8 +29,9 @@ body {
 
   height: 100vh;
   min-width: 100%;
+  
   /* overflow:scroll; */
-  /* background-color: #535bf2; */
+  /* background-color: white !important; */
 }
 
 .scorll {
@@ -215,15 +216,7 @@ body {
   
     /* height: 100% !important */
   }
-  .see-all{
-    left:41% !important;
-    bottom:0px !important
-  }
 }
 .see-all{
-  position: absolute;
-  bottom:20px;
-  left:35%;
-  margin-top: 10px;
   z-index: 10;
 }
