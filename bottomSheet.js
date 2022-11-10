@@ -1,5 +1,7 @@
 import { Gesture } from "@use-gesture/vanilla";
 import anime from "animejs/lib/anime.es.js";
+import { hideOverlay, addOverlay } from "./helpers/overlayHelpers";
+import { moveBottomSheet } from "./helpers/translationHelpers";
 
 async function BottomSheet(props) {
   let {
@@ -27,7 +29,8 @@ async function BottomSheet(props) {
     </svg>   
     `,
     defaultSideSheetClose = true,
-    cleanUpOnClose = true,
+    cleanUpOnClose = false,
+    dismissable = true,
     sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
   } = props;
 
@@ -55,13 +58,25 @@ async function BottomSheet(props) {
           ?.querySelector(`#${trigger}`)
           ?.getAttribute("data-bottomsheet-id")
       : "";
-
     let targetBottomSheet = targetid
       ? document?.querySelector(`#${targetid}`)
       : "";
-    // if (targetBottomSheet) {
-    //   targetBottomSheet.innerHTML = "";
-    // }
+    if (targetBottomSheet) {
+      targetBottomSheet.innerHTML = "";
+    }
+    // document.addEventListener("click", (e) => {
+    //   if (
+    //     e.path.filter((i) => {
+    //       return i.id === targetBottomSheet?.id;
+    //     }).length === 0 &&
+    //     e.path.filter((i) => {
+    //       return i.id === trigger;
+    //     }).length === 0
+    //   ) {
+    //     console.log("hererere", targetBottomSheet);
+    //     closeBottomSheet(targetBottomSheet, overlay, isWeb, dismissable);
+    //   }
+    // });
 
     document.body.style.overflowY = "contain";
     // if(document.querySelectorAll('[data-bottomsheet]')){
@@ -80,13 +95,17 @@ async function BottomSheet(props) {
                 .firstChild.id
             }`
           );
+    } else if (content && !targetBottomSheet.innerHTML) {
+      targetBottomSheet.innerHTML = new DOMParser().parseFromString(
+        content,
+        "text/html"
+      ).body.firstChild.innerHTML;
     }
     const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
       ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
       : document.createElement("div");
     overlay.id = `${targetBottomSheet?.id}-overlay`;
 
-    console.log(overlay, "overrr");
     if (displayOverlay) {
       overlay.classList.add("overlay");
       addOverlay(overlay);
@@ -95,7 +114,7 @@ async function BottomSheet(props) {
         ? document.body.insertBefore(overlay, targetBottomSheet)
         : "";
       overlay.addEventListener("click", () => {
-        closeBottomSheet(targetBottomSheet, overlay, isWeb);
+        closeBottomSheet(targetBottomSheet, overlay, isWeb, dismissable);
       });
       // document.body.appendChild(overlay);
     }
@@ -179,7 +198,7 @@ async function BottomSheet(props) {
       lastSetSnapPoint < window.innerHeight &&
       window.innerWidth < minWidthForWeb
     ) {
-      closeBottomSheet(targetBottomSheet, overlay, isWeb);
+      closeBottomSheet(targetBottomSheet, overlay, isWeb, dismissable);
     } else {
       openBottomSheet(targetBottomSheet, overlay, isWeb, defaultLoad);
     }
@@ -251,13 +270,17 @@ async function BottomSheet(props) {
     hideOverlay(overlay);
   }
 
-  function closeBottomSheet(targetBottomSheet, overlay, isWeb) {
+  function closeBottomSheet(targetBottomSheet, overlay, isWeb, dismissable) {
     displayOverlay ? hideOverlay(overlay) : "";
     document.body.style.overflow = "scroll";
     if (!isWeb) {
       anime({
         targets: targetBottomSheet,
-        translateY: `${convertToPx(100)}px`,
+        translateY: `${
+          !dismissable
+            ? window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
+            : convertToPx(100)
+        }px`,
         easing: "spring(1, 85, 45, 3)",
       });
     } else {
@@ -467,7 +490,7 @@ async function BottomSheet(props) {
                 );
                 if (lastSetSnapPoint >= window.innerHeight) {
                   hideOverlay(overlay);
-                  document.body.style.overflowY = "none";
+                  // document.body.style.overflowY = "none";
                 }
               } else {
                 if (
@@ -497,7 +520,7 @@ async function BottomSheet(props) {
                   );
                   if (lastSetSnapPoint >= window.innerHeight) {
                     hideOverlay(overlay);
-                    document.body.style.overflowY = "none";
+                    // document.body.style.overflowY = "none";
                   }
                 }
               }
@@ -606,7 +629,8 @@ async function BottomSheet(props) {
           lastSnapPoint,
           dy,
           false,
-          overlay
+          overlay,
+          dismissable
         ) !== undefined
           ? (offset[1] = translateToPreviousSnapPoint(
               actualOffset > window.innerHeight
@@ -619,7 +643,8 @@ async function BottomSheet(props) {
               lastSnapPoint,
               dy,
               false,
-              overlay
+              overlay,
+              dismissable
             ))
           : "";
         snapped = true;
@@ -676,42 +701,6 @@ async function BottomSheet(props) {
     }
   }
 
-  function moveBottomSheet(targetBottomSheet, top, ease, duration) {
-    anime({
-      targets: targetBottomSheet,
-      translateY: top,
-      easing: ease,
-      duration,
-    });
-  }
-  function addOverlay(overlay) {
-    overlay.classList.add("display");
-    anime({
-      targets: overlay,
-      opacity: 1,
-      easing: "spring(1, 85, 35, 3)",
-      duration: 0,
-    });
-  }
-
-  function hideOverlay(overlay) {
-    anime({
-      targets: overlay,
-      opacity: 0,
-      easing: "spring(1, 85, 35, 3)",
-      duration: 0,
-    });
-    setTimeout(() => {
-      if (overlay?.classList?.contains("display")) {
-        overlay.classList.remove("display");
-      }
-      if (overlay) overlay.remove();
-    }, 300);
-
-    document.body.style.overflow = "scroll";
-    // targetBottomSheet.innerHTML = "";
-  }
-
   function getCurrentSnapPoint(newBottomSheet) {
     return +newBottomSheet?.style?.transform.slice(11).replace("px)", "");
   }
@@ -765,7 +754,8 @@ async function BottomSheet(props) {
             lastSnapPoint,
             dy,
             true,
-            overlay
+            overlay,
+            dismissable
           );
         }
       }
@@ -779,7 +769,8 @@ async function BottomSheet(props) {
     lastSnapPoint,
     dy,
     snappable,
-    overlay
+    overlay,
+    dismissable
   ) {
     let minSnapPoint = 0;
     snapPoints.forEach((element) => {
@@ -797,7 +788,13 @@ async function BottomSheet(props) {
     if (snappable) {
       moveBottomSheet(
         newBottomSheet,
-        `${window.innerHeight - minSnapPoint}px`,
+        `${
+          !dismissable
+            ? minSnapPoint <= convertToPx(snapPoints[0].replace("%", ""))
+              ? window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
+              : window.innerHeight - minSnapPoint
+            : window.innerHeight - minSnapPoint
+        }px`,
         `spring(1, 250, 15, ${vy})`
       );
       lastSetSnapPoint = window.innerHeight - minSnapPoint;
@@ -805,9 +802,17 @@ async function BottomSheet(props) {
       return lastSetSnapPoint;
     } else {
       if (vy > 0.9 || dy > 150) {
+        console.log(dismissable);
         moveBottomSheet(
           newBottomSheet,
-          `${window.innerHeight - minSnapPoint}px`,
+          `${
+            !dismissable
+              ? minSnapPoint <= convertToPx(snapPoints[0].replace("%", ""))
+                ? window.innerHeight -
+                  convertToPx(snapPoints[0].replace("%", ""))
+                : window.innerHeight - minSnapPoint
+              : window.innerHeight - minSnapPoint
+          }px`,
           `spring(1, 250, 15, ${vy})`
         );
         lastSetSnapPoint = window.innerHeight - minSnapPoint;

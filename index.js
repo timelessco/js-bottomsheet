@@ -80,7 +80,7 @@ Promise.resolve(fetchAllShows()).then((res) => {
     //   <rect opacity="0.3" width="32" height="3" rx="1.5" fill="white"/>
     //   </svg>
     //   </div>`,
-    webLayout: "sideSheetLeft",
+    webLayout: "Modal",
     content: fetchContent(
       document.querySelector(`#target-1`).attributes.key.value,
       1
@@ -112,6 +112,7 @@ Promise.resolve(fetchAllShows()).then((res) => {
             openOnLoad: true,
             content: getBottomsheet3content(`prj-01g3b8b6fbx9xybeq532bshx5k`),
             // webLayout: "sideSheetLeft",
+            dismissable: false,
             sideSheetSnapPoints: ["25%", "50%", "100%"],
           });
         },
