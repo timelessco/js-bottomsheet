@@ -1,52 +1,75 @@
 import BottomSheet from "./bottomSheet";
 import { replaceInnerContent } from "./bottomSheet";
-// import Carousel from "vanilla-js-carousel";
 
-async function fetchContent(key, ind) {
-  let products = await fetch(
-    `https://strapi.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`
-  )
-    .then((res) => res.json())
-    .then(async (json) => {
-      return json.data[0];
+let bottomsheet1;
+Promise.resolve(fetchAllShows()).then(async (res) => {
+  document.querySelector(".scroll-snap-slider").innerHTML = res;
+  bottomsheet1 = BottomSheet({
+    trigger: "target-1",
+    snapPoints: ["100%"],
+    displayOverlay: true,
+    minWidthForModal: 600,
+    webLayout: "Modal",
+    content: `<div id="bottomsheet-${1}" data-bottomsheet> </div>`,
+    onOpen: async () => {
+      BottomSheet({
+        trigger: "target-2",
+        snapPoints: ["100%"],
+        displayOverlay: true,
+        minWidthForModal: 600,
+        content: getBottomsheet2Content(
+          document?.querySelector(`#target-2`)?.getAttribute("key") ||
+            "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
+          document?.querySelector(`#target-2`)?.getAttribute("data-key"),
+          true
+        ),
+        scaleAnimate: 0.87,
+        webLayout: "Modal",
+        sideSheetSnapPoints: ["50%", "100%"],
+        onOpen: async () => {
+          BottomSheet({
+            snapPoints: ["10%", "37%"],
+            displayOverlay: false,
+            minWidthForModal: 600,
+            openOnLoad: true,
+            content: getBottomsheet3content(`prj-01g3b8b6fbx9xybeq532bshx5k`),
+            dismissable: false,
+            sideSheetSnapPoints: ["25%", "50%", "100%"],
+          });
+        },
+        onClose: async () => {
+          (await bottomsheet1).closeBottomSheet(
+            document.querySelector("#bottomsheet-3")
+          );
+        },
+      });
+
+      document.querySelectorAll(`#target-2`).forEach((i, id) => {
+        i.addEventListener("click", () => {
+          replaceInnerContent(
+            "bottomsheet-2",
+            getBottomsheet2Content(
+              i.getAttribute("key") ||
+                "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
+              i.getAttribute("data-key"),
+              false
+            )
+          );
+        });
+      });
+    },
+  });
+
+  document.querySelectorAll(`#target-1`).forEach((i, id) => {
+    i.addEventListener("click", async () => {
+      await replaceInnerContent(
+        "bottomsheet-1",
+        getBottomsheet1content(i.attributes.key.value, 1)
+      );
     });
-
-  let content = `<div id="bottomsheet-${ind}" data-bottomsheet> 
-       <div class="list-items">
-    ${products.name}
-    </div>
-  </div>`;
-  return content;
-}
-
-async function fetchInnerContent(key, ind) {
-  let products = await fetch(
-    `https://strapi.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`
-  )
-    .then((res) => res.json())
-    .then(async (json) => {
-      return json.data[0];
-    });
-  let content = `
-       <div class="list-items">
-       <img src=${products.banner.src}>
-       <h1>${products.name}</h1>
-       <p>${products.description}</p>
-       <div>
-       ${products.videos.map((item) => {
-         return `<div>
-         <img src = ${item.poster} />
-         <h3>${item.name}</h3>
-         </div>`;
-       })}
-       </div>
-       <button id="target-2" class="watch-now" data-bottomsheet-id="bottomsheet-2" key=${
-         products.banner.src
-       } data-key=${key} > watch now</button>
-    </div>
-`;
-  return content.replaceAll(",", "");
-}
+  });
+  (await bottomsheet1).moveSideSheet();
+});
 
 async function fetchAllShows() {
   let shows = await fetch(
@@ -67,82 +90,6 @@ async function fetchAllShows() {
   })}`;
   return content.replaceAll(",", "");
 }
-let bottomsheet1;
-Promise.resolve(fetchAllShows()).then((res) => {
-  document.querySelector(".scroll-snap-slider").innerHTML = res;
-
-  bottomsheet1 = BottomSheet({
-    trigger: "target-1",
-    snapPoints: ["100%"],
-    displayOverlay: true,
-    minWidthForModal: 600,
-    // draggableArea: `<div id="draggable-area"><svg width="32" height="3" viewBox="0 0 32 3" fill="none" xmlns="http://www.w3.org/2000/svg">
-    //   <rect opacity="0.3" width="32" height="3" rx="1.5" fill="white"/>
-    //   </svg>
-    //   </div>`,
-    webLayout: "Modal",
-    content: fetchContent(
-      document.querySelector(`#target-1`).attributes.key.value,
-      1
-    ),
-    onOpen: async () => {
-      setTimeout(async () => {
-        console.log(await bottomsheet1, "thois");
-      }, 1000);
-
-      BottomSheet({
-        trigger: "target-2",
-        snapPoints: ["100%"],
-        displayOverlay: true,
-        minWidthForModal: 600,
-        content: getBottomsheet2Content(
-          document?.querySelector(`#target-2`)?.getAttribute("key") ||
-            "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
-          document?.querySelector(`#target-2`)?.getAttribute("data-key"),
-          true
-        ),
-        webLayout: "Modal",
-        sideSheetSnapPoints: ["50%", "100%"],
-        onOpen: async () => {
-          BottomSheet({
-            // trigger: "target-3",
-            snapPoints: ["10%", "37%"],
-            displayOverlay: true,
-            minWidthForModal: 600,
-            openOnLoad: true,
-            content: getBottomsheet3content(`prj-01g3b8b6fbx9xybeq532bshx5k`),
-            // webLayout: "sideSheetLeft",
-            dismissable: false,
-            sideSheetSnapPoints: ["25%", "50%", "100%"],
-          });
-        },
-      });
-      document.querySelectorAll(`#target-2`).forEach((i, id) => {
-        i.addEventListener("click", () => {
-          replaceInnerContent(
-            "bottomsheet-2",
-            getBottomsheet2Content(
-              i.getAttribute("key") ||
-                "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
-              i.getAttribute("data-key"),
-              false
-            )
-          );
-        });
-      });
-    },
-  });
-
-  document.querySelectorAll(`#target-1`).forEach((i, id) => {
-    i.addEventListener("click", () => {
-      replaceInnerContent(
-        "bottomsheet-1",
-        fetchInnerContent(i.attributes.key.value, 1)
-      );
-    });
-  });
-});
-
 function getBottomsheet2Content(src, key, bottomsheet = false) {
   return `${bottomsheet ? `<div id="bottomsheet-2" data-bottomsheet>` : ""}
   <div class="mid">
@@ -215,4 +162,33 @@ async function getBottomsheet3content(key) {
   })}
 </ul></div>`;
   return res.replaceAll(",", "");
+}
+
+async function getBottomsheet1content(key) {
+  let products = await fetch(
+    `https://strapi.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`
+  )
+    .then((res) => res.json())
+    .then(async (json) => {
+      return json.data[0];
+    });
+  let content = `
+       <div class="list-items">
+       <img src=${products.banner.src}>
+       <h1>${products.name}</h1>
+       <p>${products.description}</p>
+       <div>
+       ${products.videos.map((item) => {
+         return `<div>
+         <img src = ${item.poster} />
+         <h3>${item.name}</h3>
+         </div>`;
+       })}
+       </div>
+       <button id="target-2" class="watch-now" data-bottomsheet-id="bottomsheet-2" key=${
+         products.banner.src
+       } data-key=${key} > watch now</button>
+    </div>
+`;
+  return content.replaceAll(",", "");
 }

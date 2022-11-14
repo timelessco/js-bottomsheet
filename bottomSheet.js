@@ -2,6 +2,11 @@ import { Gesture } from "@use-gesture/vanilla";
 import anime from "animejs/lib/anime.es.js";
 import { hideOverlay, addOverlay } from "./helpers/overlayHelpers";
 import { moveBottomSheet } from "./helpers/translationHelpers";
+import {
+  snapPointConversion,
+  checkType,
+  convertToPx,
+} from "./helpers/convertionHelpers";
 
 async function BottomSheet(props) {
   let {
@@ -10,6 +15,7 @@ async function BottomSheet(props) {
     minWidthForWeb = 500,
     draggableArea = ``,
     onOpen = () => {},
+    onClose = () => {},
     trigger = "",
     content = "",
     init = () => {},
@@ -32,16 +38,13 @@ async function BottomSheet(props) {
     cleanUpOnClose = false,
     dismissable = true,
     sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
+    scaleAnimate = 1,
   } = props;
+  let lastSetSnapPoint;
 
   content = typeof content !== "string" ? await content : content;
-  let lastSetSnapPoint;
-  let oldOffset;
-  let snapped = false;
-  let dragFlag = 0;
-
   openOnLoad
-    ? bottomsheetRequirements(true)
+    ? bottomsheetRequirements(openOnLoad)
     : setTimeout(() => {
         if (trigger && document.querySelector(`#${trigger}`)) {
           document.querySelectorAll(`#${trigger}`).forEach((i) =>
@@ -52,7 +55,7 @@ async function BottomSheet(props) {
         }
       }, 400);
 
-  function bottomsheetRequirements(defaultLoad = false) {
+  function bottomsheetRequirements(openOnLoad = false) {
     let targetid = trigger
       ? document
           ?.querySelector(`#${trigger}`)
@@ -120,35 +123,33 @@ async function BottomSheet(props) {
     }
     let isWeb = window.innerWidth < minWidthForWeb ? false : true;
     if (document.querySelectorAll(`#${targetBottomSheet?.id}`).length < 2) {
-      createBottomSheet(targetBottomSheet, isWeb, overlay, defaultLoad);
+      createBottomSheet(targetBottomSheet, isWeb, overlay, openOnLoad);
       // : "";
     } else {
-      openBottomSheet(targetBottomSheet, overlay, isWeb, defaultLoad);
+      openBottomSheet(targetBottomSheet, overlay, isWeb, openOnLoad);
       // }
     }
   }
 
-  function createBottomSheet(targetBottomSheet, isWeb, overlay, defaultLoad) {
-    // const newBottomSheet = document.createElement("div");
-    // lastSetSnapPoint = null;
-    targetBottomSheet.style.display = "block";
+  function createBottomSheet(targetBottomSheet, isWeb, overlay, openOnLoad) {
     let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
-
-    let lastSnapPoint = +snapPoints[snapPoints.length - 1].replace("%", "");
-    // let isWeb = window.innerWidth < minWidthForWeb ? false : true;
+    let lastSnapPoint = snapPointConversion(snapPoints[snapPoints.length - 1]);
     let modalClose = document.createElement("div");
+    let sideSheetLeft = document.createElement("div");
+    let sideSheetRight = document.createElement("div");
+    let draggableId = "";
+
+    targetBottomSheet.style.display = "block";
     modalClose.id = "modal-close";
     modalClose.addEventListener("click", () =>
       closeModal(targetBottomSheet, overlay)
     );
-    let sideSheetLeft = document.createElement("div");
     sideSheetLeft.id = "side-left";
     defaultSideSheetClose
       ? sideSheetLeft.addEventListener("click", () => {
           closeLeftSideSheet(targetBottomSheet, overlay);
         })
       : "";
-    let sideSheetRight = document.createElement("div");
     sideSheetRight.id = "side-right";
     defaultSideSheetClose
       ? sideSheetRight.addEventListener("click", () =>
@@ -158,7 +159,6 @@ async function BottomSheet(props) {
     modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
     sideSheetLeft.insertAdjacentHTML("afterbegin", sideSheetLeftIcon);
     sideSheetRight.insertAdjacentHTML("afterbegin", sideSheetRightIcon);
-    let draggableId = "";
     if (draggableArea) {
       if (typeof draggableArea === "string") {
         draggableArea = new DOMParser().parseFromString(
@@ -198,9 +198,10 @@ async function BottomSheet(props) {
       lastSetSnapPoint < window.innerHeight &&
       window.innerWidth < minWidthForWeb
     ) {
+      console.log("from here");
       closeBottomSheet(targetBottomSheet, overlay, isWeb, dismissable);
     } else {
-      openBottomSheet(targetBottomSheet, overlay, isWeb, defaultLoad);
+      openBottomSheet(targetBottomSheet, overlay, isWeb, openOnLoad);
     }
     targetBottomSheet.click();
     targetBottomSheet.style.overflow = "scroll";
@@ -213,7 +214,8 @@ async function BottomSheet(props) {
         lastSnapPoint,
         targetBottomSheet,
         draggableId,
-        overlay
+        overlay,
+        isWeb
       );
     }, 400);
 
@@ -270,18 +272,24 @@ async function BottomSheet(props) {
     hideOverlay(overlay);
   }
 
-  function closeBottomSheet(targetBottomSheet, overlay, isWeb, dismissable) {
-    displayOverlay ? hideOverlay(overlay) : "";
+  function closeBottomSheet(
+    targetBottomSheet,
+    overlay = null,
+    isWeb = false,
+    dismissable = true
+  ) {
+    displayOverlay && overlay ? hideOverlay(overlay) : "";
     document.body.style.overflow = "scroll";
     if (!isWeb) {
       anime({
         targets: targetBottomSheet,
         translateY: `${
           !dismissable
-            ? window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
+            ? window.innerHeight - checkType(snapPoints[0])
             : convertToPx(100)
         }px`,
         easing: "spring(1, 85, 45, 3)",
+        duration: 1,
       });
     } else {
       if (webLayout === "Modal") {
@@ -299,6 +307,7 @@ async function BottomSheet(props) {
       }
     }, 500);
     hideOverlay(overlay);
+    onClose();
   }
 
   function handleCloseIcons(
@@ -368,7 +377,7 @@ async function BottomSheet(props) {
     targetBottomSheet,
     overlay,
     isWeb,
-    defaultLoad = false
+    openOnLoad = false
   ) {
     document.body.style.overflow = "hidden";
 
@@ -384,6 +393,7 @@ async function BottomSheet(props) {
             width: sideSheetSnapPoints[0],
             easing: "spring(1, 85, 35, 5)",
             duration: 1,
+            scale: 1,
           });
         }, 100);
       } else if (webLayout === "sideSheetRight") {
@@ -396,6 +406,7 @@ async function BottomSheet(props) {
             width: sideSheetSnapPoints[0],
             easing: "spring(1, 85, 35, 5)",
             duration: 1,
+            scale: 1,
           });
         }, 100);
       } else {
@@ -405,16 +416,15 @@ async function BottomSheet(props) {
         anime({
           targets: targetBottomSheet,
           opacity: 1,
-          scale: 1,
           easing: "spring(1, 85, 35, 5)",
           duration: 1,
         });
       }
     } else {
       // targetBottomSheet.style.top = convertToPx(100);
-      if (defaultLoad) {
+      if (openOnLoad) {
         targetBottomSheet.style.transform = `translateY(${
-          window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
+          window.innerHeight - checkType(snapPoints[0])
         }px)`;
       } else {
         anime({
@@ -426,9 +436,7 @@ async function BottomSheet(props) {
         setTimeout(() => {
           anime({
             targets: targetBottomSheet,
-            translateY: `${
-              window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
-            }px`,
+            translateY: `${window.innerHeight - checkType(snapPoints[0])}px`,
             easing: "spring(1, 85, 15, 3)",
             opacity: 1,
             duration: 1,
@@ -436,8 +444,7 @@ async function BottomSheet(props) {
         }, 60);
       }
     }
-    lastSetSnapPoint =
-      window.innerHeight - convertToPx(snapPoints[0].replace("%", ""));
+    lastSetSnapPoint = window.innerHeight - checkType(snapPoints[0]);
   }
 
   function handleDragGesture(
@@ -446,7 +453,8 @@ async function BottomSheet(props) {
     lastSnapPoint,
     newBottomSheet,
     draggableId,
-    overlay
+    overlay,
+    isWeb
   ) {
     const gesture = new Gesture(
       draggableTarget,
@@ -486,8 +494,13 @@ async function BottomSheet(props) {
                   xy,
                   offset,
                   dy,
-                  overlay
+                  overlay,
+                  isWeb
                 );
+                console.log("in here");
+                if (lastSetSnapPoint >= window.innerHeight)
+                  closeBottomSheet(newBottomSheet, overlay, isWeb, dismissable);
+
                 if (lastSetSnapPoint >= window.innerHeight) {
                   hideOverlay(overlay);
                   // document.body.style.overflowY = "none";
@@ -516,12 +529,16 @@ async function BottomSheet(props) {
                     xy,
                     offset,
                     dy,
-                    overlay
+                    overlay,
+                    isWeb
                   );
-                  if (lastSetSnapPoint >= window.innerHeight) {
-                    hideOverlay(overlay);
-                    // document.body.style.overflowY = "none";
-                  }
+                  if (lastSetSnapPoint >= window.innerHeight && !active)
+                    closeBottomSheet(
+                      newBottomSheet,
+                      overlay,
+                      isWeb,
+                      dismissable
+                    );
                 }
               }
             } else {
@@ -550,7 +567,8 @@ async function BottomSheet(props) {
                   xy,
                   offset,
                   dy,
-                  overlay
+                  overlay,
+                  isWeb
                 );
               }
             }
@@ -570,7 +588,6 @@ async function BottomSheet(props) {
             newBottomSheet.click();
             newBottomSheet.style.touchAction = "auto";
           }
-          dragFlag++;
         },
       },
       {
@@ -595,11 +612,9 @@ async function BottomSheet(props) {
     xy,
     offset,
     dy,
-    overlay
+    overlay,
+    isWeb
   ) {
-    let convertXy =
-      ((window.screen.height - xy[1]) / window.screen.height) * 100;
-
     let actualOffset = offset[1];
     if (maxSnapPoint === null) {
       if (active) {
@@ -613,9 +628,9 @@ async function BottomSheet(props) {
               : actualOffset
           }px`,
           `spring(1, 250, 25, 25)`,
-          1
+          1,
+          scaleAnimate
         );
-        snapped = false;
       }
       if (!active) {
         translateToPreviousSnapPoint(
@@ -630,7 +645,8 @@ async function BottomSheet(props) {
           dy,
           false,
           overlay,
-          dismissable
+          dismissable,
+          isWeb
         ) !== undefined
           ? (offset[1] = translateToPreviousSnapPoint(
               actualOffset > window.innerHeight
@@ -644,11 +660,10 @@ async function BottomSheet(props) {
               dy,
               false,
               overlay,
-              dismissable
+              dismissable,
+              isWeb
             ))
           : "";
-        snapped = true;
-        oldOffset = offset[1];
       }
     } else {
       if (active) {
@@ -664,7 +679,6 @@ async function BottomSheet(props) {
           `spring(1, 250, 25, 25)`,
           1
         );
-        snapped = false;
       }
 
       if (!active) {
@@ -679,7 +693,8 @@ async function BottomSheet(props) {
           lastSnapPoint,
           dy,
           false,
-          overlay
+          overlay,
+          isWeb
         ) !== undefined
           ? (offset[1] = translateToNextSnapPoint(
               actualOffset > window.innerHeight
@@ -692,11 +707,10 @@ async function BottomSheet(props) {
               lastSnapPoint,
               dy,
               false,
-              overlay
+              overlay,
+              isWeb
             ))
           : "";
-        snapped = true;
-        oldOffset = offset[1];
       }
     }
   }
@@ -712,13 +726,12 @@ async function BottomSheet(props) {
     lastSnapPoint,
     dy,
     snappable,
-    overlay
+    overlay,
+    isWeb
   ) {
     let maxSnapPoint = Infinity;
     snapPoints.forEach((element) => {
-      let elem =
-        typeof element === "number" ? element : +element.replace("%", "");
-
+      let elem = snapPointConversion(element);
       if (
         convertToPx(elem) > window.innerHeight - convertXy &&
         convertToPx(elem) < maxSnapPoint
@@ -742,7 +755,8 @@ async function BottomSheet(props) {
           moveBottomSheet(
             newBottomSheet,
             `${window.innerHeight - maxSnapPoint}px`,
-            `spring(1, 250, 15, ${vy})`
+            `spring(1, 250, 15, ${vy})`,
+            1
           );
           lastSetSnapPoint = window.innerHeight - maxSnapPoint;
           return lastSetSnapPoint;
@@ -755,7 +769,8 @@ async function BottomSheet(props) {
             dy,
             true,
             overlay,
-            dismissable
+            dismissable,
+            isWeb
           );
         }
       }
@@ -770,13 +785,12 @@ async function BottomSheet(props) {
     dy,
     snappable,
     overlay,
-    dismissable
+    dismissable,
+    isWeb
   ) {
     let minSnapPoint = 0;
     snapPoints.forEach((element) => {
-      let elem =
-        typeof element === "number" ? element : +element.replace("%", "");
-
+      let elem = snapPointConversion(element);
       if (
         convertToPx(elem) < window.innerHeight - convertXy &&
         convertToPx(elem) > minSnapPoint
@@ -790,33 +804,31 @@ async function BottomSheet(props) {
         newBottomSheet,
         `${
           !dismissable
-            ? minSnapPoint <= convertToPx(snapPoints[0].replace("%", ""))
-              ? window.innerHeight - convertToPx(snapPoints[0].replace("%", ""))
+            ? minSnapPoint <= checkType(snapPoints[0])
+              ? window.innerHeight - checkType(snapPoints[0])
               : window.innerHeight - minSnapPoint
             : window.innerHeight - minSnapPoint
         }px`,
-        `spring(1, 250, 15, ${vy})`
+        `spring(1, 250, 15, ${vy})`,
+        1
       );
       lastSetSnapPoint = window.innerHeight - minSnapPoint;
-      if (lastSetSnapPoint >= window.innerHeight) hideOverlay(overlay);
       return lastSetSnapPoint;
     } else {
       if (vy > 0.9 || dy > 150) {
-        console.log(dismissable);
         moveBottomSheet(
           newBottomSheet,
           `${
             !dismissable
-              ? minSnapPoint <= convertToPx(snapPoints[0].replace("%", ""))
-                ? window.innerHeight -
-                  convertToPx(snapPoints[0].replace("%", ""))
+              ? minSnapPoint <= checkType(snapPoints[0])
+                ? window.innerHeight - checkType(snapPoints[0])
                 : window.innerHeight - minSnapPoint
               : window.innerHeight - minSnapPoint
           }px`,
-          `spring(1, 250, 15, ${vy})`
+          `spring(1, 250, 15, ${vy})`,
+          1
         );
         lastSetSnapPoint = window.innerHeight - minSnapPoint;
-        if (lastSetSnapPoint >= window.innerHeight) hideOverlay(overlay);
 
         return lastSetSnapPoint;
       } else {
@@ -827,7 +839,8 @@ async function BottomSheet(props) {
           lastSnapPoint,
           dy,
           true,
-          overlay
+          overlay,
+          isWeb
         );
       }
     }
@@ -924,12 +937,6 @@ async function BottomSheet(props) {
     // }
   }
 
-  function convertToPx(percentage) {
-    return Math.round((window.innerHeight * percentage) / 100);
-  }
-  function convertToPercentage(px) {
-    return Math.round((px / window.innerWidth) * 100);
-  }
   function cleanUp(targetBottomSheet, overlay) {
     targetBottomSheet.innerHTML = "";
 
@@ -937,7 +944,7 @@ async function BottomSheet(props) {
     // hideOverlay(overlay);
   }
   function moveSideSheet(param) {
-    console.log("move sidesheet");
+    console.log("move sidesheet", snapPoints);
     // if (index) {
     //   let snapPoints = BottomSheet.getSideSheetSnapPoints();
     //   anime({
@@ -950,7 +957,8 @@ async function BottomSheet(props) {
   }
 
   const self = {
-    moveSideSheet: "hi",
+    moveSideSheet,
+    closeBottomSheet,
   };
 
   return self;
