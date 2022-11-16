@@ -29,7 +29,7 @@ body {
   height: 100vh;
   min-width: 100%;
   /* overflow:scroll; */
-  /* background-color: white !important; */
+  background-color: white !important;
 }
 
 .scorll {
