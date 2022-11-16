@@ -153,11 +153,6 @@ cursor: pointer;
 img {
   width: 100%;
 }
-#bottomsheet-2 img {
-  height: 400px;
-  border-radius: 20px;
-  margin: auto;
-}
 
 body {
   background: black;

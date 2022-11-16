@@ -2,26 +2,21 @@ import BottomSheet from "./bottomSheet";
 import { replaceInnerContent } from "./bottomSheet";
 
 let bottomsheet1;
+
 Promise.resolve(fetchAllShows()).then(async (res) => {
   document.querySelector(".scroll-snap-slider").innerHTML = res;
-  bottomsheet1 = BottomSheet({
-    trigger: "target-1",
-    snapPoints: ["100%"],
-    displayOverlay: false,
-    minWidthForModal: 600,
-    webLayout: "modal",
-    content: `<div id="bottomsheet-${1}" data-bottomsheet> </div>`,
-  });
-
-  document.querySelectorAll(`#target-1`).forEach((i, id) => {
-    i.addEventListener("click", async () => {
-      await replaceInnerContent(
-        "bottomsheet-1",
-        getBottomsheet1content(i.attributes.key.value, 1)
-      );
+  document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
+    bottomsheet1 = BottomSheet({
+      trigger: `target-${index}`,
+      snapPoints: ["100%"],
+      displayOverlay: false,
+      minWidthForModal: 600,
+      webLayout: "modal",
+      content: `<div id="bottomsheet-${index}" data-bottomsheet> ${await getBottomsheet1content(
+        i.getAttribute("key")
+      )} </div>`,
     });
   });
-  (await bottomsheet1).moveSideSheet();
 });
 
 async function fetchAllShows() {
@@ -36,10 +31,8 @@ async function fetchAllShows() {
       return res;
     });
 
-  let content = `${shows.map((i) => {
-    return `<li id="target-1" class="scroll-snap-slide" data-bottomsheet-id = bottomsheet-${1} key = ${
-      i.key
-    }><img src=${i.poster.src}></li>`;
+  let content = `${shows.map((i, index) => {
+    return `<li id="target-${index}" class="scroll-snap-slide" data-bottomsheet-id = bottomsheet-${index} key = ${i.key}><img src=${i.poster.src}></li>`;
   })}`;
   return content.replaceAll(",", "");
 }

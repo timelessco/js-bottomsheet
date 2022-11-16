@@ -288,7 +288,7 @@ async function BottomSheet(props) {
             ? window.innerHeight - checkType(snapPoints[0])
             : convertToPx(100)
         }px`,
-        easing: `spring(1, 85, 45, ${vy})`,
+        easing: `spring(1, 250, 15, ${vy})`,
         duration: 1,
       });
     } else {
@@ -721,8 +721,6 @@ async function BottomSheet(props) {
     overlay,
     isWeb
   ) {
-    console.log("next", dy);
-
     let maxSnapPoint = Infinity;
     snapPoints.forEach((element) => {
       let elem = snapPointConversion(element);
@@ -786,7 +784,6 @@ async function BottomSheet(props) {
     dismissible,
     isWeb
   ) {
-    console.log("previous", dy);
     let minSnapPoint = 0;
     snapPoints.forEach((element) => {
       let elem = snapPointConversion(element);
@@ -890,12 +887,17 @@ async function BottomSheet(props) {
     //   });
     // }
   }
+  function destroy(trigger) {
+    document.getElementById(trigger).removeEventListener("click", () => {
+      init(false);
+    });
+  }
 
   const self = {
-    moveSideSheet,
     close,
     init,
     open,
+    destroy,
   };
 
   return self;
