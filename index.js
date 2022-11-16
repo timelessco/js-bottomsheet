@@ -7,7 +7,11 @@ Promise.resolve(fetchAllShows()).then(async (res) => {
   bottomsheet1 = BottomSheet({
     trigger: "target-1",
     snapPoints: ["100%"],
-    displayOverlay: true,
+    // draggableArea: `<div id="draggable-area" style="width: 120px"><svg width="32" height="3" viewBox="0 0 32 3" fill="none" xmlns="http://www.w3.org/2000/svg">
+    //   <rect opacity="0.3" width="32" height="3" rx="1.5" fill="white"/>
+    //   </svg>
+    //   </div>`,
+    displayOverlay: false,
     minWidthForModal: 600,
     webLayout: "Modal",
     content: `<div id="bottomsheet-${1}" data-bottomsheet> </div>`,
@@ -23,7 +27,6 @@ Promise.resolve(fetchAllShows()).then(async (res) => {
           document?.querySelector(`#target-2`)?.getAttribute("data-key"),
           true
         ),
-        scaleAnimate: 0.87,
         webLayout: "Modal",
         sideSheetSnapPoints: ["50%", "100%"],
         onOpen: async () => {
@@ -105,6 +108,7 @@ function getBottomsheet2Content(src, key, bottomsheet = false) {
         data-nimg="future-fill"
         style="position: absolute; color: transparent"
     />
+    <input value= "" style="text-align: center; display:flex; margin:auto"/>
   </div>
  
   ${bottomsheet ? `</div>` : ""}

@@ -9,7 +9,7 @@
    /* z-index: 999; */
    left:0;
    top: 0;
-   /* transform: translateY(-100%); */
+   transform: unset;
    box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
    /* border-top-left-radius: 36px;
    border-top-right-radius: 36px; */
@@ -31,7 +31,8 @@
   height: 50% !important;
   margin:auto;
   left:50%; 
-  transform: translate(-50%,-50%); 
+  transform: translate(-50%,-50%) !important; 
+  top: 50%  !important; 
   box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
   border-radius: 30px;
   touch-action: none;
