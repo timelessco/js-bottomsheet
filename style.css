@@ -26,10 +26,8 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-
   height: 100vh;
   min-width: 100%;
-  
   /* overflow:scroll; */
   /* background-color: white !important; */
 }

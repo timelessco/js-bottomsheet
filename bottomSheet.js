@@ -262,8 +262,7 @@ async function BottomSheet(props) {
     anime({
       targets: targetBottomSheet,
       opacity: 0,
-      scale: 0.9,
-      easing: "spring(1, 85, 45, 2)",
+      easing: "spring(1, 85, 45, 8)",
       duration: 0,
     });
     setTimeout(() => {
@@ -405,12 +404,22 @@ async function BottomSheet(props) {
       } else {
         targetBottomSheet.style.top = "50%";
         targetBottomSheet.style.opacity = 0;
-        targetBottomSheet.style.transform = "translate(-50%,-50%) scale(0.9)";
+        targetBottomSheet.style.transform =
+          "translateX(-50%) translateY(-40%) rotateX(-20deg)";
         anime({
+          // targets: targetBottomSheet,
+          // opacity: 1,
+          // easing: "spring(1, 85, 35, 1)",
+          // duration: 3,
+          translateY: "-50%",
           targets: targetBottomSheet,
           opacity: 1,
-          easing: "spring(1, 85, 35, 5)",
-          duration: 1,
+          // scale: 1,
+          rotateX: "1deg",
+          easing: "spring(1, 85, 45, 8)",
+          duration: 0,
+          // perspective: 2,
+          // });
         });
       }
     } else {

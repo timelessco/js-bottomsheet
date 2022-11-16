@@ -11,50 +11,6 @@ Promise.resolve(fetchAllShows()).then(async (res) => {
     minWidthForModal: 600,
     webLayout: "modal",
     content: `<div id="bottomsheet-${1}" data-bottomsheet> </div>`,
-    onOpen: async () => {
-      BottomSheet({
-        trigger: "target-2",
-        snapPoints: ["100%"],
-        displayOverlay: true,
-        minWidthForModal: 600,
-        content: getBottomsheet2Content(
-          document?.querySelector(`#target-2`)?.getAttribute("key") ||
-            "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
-          document?.querySelector(`#target-2`)?.getAttribute("data-key"),
-          true
-        ),
-        webLayout: "modal",
-        sideSheetSnapPoints: ["50%", "100%"],
-        onOpen: async () => {
-          BottomSheet({
-            snapPoints: ["10%", "37%"],
-            displayOverlay: false,
-            minWidthForModal: 600,
-            openOnLoad: true,
-            content: getBottomsheet3content(`prj-01g3b8b6fbx9xybeq532bshx5k`),
-            dismissible: false,
-            sideSheetSnapPoints: ["25%", "50%", "100%"],
-          });
-        },
-        onClose: async () => {
-          (await bottomsheet1).close(document.querySelector("#bottomsheet-3"));
-        },
-      });
-
-      document.querySelectorAll(`#target-2`).forEach((i, id) => {
-        i.addEventListener("click", () => {
-          replaceInnerContent(
-            "bottomsheet-2",
-            getBottomsheet2Content(
-              i.getAttribute("key") ||
-                "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
-              i.getAttribute("data-key"),
-              false
-            )
-          );
-        });
-      });
-    },
   });
 
   document.querySelectorAll(`#target-1`).forEach((i, id) => {
@@ -70,7 +26,7 @@ Promise.resolve(fetchAllShows()).then(async (res) => {
 
 async function fetchAllShows() {
   let shows = await fetch(
-    "https://strapi.tmls.dev/api/genres?sort[0]=id&fields[0]=name&populate[shows][sort][0]=id&populate[shows][fields][0]=key&populate[shows][fields][1]=name&populate[shows][fields][2]=featured&populate[shows][populate][poster][fields][0]=hash&populate[shows][populate][poster][fields][1]=src&populate[shows][populate][banner][fields][0]=hash&populate[shows][populate][banner][fields][1]=src"
+    "https://strapi.tmls.dev/api/genres?sort[0]=id&fields[0]=name&populate[shows][sort][0]=id&populate[shows][fields][0]=key&populate[shows][fields][1]=name&populate[shows]&populate[shows][populate][poster][fields][0]=hash&populate[shows][populate][poster][fields][1]=src&populate[shows][populate][banner][fields][0]=hash&populate[shows][populate][banner][fields][1]=src"
   )
     .then((res) => res.json())
     .then(async (json) => {
@@ -86,80 +42,6 @@ async function fetchAllShows() {
     }><img src=${i.poster.src}></li>`;
   })}`;
   return content.replaceAll(",", "");
-}
-function getBottomsheet2Content(src, key, bottomsheet = false) {
-  return `${bottomsheet ? `<div id="bottomsheet-2" data-bottomsheet>` : ""}
-  <div class="mid">
-    <img src= ${src} />
-    <div class="blur"></div>
-  </div>
-  <div class="universal">
-   <div aria-hidden="true" style="padding-bottom: 80.7754%"></div>
-      <img
-        alt="Universal FYC Home"
-        src="https://mondo-staging.vercel.app/_next/image?url=%2Fimages%2Fextended-logo.png&w=640&q=75"
-        decoding="async"
-        data-nimg="future-fill"
-        style="position: absolute; color: transparent"
-    />
-    <input value= "" style="text-align: center; display:flex; margin:auto"/>
-  </div>
- 
-  ${bottomsheet ? `</div>` : ""}
-`;
-}
-
-async function getBottomsheet3content(key) {
-  let products;
-  if (key !== undefined) {
-    products = await fetch(
-      `https://strapi.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`
-    )
-      .then((res) => res.json())
-      .then(async (json) => {
-        return json.data[0];
-      });
-  }
-  let res = `<div id="bottomsheet-3" data-bottomsheet>
-  <div
-    class="see-all"
-    id="target-3"
-    key=${key}
-    data-bottomsheet-id="bottomsheet-3"
-    style="
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    "
-  >
-    <div style="transform: rotate(270deg) translateZ(0px); width: max-content">
-      <svg
-        aria-hidden="true"
-        focusable="false"
-        viewBox="0 0 9 16"
-        fill="none"
-        style="width: 20px"
-      >
-        <path
-          d="M8 15L0.999999 8.2L8 1"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linejoin="round"
-        ></path>
-      </svg>
-    </div>
-    <span class="uppercase">see all episodes</span>
-  </div>
-
-  <ul class="scroll-snap-slider">
-  ${products?.videos.map((items, index) => {
-    return `<li class="scroll-snap-slide">
-    <img src=${items.poster} style="border-radius:20px"/>
-    </li>`;
-  })}
-</ul></div>`;
-  return res.replaceAll(",", "");
 }
 
 async function getBottomsheet1content(key) {
@@ -183,9 +65,6 @@ async function getBottomsheet1content(key) {
          </div>`;
        })}
        </div>
-       <button id="target-2" class="watch-now" data-bottomsheet-id="bottomsheet-2" key=${
-         products.banner.src
-       } data-key=${key} > watch now</button>
     </div>
 `;
   return content.replaceAll(",", "");
