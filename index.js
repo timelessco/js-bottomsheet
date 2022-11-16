@@ -7,13 +7,9 @@ Promise.resolve(fetchAllShows()).then(async (res) => {
   bottomsheet1 = BottomSheet({
     trigger: "target-1",
     snapPoints: ["100%"],
-    // draggableArea: `<div id="draggable-area" style="width: 120px"><svg width="32" height="3" viewBox="0 0 32 3" fill="none" xmlns="http://www.w3.org/2000/svg">
-    //   <rect opacity="0.3" width="32" height="3" rx="1.5" fill="white"/>
-    //   </svg>
-    //   </div>`,
     displayOverlay: false,
     minWidthForModal: 600,
-    webLayout: "Modal",
+    webLayout: "modal",
     content: `<div id="bottomsheet-${1}" data-bottomsheet> </div>`,
     onOpen: async () => {
       BottomSheet({
@@ -27,7 +23,7 @@ Promise.resolve(fetchAllShows()).then(async (res) => {
           document?.querySelector(`#target-2`)?.getAttribute("data-key"),
           true
         ),
-        webLayout: "Modal",
+        webLayout: "modal",
         sideSheetSnapPoints: ["50%", "100%"],
         onOpen: async () => {
           BottomSheet({
@@ -36,14 +32,12 @@ Promise.resolve(fetchAllShows()).then(async (res) => {
             minWidthForModal: 600,
             openOnLoad: true,
             content: getBottomsheet3content(`prj-01g3b8b6fbx9xybeq532bshx5k`),
-            dismissable: false,
+            dismissible: false,
             sideSheetSnapPoints: ["25%", "50%", "100%"],
           });
         },
         onClose: async () => {
-          (await bottomsheet1).closeBottomSheet(
-            document.querySelector("#bottomsheet-3")
-          );
+          (await bottomsheet1).close(document.querySelector("#bottomsheet-3"));
         },
       });
 
