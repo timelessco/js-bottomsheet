@@ -91,9 +91,9 @@ async function BottomSheet(props) {
     //   // }
     // });
     document.body.style.overflowY = "contain";
-    if (init) {
-      init();
-    }
+    // if (init) {
+    //   init();
+    // }
     if (content && !targetBottomSheet) {
       document.body.insertAdjacentHTML("beforeend", content);
       targetBottomSheet = targetid
