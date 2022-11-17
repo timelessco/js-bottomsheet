@@ -539,10 +539,7 @@ async function BottomSheet(props) {
                 newBottomSheet.style.overflow = "scroll";
                 if (convertToPx(100 - lastSnapPoint) > 0)
                   newBottomSheet.style.minHeight = "unset";
-                newBottomSheet.style.height = `${convertToPx(
-                  100 - lastSnapPoint
-                )}px`;
-
+                newBottomSheet.style.height = `${convertToPx(lastSnapPoint)}px`;
                 newBottomSheet.style.touchAction = "auto";
                 newBottomSheet.click();
               } else {
