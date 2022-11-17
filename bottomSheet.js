@@ -64,9 +64,10 @@ async function BottomSheet(props) {
     let targetBottomSheet = targetid
       ? document?.querySelector(`#${targetid}`)
       : "";
-    if (targetBottomSheet) {
-      targetBottomSheet.innerHTML = "";
-    }
+    // if (targetBottomSheet) {
+    //   targetBottomSheet.innerHTML = "";
+    // }
+    console.log(targetBottomSheet, "targetBottomSheet");
     // document.addEventListener("click", (e) => {
     //   let flag = 0;
     //   console.log(e.path, "e.path");
@@ -114,7 +115,12 @@ async function BottomSheet(props) {
       ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
       : document.createElement("div");
     overlay.id = `${targetBottomSheet?.id}-overlay`;
-
+    if (
+      targetBottomSheet &&
+      !document.getElementById(`#${targetBottomSheet.id}`)
+    ) {
+      document.body.append(targetBottomSheet);
+    }
     if (displayOverlay) {
       overlay.classList.add("overlay");
       addOverlay(overlay);
