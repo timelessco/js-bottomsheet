@@ -429,6 +429,7 @@ async function BottomSheet(props) {
         });
       }
     } else {
+      // targetBottomSheet.style.opacity = 1;
       // targetBottomSheet.style.top = convertToPx(100);
       if (openOnLoad) {
         targetBottomSheet.style.transform = `translateY(${
