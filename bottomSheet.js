@@ -413,30 +413,20 @@ async function BottomSheet(props) {
         targetBottomSheet.style.transform =
           "translateX(-50%) translateY(-40%) rotateX(-20deg)";
         anime({
-          // targets: targetBottomSheet,
-          // opacity: 1,
-          // easing: "spring(1, 85, 35, 1)",
-          // duration: 3,
           translateY: "-50%",
           targets: targetBottomSheet,
           opacity: 1,
-          // scale: 1,
           rotateX: "1deg",
           easing: "spring(1, 85, 45, 8)",
           duration: 0,
-          // perspective: 2,
-          // });
         });
       }
     } else {
-      // targetBottomSheet.style.opacity = 1;
-      // targetBottomSheet.style.top = convertToPx(100);
       if (openOnLoad) {
         targetBottomSheet.style.transform = `translateY(${
           window.innerHeight - checkType(snapPoints[0])
         }px)`;
       } else {
-        // targetBottomSheet.style.transform = "";
         anime({
           targets: targetBottomSheet,
           translateY: `${convertToPx(100)}px`,
@@ -471,13 +461,10 @@ async function BottomSheet(props) {
       {
         onDrag: ({
           active,
-          movement: [mx, my],
           velocity: [vx, vy],
-          xy,
           offset,
           distance: [dx, dy],
           target,
-          cancel,
           direction,
         }) => {
           let minSnapPoint = 0;
@@ -485,15 +472,12 @@ async function BottomSheet(props) {
           currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
           if (window.innerWidth < minWidthForModal) {
             if (direction[1] > 0) {
-              let type;
               if (
                 draggableId &&
                 target === document.querySelector(`#${draggableId}`)
               ) {
                 newBottomSheet.style.overflow = "hidden";
                 newBottomSheet.style.touchAction = "none";
-                // document?.querySelector(`#${draggableId}`)?.click();
-                let newOffset = offset[1];
                 handleSnapPoints(
                   newBottomSheet,
                   minSnapPoint,
@@ -573,7 +557,7 @@ async function BottomSheet(props) {
         onDragStart: () => {
           document.body.style.overflow = "hidden";
         },
-        onDragEnd: ({ movement: [mx, my], direction }) => {
+        onDragEnd: ({ direction }) => {
           currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
           if (
             (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
@@ -592,6 +576,7 @@ async function BottomSheet(props) {
           rubberband: true,
           axis: "y",
           preventDefault: false,
+          from: () => [0, getCurrentSnapPoint(newBottomSheet)],
         },
       }
     );
@@ -671,9 +656,6 @@ async function BottomSheet(props) {
               : actualOffset
           }px`,
           `spring(1, 250, 25, 25)`
-          // 1,
-          // animateOnDrag,
-          // true
         );
       }
 
@@ -742,9 +724,6 @@ async function BottomSheet(props) {
           newBottomSheet,
           `${window.innerHeight - maxSnapPoint}px`,
           `spring(1, 250, 15, ${vy})`
-          // 1,
-          // animateOnDrag,
-          // true
         );
         lastSetSnapPoint = window.innerHeight - maxSnapPoint;
         return lastSetSnapPoint;
@@ -754,9 +733,6 @@ async function BottomSheet(props) {
             newBottomSheet,
             `${window.innerHeight - maxSnapPoint}px`,
             `spring(1, 250, 15, ${vy})`
-            // 1,
-            // animateOnDrag,
-            // true
           );
           lastSetSnapPoint = window.innerHeight - maxSnapPoint;
           return lastSetSnapPoint;
@@ -810,9 +786,6 @@ async function BottomSheet(props) {
             : window.innerHeight - minSnapPoint
         }px`,
         `spring(1, 250, 15, ${vy})`
-        // 1
-        // animateOnDrag,
-        // true
       );
       lastSetSnapPoint = window.innerHeight - minSnapPoint;
       return lastSetSnapPoint;
@@ -828,9 +801,6 @@ async function BottomSheet(props) {
               : window.innerHeight - minSnapPoint
           }px`,
           `spring(1, 250, 15, ${vy})`
-          // 1
-          // animateOnDrag,
-          // true
         );
         lastSetSnapPoint = window.innerHeight - minSnapPoint;
 
