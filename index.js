@@ -8,7 +8,7 @@ Promise.resolve(fetchAllShows()).then(async (res) => {
   document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
     bottomsheet1 = BottomSheet({
       trigger: `target-${index}`,
-      snapPoints: ["30%", "60%", "100%"],
+      snapPoints: ["100%"],
       displayOverlay: false,
       minWidthForModal: 600,
       webLayout: "modal",
