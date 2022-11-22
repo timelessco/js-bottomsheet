@@ -1,132 +1,76 @@
-
-[data-bottomsheet]{
+[data-bottomsheet] {
   position: fixed;
   display: none;
   background-color: black;
   width: 100%;
-   position: fixed;
-   height: 100%;
-   /* z-index: 999; */
-   left:0;
-   top: 0;
-   opacity: 0;
-   transform: unset;
-   box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
-   /* border-top-left-radius: 36px;
-   border-top-right-radius: 36px; */
-   min-height: -webkit-fill-available;
-   /* padding-bottom: 10px; */
-   will-change: transform;
-   overflow: scroll;
-   touch-action: none;
-   color: white;
+  position: fixed;
+  height: 100%;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transform: unset;
+  box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
+  min-height: -webkit-fill-available;
+  will-change: transform;
+  overflow: scroll;
+  touch-action: none;
+  color: white;
 }
-.modal{
+.modal {
   background-color: black;
-  position: absolute; 
-  /* z-index: 400; */
+  position: absolute;
   overflow: scroll;
   display: block;
-  /* top:50% !important; */
   max-width: 50%;
   height: 50% !important;
-  margin:auto;
-  left:50%; 
-  transform: translate(-50%,-50%); 
-  top: 50%  !important; 
+  margin: auto;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50% !important;
   box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
   border-radius: 30px;
   touch-action: none;
   padding: 10px;
 }
-
-.bottomsheet div#bottomsheet-1, .modal div#bottomsheet-1{
-  display: block !important;
-  /* overflow-y: scroll; */
-
+.overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
 }
-
-
-.overlay{
-    position: fixed;
-    display: none; 
-    width: 100%; 
-    height: 100%; 
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5); 
-    /* z-index: 2;  */
-}
-.overlay.display{
+.overlay.display {
   display: block;
   opacity: 0;
 }
-
-#draggable-area{
+#draggable-area {
   padding: 30px 0;
-  width:100%;
-  display:flex;
-  align-items:center;
+  width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: center;
   position: sticky;
-  top:0;
+  top: 0;
   z-index: 100;
   background-color: inherit;
 }
-
-#modal-close{
+#modal-close {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   position: sticky;
-  top:0;
-  padding:4px;
+  top: 0;
+  padding: 4px;
   z-index: 100;
-
 }
-#side-left{
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  position: sticky;
-  top:0;
-  padding:2px;
-  z-index: 100;
-
-}
-#side-right{
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  position: sticky;
-  top:0;
-  z-index: 100;
-
-}
-img{
-  /* user-drag: none; */
-    -webkit-user-drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-}
-.side-sheet{
-  background-color: black;
-  position: absolute; 
-  /* z-index: 400; */
-  overflow: scroll;
-  display: block;
-  /* top:50% !important; */
- width: 0px;
-  height: 100% !important;
-  /* margin:auto; */
-  /* right:0;  */
-  left: unset;
-  /* transform: translateY(-50%);  */
-  box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
-  border-radius: 0px;
-  touch-action: none;
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }

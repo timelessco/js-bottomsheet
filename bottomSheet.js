@@ -8,7 +8,7 @@ import {
   convertToPx,
 } from "./helpers/convertionHelpers";
 
-async function BottomSheet(props) {
+function BottomSheet(props) {
   let {
     snapPoints = ["100%"],
     displayOverlay = true,
@@ -38,11 +38,27 @@ async function BottomSheet(props) {
     cleanUpOnClose = false,
     dismissible = true,
     sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
+    velocityThreshold = 0.9,
+    distanceThreshold = 150,
+    closeOnOverlayClick = true,
     animateOnDrag = {},
   } = props;
   let lastSetSnapPoint;
 
-  content = typeof content !== "string" ? await content : content;
+  content =
+    typeof content !== "string"
+      ? promise.resolve(content).then((value) => {
+          value;
+        })
+      : content;
+  let targetid = trigger
+    ? document
+        ?.querySelector(`#${trigger}`)
+        ?.getAttribute("data-bottomsheet-id")
+    : "";
+  let targetBottomSheet = targetid
+    ? document?.querySelector(`#${targetid}`)
+    : "";
   openOnLoad
     ? init(openOnLoad)
     : setTimeout(() => {
@@ -56,41 +72,6 @@ async function BottomSheet(props) {
       }, 400);
 
   function init(openOnLoad = false) {
-    let targetid = trigger
-      ? document
-          ?.querySelector(`#${trigger}`)
-          ?.getAttribute("data-bottomsheet-id")
-      : "";
-    let targetBottomSheet = targetid
-      ? document?.querySelector(`#${targetid}`)
-      : "";
-    // if (targetBottomSheet) {
-    //   targetBottomSheet.innerHTML = "";
-    // }
-    console.log(targetBottomSheet, "targetBottomSheet");
-    // document.addEventListener("click", (e) => {
-    //   let flag = 0;
-    //   console.log(e.path, "e.path");
-    //   e.path.forEach((i) => {
-    //     console.log(i.id, trigger, targetBottomSheet.id, "p;oljknbv ");
-    //     if (i.id === trigger || i.id === targetBottomSheet.id) flag = 1;
-    //   });
-    //   console.log(flag, "flag");
-    //   if (flag === 0) {
-    //     close(targetBottomSheet, overlay, isWeb, dismissible);
-    //   }
-    //   // if (
-    //   //   e.path.filter((i) => {
-    //   //     return i.id === targetBottomSheet?.id;
-    //   //   }).length === 0 &&
-    //   //   e.path.filter((i) => {
-    //   //     return i.id === trigger;
-    //   //   }).length === 0
-    //   // ) {
-    //   //   console.log("hererere", targetBottomSheet);
-    //   //   close(targetBottomSheet, overlay, isWeb, dismissible);
-    //   // }
-    // });
     document.body.style.overflowY = "contain";
     if (onInit) {
       onInit();
@@ -128,15 +109,17 @@ async function BottomSheet(props) {
       targetBottomSheet && document.querySelector(".overlay")
         ? document.body.insertBefore(overlay, targetBottomSheet)
         : "";
-      overlay.addEventListener("click", () => {
-        close(targetBottomSheet, overlay, isWeb, dismissible);
-      });
+      if (closeOnOverlayClick) {
+        overlay.addEventListener("click", () => {
+          close(overlay, isWeb, dismissible);
+        });
+      }
     }
     let isWeb = window.innerWidth < minWidthForModal ? false : true;
     if (document.querySelectorAll(`#${targetBottomSheet?.id}`).length < 2) {
       createBottomSheet(targetBottomSheet, isWeb, overlay, openOnLoad);
     } else {
-      open(targetBottomSheet, overlay, isWeb, openOnLoad);
+      open(overlay, isWeb, openOnLoad);
     }
   }
 
@@ -207,9 +190,9 @@ async function BottomSheet(props) {
       lastSetSnapPoint < window.innerHeight &&
       window.innerWidth < minWidthForModal
     ) {
-      close(targetBottomSheet, overlay, isWeb, dismissible);
+      close(overlay, isWeb, dismissible);
     } else {
-      open(targetBottomSheet, overlay, isWeb, openOnLoad);
+      open(overlay, isWeb, openOnLoad);
     }
     targetBottomSheet.click();
     targetBottomSheet.style.overflow = "scroll";
@@ -268,8 +251,9 @@ async function BottomSheet(props) {
     anime({
       targets: targetBottomSheet,
       opacity: 0,
-      easing: "spring(1, 85, 45, 8)",
-      duration: 0,
+      easing: "spring(1, 85, 45, 15)",
+      duration: 0.1,
+      translateY: "-40%",
     });
     setTimeout(() => {
       cleanUp(targetBottomSheet, overlay);
@@ -277,13 +261,7 @@ async function BottomSheet(props) {
     hideOverlay(overlay);
   }
 
-  function close(
-    targetBottomSheet,
-    overlay = null,
-    isWeb = false,
-    dismissible = true,
-    vy = 7
-  ) {
+  function close(overlay = null, isWeb = false, dismissible = true, vy = 7) {
     displayOverlay && overlay ? hideOverlay(overlay) : "";
     document.body.style.overflow = "scroll";
     if (!isWeb) {
@@ -379,7 +357,7 @@ async function BottomSheet(props) {
     }
   }
 
-  function open(targetBottomSheet, overlay, isWeb, openOnLoad = false) {
+  function open(overlay, isWeb = false, openOnLoad = false) {
     document.body.style.overflow = "hidden";
     displayOverlay ? addOverlay(overlay) : "";
     if (isWeb) {
@@ -417,8 +395,8 @@ async function BottomSheet(props) {
           targets: targetBottomSheet,
           opacity: 1,
           rotateX: "1deg",
-          easing: "spring(1, 85, 45, 8)",
-          duration: 0,
+          easing: "spring(1, 85, 45, 15)",
+          duration: 0.1,
         });
       }
     } else {
@@ -491,7 +469,7 @@ async function BottomSheet(props) {
                   isWeb
                 );
                 if (lastSetSnapPoint >= window.innerHeight)
-                  close(newBottomSheet, overlay, isWeb, dismissible, vy);
+                  close(overlay, isWeb, dismissible, vy);
 
                 if (lastSetSnapPoint >= window.innerHeight) {
                   hideOverlay(overlay);
@@ -522,7 +500,7 @@ async function BottomSheet(props) {
                     isWeb
                   );
                   if (lastSetSnapPoint >= window.innerHeight)
-                    close(newBottomSheet, overlay, isWeb, dismissible, vy);
+                    close(overlay, isWeb, dismissible, vy);
                 }
               }
             } else {
@@ -549,7 +527,7 @@ async function BottomSheet(props) {
                   isWeb
                 );
                 if (lastSetSnapPoint >= window.innerHeight)
-                  close(newBottomSheet, overlay, isWeb, dismissible, vy);
+                  close(overlay, isWeb, dismissible, vy);
               }
             }
           }
@@ -728,7 +706,7 @@ async function BottomSheet(props) {
         lastSetSnapPoint = window.innerHeight - maxSnapPoint;
         return lastSetSnapPoint;
       } else {
-        if (vy > 0.9 || dy < 150) {
+        if (vy > velocityThreshold || dy < distanceThreshold) {
           moveBottomSheet(
             newBottomSheet,
             `${window.innerHeight - maxSnapPoint}px`,
@@ -790,7 +768,7 @@ async function BottomSheet(props) {
       lastSetSnapPoint = window.innerHeight - minSnapPoint;
       return lastSetSnapPoint;
     } else {
-      if (vy > 0.9 || dy > 150) {
+      if (vy > velocityThreshold || dy > distanceThreshold) {
         moveBottomSheet(
           newBottomSheet,
           `${
@@ -861,7 +839,7 @@ async function BottomSheet(props) {
     //   });
     // }
   }
-  function destroy(trigger) {
+  function destroy() {
     document.getElementById(trigger).removeEventListener("click", () => {
       init(false);
     });
