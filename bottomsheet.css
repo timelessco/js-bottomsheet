@@ -16,7 +16,7 @@
   touch-action: none;
   color: white;
 }
-[data-bottomsheet].modal {
+.modal {
   background-color: black;
   position: absolute;
   overflow: scroll;
