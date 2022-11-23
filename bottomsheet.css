@@ -16,7 +16,7 @@
   touch-action: none;
   color: white;
 }
-.modal {
+[data-bottomsheet].modal {
   background-color: black;
   position: absolute;
   overflow: scroll;
@@ -47,16 +47,10 @@
   display: block;
   opacity: 0;
 }
-#draggable-area {
-  padding: 30px 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+[data-draggable]{
   position: sticky;
-  top: 0;
-  z-index: 100;
-  background-color: inherit;
+  top:0;
+  width: 100%;
 }
 #modal-close {
   display: flex;
@@ -67,10 +61,29 @@
   padding: 4px;
   z-index: 100;
 }
-img {
+[data-bottomsheet] img {
   -webkit-user-drag: none;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+
+[data-bottomsheet] input[type="color"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="email"],
+input[type="month"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="time"],
+input[type="url"],
+input[type="week"],
+select:focus,
+textarea {
+  font-size: 16px;
 }

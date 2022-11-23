@@ -197,7 +197,6 @@ function BottomSheet(props) {
     targetBottomSheet.click();
     targetBottomSheet.style.overflow = "scroll";
     targetBottomSheet.style.touchAction = "auto";
-
     setTimeout(() => {
       handleDragGesture(
         targetBottomSheet,
@@ -401,6 +400,7 @@ function BottomSheet(props) {
       }
     } else {
       if (openOnLoad) {
+        targetBottomSheet.style.opacity = 1;
         targetBottomSheet.style.transform = `translateY(${
           window.innerHeight - checkType(snapPoints[0])
         }px)`;
@@ -504,13 +504,16 @@ function BottomSheet(props) {
                 }
               }
             } else {
-              if (currentSnapPoint <= convertToPx(100 - lastSnapPoint)) {
+              if (
+                getCurrentSnapPoint(targetBottomSheet) <=
+                convertToPx(100 - lastSnapPoint)
+              ) {
+                newBottomSheet.click();
                 newBottomSheet.style.overflow = "scroll";
                 if (convertToPx(100 - lastSnapPoint) > 0)
                   newBottomSheet.style.minHeight = "unset";
                 newBottomSheet.style.height = `${convertToPx(lastSnapPoint)}px`;
                 newBottomSheet.style.touchAction = "auto";
-                newBottomSheet.click();
               } else {
                 newBottomSheet.style.overflow = "hidden";
                 newBottomSheet.style.touchAction = "none";
@@ -540,7 +543,8 @@ function BottomSheet(props) {
           if (
             (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
               lastSetSnapPoint === 0) &&
-            direction[1] < 0
+            direction[1] < 0 &&
+            targetBottomSheet.scrollTop >= 1
           ) {
             newBottomSheet.style.overflow = "scroll";
             newBottomSheet.click();
@@ -824,7 +828,7 @@ function BottomSheet(props) {
   }
 
   function cleanUp(targetBottomSheet) {
-    targetBottomSheet.innerHTML = "";
+    // targetBottomSheet.innerHTML = "";
     targetBottomSheet.remove();
   }
   function moveSideSheet(param) {

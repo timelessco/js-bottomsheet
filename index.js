@@ -1,4 +1,4 @@
-import BottomSheet from "../bottomSheet";
+import BottomSheet from "./bottomSheet";
 let bottomsheet1;
 
 Promise.resolve(fetchAllShows()).then(async (res) => {
