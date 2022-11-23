@@ -873,4 +873,5 @@ export async function replaceInnerContent(bottomsheetID, content) {
       .insertAdjacentHTML("beforeend", content);
   }
 }
+
 export default BottomSheet;

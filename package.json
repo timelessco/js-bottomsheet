@@ -9,17 +9,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build-lib": "vite build --config viteConfig.js",
     "preview": "vite preview",
     "host": "vite --host"
   },
   "devDependencies": {
-    "vite": "^3.1.0"
+    "vite": "^3.1.0",
+    "scroll-snap-slider": "SamrithaS/scroll-snap-slider"
   },
   "dependencies": {
     "@use-gesture/vanilla": "^10.2.20",
-    "animejs": "^3.2.1",
-    "js-bottomsheet": "^0.0.0",
-    "vanilla-js-carousel": "^3.1.2",
-    "scroll-snap-slider": "SamrithaS/scroll-snap-slider"
+    "animejs": "^3.2.1"
   }
 }
