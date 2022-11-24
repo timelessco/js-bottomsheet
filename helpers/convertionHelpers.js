@@ -17,3 +17,7 @@ export function convertToPx(percentage) {
 export function convertToPercentage(px) {
   return Math.round((px / window.innerWidth) * 100);
 }
+
+export function differenceOfWindowHt(value) {
+  return window.innerHeight - value;
+}

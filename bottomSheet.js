@@ -6,6 +6,7 @@ import {
   snapPointConversion,
   checkType,
   convertToPx,
+  differenceOfWindowHt,
 } from "./helpers/convertionHelpers";
 
 function BottomSheet(props) {
@@ -271,7 +272,7 @@ function BottomSheet(props) {
         targets: targetBottomSheet,
         translateY: `${
           !dismissible
-            ? window.innerHeight - checkType(snapPoints[0])
+            ? differenceOfWindowHt(checkType(snapPoints[0]))
             : convertToPx(100)
         }px`,
         easing: getSnapPointAnimation(vy),
@@ -404,9 +405,9 @@ function BottomSheet(props) {
     } else {
       if (openOnLoad) {
         targetBottomSheet.style.opacity = 1;
-        targetBottomSheet.style.transform = `translateY(${
-          window.innerHeight - checkType(snapPoints[0])
-        }px)`;
+        targetBottomSheet.style.transform = `translateY(${differenceOfWindowHt(
+          checkType(snapPoints[0])
+        )}px)`;
       } else {
         anime({
           targets: targetBottomSheet,
@@ -417,7 +418,7 @@ function BottomSheet(props) {
         setTimeout(() => {
           anime({
             targets: targetBottomSheet,
-            translateY: `${window.innerHeight - checkType(snapPoints[0])}px`,
+            translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
             easing: "spring(1, 85, 15, 3)",
             opacity: 1,
             duration: 1,
@@ -425,7 +426,7 @@ function BottomSheet(props) {
         }, 60);
       }
     }
-    lastSetSnapPoint = window.innerHeight - checkType(snapPoints[0]);
+    lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
   }
 
   function handleDragGesture(
@@ -580,6 +581,7 @@ function BottomSheet(props) {
     isWeb
   ) {
     let actualOffset = offset[1];
+
     if (maxSnapPoint === null) {
       if (active) {
         moveBottomSheet(
@@ -592,12 +594,10 @@ function BottomSheet(props) {
               : actualOffset
           }px`,
           `spring(1, 250, 25, 25)`
-          // 1
-          // animateOnDrag
         );
       }
-      if (!active) {
-        translateToPreviousSnapPoint(
+      function previousSnappointInputs() {
+        return translateToPreviousSnapPoint(
           actualOffset > window.innerHeight
             ? window.innerHeight
             : actualOffset < convertToPx(100 - lastSnapPoint)
@@ -611,22 +611,11 @@ function BottomSheet(props) {
           overlay,
           dismissible,
           isWeb
-        ) !== undefined
-          ? (offset[1] = translateToPreviousSnapPoint(
-              actualOffset > window.innerHeight
-                ? window.innerHeight
-                : actualOffset < convertToPx(100 - lastSnapPoint)
-                ? convertToPx(100 - lastSnapPoint)
-                : actualOffset,
-              newBottomSheet,
-              vy,
-              lastSnapPoint,
-              dy,
-              false,
-              overlay,
-              dismissible,
-              isWeb
-            ))
+        );
+      }
+      if (!active) {
+        previousSnappointInputs() !== undefined
+          ? (offset[1] = previousSnappointInputs())
           : "";
       }
     } else {
@@ -643,9 +632,8 @@ function BottomSheet(props) {
           `spring(1, 250, 25, 25)`
         );
       }
-
-      if (!active) {
-        translateToNextSnapPoint(
+      function nextSnappointInputs() {
+        return translateToNextSnapPoint(
           actualOffset > window.innerHeight
             ? window.innerHeight
             : actualOffset < convertToPx(100 - lastSnapPoint)
@@ -658,21 +646,11 @@ function BottomSheet(props) {
           false,
           overlay,
           isWeb
-        ) !== undefined
-          ? (offset[1] = translateToNextSnapPoint(
-              actualOffset > window.innerHeight
-                ? window.innerHeight
-                : actualOffset < convertToPx(100 - lastSnapPoint)
-                ? convertToPx(100 - lastSnapPoint)
-                : actualOffset,
-              newBottomSheet,
-              vy,
-              lastSnapPoint,
-              dy,
-              false,
-              overlay,
-              isWeb
-            ))
+        );
+      }
+      if (!active) {
+        nextSnappointInputs() !== undefined
+          ? (offset[1] = nextSnappointInputs())
           : "";
       }
     }
@@ -696,30 +674,29 @@ function BottomSheet(props) {
     snapPoints.forEach((element) => {
       let elem = snapPointConversion(element);
       if (
-        convertToPx(elem) > window.innerHeight - convertXy &&
+        convertToPx(elem) > differenceOfWindowHt(convertXy) &&
         convertToPx(elem) < maxSnapPoint
       ) {
         maxSnapPoint = convertToPx(elem);
       }
     });
-
     if (maxSnapPoint !== Infinity) {
       if (snappable) {
         moveBottomSheet(
           newBottomSheet,
-          `${window.innerHeight - maxSnapPoint}px`,
+          `${differenceOfWindowHt(maxSnapPoint)}px`,
           getSnapPointAnimation(vy)
         );
-        lastSetSnapPoint = window.innerHeight - maxSnapPoint;
+        lastSetSnapPoint = differenceOfWindowHt(maxSnapPoint);
         return lastSetSnapPoint;
       } else {
         if (vy > velocityThreshold || dy < distanceThreshold) {
           moveBottomSheet(
             newBottomSheet,
-            `${window.innerHeight - maxSnapPoint}px`,
+            `${differenceOfWindowHt(maxSnapPoint)}px`,
             getSnapPointAnimation(vy)
           );
-          lastSetSnapPoint = window.innerHeight - maxSnapPoint;
+          lastSetSnapPoint = differenceOfWindowHt(maxSnapPoint);
           return lastSetSnapPoint;
         } else {
           return translateToPreviousSnapPoint(
@@ -753,26 +730,25 @@ function BottomSheet(props) {
     snapPoints.forEach((element) => {
       let elem = snapPointConversion(element);
       if (
-        convertToPx(elem) < window.innerHeight - convertXy &&
+        convertToPx(elem) < differenceOfWindowHt(convertXy) &&
         convertToPx(elem) > minSnapPoint
       ) {
         minSnapPoint = convertToPx(elem);
       }
     });
-
     if (snappable) {
       moveBottomSheet(
         newBottomSheet,
         `${
           !dismissible
             ? minSnapPoint <= checkType(snapPoints[0])
-              ? window.innerHeight - checkType(snapPoints[0])
-              : window.innerHeight - minSnapPoint
-            : window.innerHeight - minSnapPoint
+              ? differenceOfWindowHt(checkType(snapPoints[0]))
+              : differenceOfWindowHt(minSnapPoint)
+            : differenceOfWindowHt(minSnapPoint)
         }px`,
         getSnapPointAnimation(vy)
       );
-      lastSetSnapPoint = window.innerHeight - minSnapPoint;
+      lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
       return lastSetSnapPoint;
     } else {
       if (vy > velocityThreshold || dy > distanceThreshold) {
@@ -781,14 +757,13 @@ function BottomSheet(props) {
           `${
             !dismissible
               ? minSnapPoint <= checkType(snapPoints[0])
-                ? window.innerHeight - checkType(snapPoints[0])
-                : window.innerHeight - minSnapPoint
-              : window.innerHeight - minSnapPoint
+                ? differenceOfWindowHt(checkType(snapPoints[0]))
+                : differenceOfWindowHt(minSnapPoint)
+              : differenceOfWindowHt(minSnapPoint)
           }px`,
           getSnapPointAnimation(vy)
         );
-        lastSetSnapPoint = window.innerHeight - minSnapPoint;
-
+        lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
         return lastSetSnapPoint;
       } else {
         return translateToNextSnapPoint(
@@ -843,14 +818,12 @@ function BottomSheet(props) {
       init(false);
     });
   }
-
   const self = {
     close,
     init,
     open,
     destroy,
   };
-
   return self;
 }
 
