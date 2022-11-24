@@ -7,6 +7,7 @@ import {
   checkType,
   convertToPx,
   differenceOfWindowHt,
+  getMobileOperatingSystem,
 } from "./helpers/convertionHelpers";
 
 function BottomSheet(props) {
@@ -45,7 +46,6 @@ function BottomSheet(props) {
     animateOnDrag = {},
   } = props;
   let lastSetSnapPoint;
-
   content =
     typeof content !== "string"
       ? promise.resolve(content).then((value) => {
@@ -66,6 +66,23 @@ function BottomSheet(props) {
   overlay.id = `${targetBottomSheet?.id}-overlay`;
   let closeAnimation = `spring(1, 85, 45, 15)`;
   let openAnimation = `spring(1, 85, 35, 5)`;
+
+  document.addEventListener("click", (e) => {
+    console.log("click");
+    // e.target.scrollIntoView();
+    setTimeout(() => {
+      if (
+        e.target.tagName.toLowerCase() === "input"
+        // getMobileOperatingSystem() === "Android" &&
+        // getCurrentSnapPoint(targetBottomSheet) >=
+        //   window.outerHeight - window.innerHeight
+      ) {
+        targetBottomSheet.style.transform = `translateY(${0})`;
+
+        // moveBottomSheet(targetBottomSheet, "0px", getSnapPointAnimation(vy));
+      }
+    }, 100);
+  });
   openOnLoad
     ? init(openOnLoad)
     : setTimeout(() => {
@@ -540,12 +557,22 @@ function BottomSheet(props) {
         onDragEnd: ({ direction }) => {
           currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
           if (
-            currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
-            (lastSetSnapPoint === 0 && direction[1] < 0)
+            (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
+              lastSetSnapPoint === 0) &&
+            direction[1] < 0 &&
+            targetBottomSheet.scrollTop >= 0
           ) {
             newBottomSheet.style.overflow = "scroll";
             newBottomSheet.click();
             newBottomSheet.style.touchAction = "auto";
+          }
+          if (
+            (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
+              lastSetSnapPoint === 0) &&
+            direction[1] > 0 &&
+            targetBottomSheet.scrollTop === 0
+          ) {
+            newBottomSheet.style.overflow = "hidden";
           }
         },
       },
