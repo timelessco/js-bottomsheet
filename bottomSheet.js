@@ -12,8 +12,8 @@ import {
 function BottomSheet(props) {
   let {
     snapPoints = ["100%"],
-    displayOverlay = true,
-    minWidthForModal = 500,
+    displayOverlay = false,
+    minWidthForModal = 700,
     draggableArea = ``,
     onOpen = () => {},
     onClose = () => {},
@@ -246,11 +246,7 @@ function BottomSheet(props) {
     return isWeb;
   }
 
-  function closeModal(
-    targetBottomSheet,
-    overlay
-    // sideSheetSnapPoints
-  ) {
+  function closeModal(targetBottomSheet, overlay) {
     anime({
       targets: targetBottomSheet,
       opacity: 0,
@@ -329,7 +325,6 @@ function BottomSheet(props) {
         webLayout === "sideSheetLeft"
       ) {
         targetBottomSheet.prepend(sideSheetLeft);
-        // closeLeftSideSheet(targetBottomSheet);
       } else if (
         !document.querySelector(`#${targetBottomSheet.id} #side-right`) &&
         webLayout === "sideSheetRight"
@@ -545,10 +540,8 @@ function BottomSheet(props) {
         onDragEnd: ({ direction }) => {
           currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
           if (
-            (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
-              lastSetSnapPoint === 0) &&
-            direction[1] < 0 &&
-            targetBottomSheet.scrollTop >= 1
+            currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
+            (lastSetSnapPoint === 0 && direction[1] < 0)
           ) {
             newBottomSheet.style.overflow = "scroll";
             newBottomSheet.click();
@@ -806,12 +799,11 @@ function BottomSheet(props) {
   }
 
   function cleanUp(targetBottomSheet) {
-    // targetBottomSheet.innerHTML = "";
     targetBottomSheet.remove();
   }
 
   function getSnapPointAnimation(vy) {
-    return `spring(1, 250, 15, ${vy})`;
+    return `spring(1, 95, 25, 13)`;
   }
   function destroy() {
     document.getElementById(trigger).removeEventListener("click", () => {

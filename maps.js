@@ -19,7 +19,6 @@ let bottomsheet1 = BottomSheet({
 
 let bottomsheet2 = BottomSheet({
   trigger: `map-target`,
-  displayOverlay: false,
 });
 document.getElementById("done").addEventListener("click", () => {
   bottomsheet2.close();
