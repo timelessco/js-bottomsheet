@@ -1,8 +1,6 @@
 # Js Bottomsheet
 A pure Js snappable, scrollable, customisable bottomsheet!
 
-https://user-images.githubusercontent.com/62285891/203723490-ec56b1a9-133c-429e-8154-06d2e0177305.MOV
-
 ## Features
 - Works as a modal in web and as a bottomsheet in mobile.
 - Supports multiple snap points.
