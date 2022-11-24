@@ -466,3 +466,17 @@ h4 {
   padding: 15px 0;
   max-width: -webkit-fill-available;
 }
+.no-flex{
+  display: block;
+}
+#maps-3{
+  background-color: transparent;
+}
+.lg{
+  font-size: 20px;
+  padding: 12px 0;
+}
+
+.p2{
+  padding: 10px 0;
+}

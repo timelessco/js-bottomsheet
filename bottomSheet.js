@@ -59,6 +59,9 @@ function BottomSheet(props) {
   let targetBottomSheet = targetid
     ? document?.querySelector(`#${targetid}`)
     : "";
+
+  let closeAnimation = `spring(1, 85, 45, 15)`;
+  let openAnimation = `spring(1, 85, 35, 5)`;
   openOnLoad
     ? init(openOnLoad)
     : setTimeout(() => {
@@ -250,7 +253,7 @@ function BottomSheet(props) {
     anime({
       targets: targetBottomSheet,
       opacity: 0,
-      easing: "spring(1, 85, 45, 15)",
+      easing: closeAnimation,
       duration: 0.1,
       translateY: "-40%",
     });
@@ -271,7 +274,7 @@ function BottomSheet(props) {
             ? window.innerHeight - checkType(snapPoints[0])
             : convertToPx(100)
         }px`,
-        easing: `spring(1, 250, 15, ${vy})`,
+        easing: getSnapPointAnimation(vy),
         duration: 1,
       });
     } else {
@@ -368,7 +371,7 @@ function BottomSheet(props) {
             targets: targetBottomSheet,
             left: "0",
             width: sideSheetSnapPoints[0],
-            easing: "spring(1, 85, 35, 5)",
+            easing: openAnimation,
             duration: 1,
           });
         }, 100);
@@ -380,7 +383,7 @@ function BottomSheet(props) {
             targets: targetBottomSheet,
             right: "0",
             width: sideSheetSnapPoints[0],
-            easing: "spring(1, 85, 35, 5)",
+            easing: openAnimation,
             duration: 1,
           });
         }, 100);
@@ -394,7 +397,7 @@ function BottomSheet(props) {
           targets: targetBottomSheet,
           opacity: 1,
           rotateX: "1deg",
-          easing: "spring(1, 85, 45, 15)",
+          easing: closeAnimation,
           duration: 0.1,
         });
       }
@@ -705,7 +708,7 @@ function BottomSheet(props) {
         moveBottomSheet(
           newBottomSheet,
           `${window.innerHeight - maxSnapPoint}px`,
-          `spring(1, 250, 15, ${vy})`
+          getSnapPointAnimation(vy)
         );
         lastSetSnapPoint = window.innerHeight - maxSnapPoint;
         return lastSetSnapPoint;
@@ -714,7 +717,7 @@ function BottomSheet(props) {
           moveBottomSheet(
             newBottomSheet,
             `${window.innerHeight - maxSnapPoint}px`,
-            `spring(1, 250, 15, ${vy})`
+            getSnapPointAnimation(vy)
           );
           lastSetSnapPoint = window.innerHeight - maxSnapPoint;
           return lastSetSnapPoint;
@@ -767,7 +770,7 @@ function BottomSheet(props) {
               : window.innerHeight - minSnapPoint
             : window.innerHeight - minSnapPoint
         }px`,
-        `spring(1, 250, 15, ${vy})`
+        getSnapPointAnimation(vy)
       );
       lastSetSnapPoint = window.innerHeight - minSnapPoint;
       return lastSetSnapPoint;
@@ -782,7 +785,7 @@ function BottomSheet(props) {
                 : window.innerHeight - minSnapPoint
               : window.innerHeight - minSnapPoint
           }px`,
-          `spring(1, 250, 15, ${vy})`
+          getSnapPointAnimation(vy)
         );
         lastSetSnapPoint = window.innerHeight - minSnapPoint;
 
@@ -831,17 +834,9 @@ function BottomSheet(props) {
     // targetBottomSheet.innerHTML = "";
     targetBottomSheet.remove();
   }
-  function moveSideSheet(param) {
-    // console.log("move sidesheet", snapPoints);
-    // if (index) {
-    //   let snapPoints = BottomSheet.getSideSheetSnapPoints();
-    //   anime({
-    //     targets: targetBottomSheet,
-    //     width: `${snapPoints[index]}`,
-    //     easing: "spring(1, 85, 45, 3)",
-    //     duration: 0,
-    //   });
-    // }
+
+  function getSnapPointAnimation(vy) {
+    return `spring(1, 250, 15, ${vy})`;
   }
   function destroy() {
     document.getElementById(trigger).removeEventListener("click", () => {
