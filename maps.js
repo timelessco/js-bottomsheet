@@ -28,5 +28,8 @@ document.getElementById("done").addEventListener("click", () => {
 let bottomsheet3 = BottomSheet({
   trigger: `target-map-3`,
   displayOverlay: true,
-  snapPoints: ["40%"],
+  snapPoints: ["35%"],
+});
+document.querySelector(".cancel").addEventListener("click", () => {
+  bottomsheet3.close();
 });

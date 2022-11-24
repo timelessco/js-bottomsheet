@@ -471,6 +471,9 @@ h4 {
 }
 #maps-3{
   background-color: transparent;
+  padding: 0 5px;
+  width: 100%;
+  max-width: -webkit-fill-available
 }
 .lg{
   font-size: 20px;
@@ -479,4 +482,13 @@ h4 {
 
 .p2{
   padding: 10px 0;
+}
+.cancel{
+  width: 100%;
+  border:none;
+  outline: none;
+  background-color: #2c2c2e;
+  padding: 12px 0;
+  border-radius: 10px;
+  margin: 13px 0 0 0;
 }
