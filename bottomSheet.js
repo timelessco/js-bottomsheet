@@ -68,18 +68,12 @@ function BottomSheet(props) {
   let openAnimation = `spring(1, 85, 35, 5)`;
 
   document.addEventListener("click", (e) => {
-    console.log("click");
-    // e.target.scrollIntoView();
     setTimeout(() => {
       if (
-        e.target.tagName.toLowerCase() === "input"
-        // getMobileOperatingSystem() === "Android" &&
-        // getCurrentSnapPoint(targetBottomSheet) >=
-        //   window.outerHeight - window.innerHeight
+        e.target.tagName.toLowerCase() === "input" &&
+        getMobileOperatingSystem() === "Android"
       ) {
-        targetBottomSheet.style.transform = `translateY(${0})`;
-
-        // moveBottomSheet(targetBottomSheet, "0px", getSnapPointAnimation(vy));
+        moveBottomSheet(targetBottomSheet, "0px", getSnapPointAnimation());
       }
     }, 100);
   });
@@ -288,7 +282,7 @@ function BottomSheet(props) {
             ? differenceOfWindowHt(checkType(snapPoints[0]))
             : convertToPx(100)
         }px`,
-        easing: getSnapPointAnimation(vy),
+        easing: getSnapPointAnimation(),
         duration: 1,
       });
     } else {
@@ -705,7 +699,7 @@ function BottomSheet(props) {
         moveBottomSheet(
           newBottomSheet,
           `${differenceOfWindowHt(maxSnapPoint)}px`,
-          getSnapPointAnimation(vy)
+          getSnapPointAnimation()
         );
         lastSetSnapPoint = differenceOfWindowHt(maxSnapPoint);
         return lastSetSnapPoint;
@@ -714,7 +708,7 @@ function BottomSheet(props) {
           moveBottomSheet(
             newBottomSheet,
             `${differenceOfWindowHt(maxSnapPoint)}px`,
-            getSnapPointAnimation(vy)
+            getSnapPointAnimation()
           );
           lastSetSnapPoint = differenceOfWindowHt(maxSnapPoint);
           return lastSetSnapPoint;
@@ -766,7 +760,7 @@ function BottomSheet(props) {
               : differenceOfWindowHt(minSnapPoint)
             : differenceOfWindowHt(minSnapPoint)
         }px`,
-        getSnapPointAnimation(vy)
+        getSnapPointAnimation()
       );
       lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
       return lastSetSnapPoint;
@@ -781,7 +775,7 @@ function BottomSheet(props) {
                 : differenceOfWindowHt(minSnapPoint)
               : differenceOfWindowHt(minSnapPoint)
           }px`,
-          getSnapPointAnimation(vy)
+          getSnapPointAnimation()
         );
         lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
         return lastSetSnapPoint;
@@ -829,7 +823,7 @@ function BottomSheet(props) {
     targetBottomSheet.remove();
   }
 
-  function getSnapPointAnimation(vy) {
+  function getSnapPointAnimation() {
     return `spring(1, 95, 25, 13)`;
   }
   function destroy() {
