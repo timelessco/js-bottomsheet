@@ -52,13 +52,6 @@ This would create a simple bottomsheet with the default props.
   snappoints: ['20%', '60%', '100%']
 });
 ```
-
-### displayOverlay:
-A boolean defining whether to display an overlay or not.
-> Type: Boolean
-
-> Default: false
-
 ### content:
 Your content needn't always be a DOM element, it could be passed in dynamically too, as a string or as a promise.
 > Type: string | promise
@@ -70,6 +63,13 @@ Your content needn't always be a DOM element, it could be passed in dynamically 
   content: <div id="bottomsheet-1" data-bottomsheet>The Bottomsheet</div>
 });
 ```
+
+### displayOverlay:
+A boolean defining whether to display an overlay or not.
+> Type: Boolean
+
+> Default: false
+
 
 ### draggableArea:
 An area which would be sticky to the top of the sheet and would always listen to drag events, even if the content of the sheet is scrollable. It should have an ID.
@@ -126,6 +126,114 @@ Removing the Bottomsheet from the DOM on closing it can be done with this prop.
 > Default: false
 
 ### dismissible
+Determines whether the bottomsheet is dismissible or not.
+> Type: boolean
 
+> Default: true
+
+### velocityThreshold
+The velocity greater than which the bottomsheet would be snappable to the next snappoint, otherwise it would snap back to the old one.
+> Type: number
+
+> Default: 0.9
+
+### distanceThreshold
+The distance greater than which the bottomsheet would be snappable to the next snappoint, otherwise it would snap back to the old one.
+> Type: number
+
+> Default: 150
+
+### closeOnOverlayClick
+An option to keep the bottomsheet open or close it on overlay click.
+> Type: boolean
+
+> Default: true
+
+## Lifecycle methods
+
+### onInit
+Operations to be run on initialisation of the bottomsheet can be done using this callback function.
+
+> Type: function
+
+eg:
+```
+BottomSheet({
+      trigger: `target-1`,
+      onInit: () => {
+        console.log("init");
+      }
+  });
+```
+
+
+### onOpen
+Operations to be run once the bottomsheet is open can be done using this callback function.
+
+> Type: function
+
+eg:
+```
+BottomSheet({
+      trigger: `target-1`,
+      onOpen: () => {
+        console.log("open");
+      }
+    });
+  });
+```
+
+### onClose
+Operations to be run while closing the bottomsheet can be done using this callback function.
+
+> Type: function
+
+eg:
+```
+BottomSheet({
+      trigger: `target-1`,
+      onClose: () => {
+        console.log("close");
+      }
+    });
+```
+
+## Methods
+
+### open
+Can be used to open the bottomsheet programatically. This works only if the sheet it already initialised.
+
+eg:
+```
+let bottomsheet1 = BottomSheet({
+      trigger: `target-1`
+  });  //this would open the sheet by default
+  
+  bottomsheet1.open() //can be used if it's necessary to open the sheet in any other scenario.
+```
+
+### close
+Can be used to close the bottomsheet programatically. This works only if the sheet it already initialised and open.
+
+eg:
+```
+let bottomsheet1 = BottomSheet({
+      trigger: `target-1`
+  });
+  
+  bottomsheet1.close()
+```
+
+### destroy
+Can be used to destroy the event listeners on the triggers when it's no longer needed.
+
+eg:
+```
+let bottomsheet1 = BottomSheet({
+      trigger: `target-1`
+  });
+  
+  bottomsheet1.destroy()
+```
 
 
