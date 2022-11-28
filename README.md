@@ -236,4 +236,18 @@ let bottomsheet1 = BottomSheet({
   bottomsheet1.destroy()
 ```
 
+## Styling
+You can style the bottomsheet and other elements by overriding it's css styles. 
+
+| Element         | ClassName                                                 |
+|:----------------|:----------------------------------------------------------|
+| Bottomsheet     | 'bottomsheet'                                             |
+| Overlay         | 'overlay'                                                 |
+| Modal           | 'modal'                                                   |
+| Modal Close Icon| 'close-modal'                                             |
+| Draggable Area  | 'draggable'                                               |
+
+
+
+
 
