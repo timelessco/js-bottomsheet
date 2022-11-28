@@ -13,6 +13,14 @@ Promise.resolve(fetchAllShows()).then(async (res) => {
       content: `<div id="bottomsheet-${index}" data-bottomsheet> ${await getBottomsheet1content(
         i.getAttribute("key")
       )} </div>`,
+      onInit: () => {
+        console.log("init");
+      },
+      onOpen: () => {
+        console.log("open");
+      },
+      onClose: () => console.log("close"),
+      displayOverlay: true,
     });
   });
 });

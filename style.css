@@ -314,8 +314,8 @@ h4 {
   padding: 0 10px;
   max-width: -webkit-fill-available;
 }
-#maps-2{
-  background-color:#242628;
+#maps-2 {
+  background-color: #242628;
   padding: 10px;
   width: 100%;
   max-width: -webkit-fill-available;
@@ -366,18 +366,20 @@ h4 {
   align-items: center;
   justify-content: center;
   margin: 0;
+  box-shadow: 0px 0px 2px rgb(0, 0, 0, 0.04), 0px 0px 32px rgb(0, 0, 0, 0.14),
+    0px 1px 6px rgb(0, 0, 0, 0.02);
 }
 .cont-box {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #2c2c2e;
-  padding: 8px 12px;
+  padding: 10px 12px;
   border-radius: 12px;
   width: 100%;
   max-width: -webkit-fill-available;
 }
-.cont-box div{
+.cont-box div {
   width: 100%;
 }
 .sm {
@@ -423,14 +425,14 @@ h4 {
   justify-content: flex-start;
   width: 100%;
   padding-top: 8px;
-  padding-bottom:8px;
-  border-bottom: 0.6px solid #696A6D
+  padding-bottom: 8px;
+  border-bottom: 0.6px solid #696a6d;
 }
-.flex-start:last-of-type{
+.flex-start:last-of-type {
   border: none;
 }
 
-.surround{
+.surround {
   background-color: #333438;
   padding: 15px 0;
   display: flex;
@@ -439,57 +441,68 @@ h4 {
   margin: 12px 0;
   align-items: center;
   justify-content: center;
-  max-width:-webkit-fill-available;
+  max-width: -webkit-fill-available;
+  outline: none;
+  border: none;
+  box-shadow: 0px 0px 2px rgb(0, 0, 0, 0.04), 0px 0px 32px rgb(0, 0, 0, 0.14),
+    0px 1px 6px rgb(0, 0, 0, 0.02);
 }
-.share{
+.surround:focus {
+  outline: none;
+  border: none;
+}
+.share {
   margin-top: 26px;
 }
-.border{
-  border-bottom: 0.6px solid #696A6D
+.border {
+  border-bottom: 0.6px solid #696a6d;
 }
-.center{
-  justify-content:center
+.center {
+  justify-content: center;
 }
-.margin{
+.margin {
   margin-left: -10px;
 }
-.text-center{
+.text-center {
   text-align: center;
 }
-.contact{
-  background-color: #3B82F6;
-  color:white;
+.contact {
+  background-color: #3b82f6;
+  color: white;
   outline: none;
   border: none;
   width: 96%;
   position: fixed;
-  bottom:30px;
+  bottom: 30px;
   padding: 15px 0;
   max-width: -webkit-fill-available;
 }
-.no-flex{
+.no-flex {
   display: block;
 }
-#maps-3{
+#maps-3 {
   background-color: transparent;
   padding: 0 5px;
   width: 100%;
-  max-width: -webkit-fill-available
+  max-width: -webkit-fill-available;
 }
-.lg{
+.lg {
   font-size: 20px;
   padding: 12px 0;
 }
 
-.p2{
+.p2 {
   padding: 10px 0;
 }
-.cancel{
+.cancel {
   width: 100%;
-  border:none;
+  border: none;
   outline: none;
   background-color: #2c2c2e;
   padding: 12px 0;
   border-radius: 10px;
   margin: 13px 0 0 0;
+}
+#maps-3.modal {
+  top: 80% !important;
 }

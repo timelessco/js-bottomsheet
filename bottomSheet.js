@@ -148,6 +148,7 @@ function BottomSheet(props) {
 
     targetBottomSheet.style.display = "block";
     modalClose.id = "modal-close";
+    modalClose.classList.add("close-modal");
     modalClose.addEventListener("click", () =>
       closeModal(targetBottomSheet, overlay)
     );
@@ -178,6 +179,7 @@ function BottomSheet(props) {
         draggableId = draggableArea?.id;
       }
       draggableArea.setAttribute("data-draggable", "1");
+      draggableArea.classList.add("draggable");
     }
     handleCloseIcons(
       targetBottomSheet,
