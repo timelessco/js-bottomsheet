@@ -9,7 +9,7 @@ A pure Js snappable, scrollable, customisable bottomsheet!
 - Is scrollable at the last snappoint.
 - Supports dynamic content.
 
-##Installation
+## Installation
 
 ## Usage
 
