@@ -1,27 +1,29 @@
 // vite.config.js
-import { resolve } from 'path'
-import { defineConfig } from 'vite'
+import { resolve } from "path";
+import { defineConfig } from "vite";
 
 export default defineConfig({
+  // optimizeDeps: {
+  //   include: ["animejs/lib/anime.es.js", "use-gesture/vanilla"],
+  //   exclude: ["scroll-snap-slider"],
+  // },
   build: {
+    outDir: "lib",
     lib: {
-      // Could also be a dictionary or array of multiple entry points
-      entry: resolve(__dirname, 'bottomSheet.js'),
-      name: 'bottomSheet',
-      // the proper extensions will be added
-      fileName: 'bottomSheet',
+      entry: resolve(__dirname, "./bottomSheet.js"),
+      name: "bottomsheet",
+      fileName: (format) => `bottomsheet.${format}.js`,
     },
-    rollupOptions: {
-      // make sure to externalize deps that shouldn't be bundled
-      // into your library
-      external: [],
-      output: {
-        // Provide global variables to use in the UMD build
-        // for externalized deps
-        globals: {
-          vue: 'Vue'
-        }
-      }
-    }
-  }
-})
+    // rollupOptions: {
+    //   external: ["animejs/lib/anime.es"],
+    //   output: {
+    //     globals: {
+    //       "animejs/lib/anime.es": "anime",
+    //     },
+    //   },
+    // },
+    // commonjsOptions: {
+    //   include: ["animejs/lib/anime.es.js", "use-gesture/vanilla"],
+    // },
+  },
+});

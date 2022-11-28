@@ -1,4 +1,5 @@
-import BottomSheet from "./bottomSheet";
+import { BottomSheet } from "./lib/bottomsheet.es";
+
 let bottomsheet1;
 
 Promise.resolve(fetchAllShows()).then(async (res) => {

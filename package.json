@@ -1,10 +1,15 @@
 {
   "name": "js-bottomsheet",
   "version": "0.0.0",
-  "type": "module",
-  "module": "./bottomSheet.js",
+  "files":["lib", "bottomsheet.css"],
+  "main":"./lib/bottomsheet.umd.js",
+  "module":"./lib/bottomsheet.es.js",
   "exports": {
-    "default": "./bottomSheet.js"
+    ".": {
+      "import": "./lib/bottomsheet.es.js",
+      "require": "./lib/bottomsheet.umd.js"
+    },
+    "./bottomsheet.css": "./bottomsheet.css"
   },
   "scripts": {
     "dev": "vite",

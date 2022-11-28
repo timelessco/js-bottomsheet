@@ -1,5 +1,5 @@
+import anime from "animejs/lib/anime.es";
 import { Gesture } from "@use-gesture/vanilla";
-import anime from "animejs/lib/anime.es.js";
 import { hideOverlay, addOverlay } from "./helpers/overlayHelpers";
 import { moveBottomSheet } from "./helpers/translationHelpers";
 import {
@@ -861,4 +861,4 @@ export async function replaceInnerContent(bottomsheetID, content) {
   }
 }
 
-export default BottomSheet;
+export { BottomSheet };
