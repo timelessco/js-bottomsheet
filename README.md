@@ -66,14 +66,14 @@ Your content needn't always be a DOM element, it could be passed in dynamically 
 
 ### displayOverlay:
 A boolean defining whether to display an overlay or not.
-> Type: Boolean
+> Type: boolean
 
 > Default: false
 
 
 ### draggableArea:
 An area which would be sticky to the top of the sheet and would always listen to drag events, even if the content of the sheet is scrollable. It should have an ID.
-> Type: string.
+> Type: string
 
 eg: 
 
@@ -225,7 +225,7 @@ let bottomsheet1 = BottomSheet({
 ```
 
 ### destroy
-Can be used to destroy the event listeners on the triggers when it's no longer needed.
+Can be used to remove the event listeners on the triggers when it's no longer needed.
 
 eg:
 ```
