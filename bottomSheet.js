@@ -10,7 +10,7 @@ import {
   getMobileOperatingSystem,
 } from "./helpers/convertionHelpers";
 
-const BottomSheet = (props) => {
+export const BottomSheet = (props) => {
   let {
     snapPoints = ["100%"],
     displayOverlay = false,
@@ -860,5 +860,3 @@ export async function replaceInnerContent(bottomsheetID, content) {
       .insertAdjacentHTML("beforeend", content);
   }
 }
-
-module.exports = BottomSheet;

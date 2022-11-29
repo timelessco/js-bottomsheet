@@ -13,7 +13,6 @@ export default defineConfig({
       entry: resolve(__dirname, "./bottomSheet.js"),
       name: "BottomSheet",
       fileName: (format) => `bottomsheet.${format}.js`,
-      exports: "named",
     },
     // rollupOptions: {
     //   external: ["animejs/lib/anime.es"],
