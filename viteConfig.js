@@ -11,7 +11,7 @@ export default defineConfig({
     outDir: "lib",
     lib: {
       entry: resolve(__dirname, "./bottomSheet.js"),
-      name: "bottomsheet",
+      name: "BottomSheet",
       fileName: (format) => `bottomsheet.${format}.js`,
     },
     // rollupOptions: {

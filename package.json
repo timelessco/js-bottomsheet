@@ -1,6 +1,6 @@
 {
   "name": "js-bottomsheet",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description":"A pure Js snappable, scrollable, customisable bottomsheet!",
   "keywords": [
     "bottomsheet",
