@@ -55,8 +55,10 @@ async function getBottomsheet1content(key) {
 
   let content = `
        <div class="list-items">
+       <div class="img-wrapper">
        <img src=${products.banner.src}>
        <div class="gradient"></div>
+       </div>
        <div class="container">
        <h1 class="name">${products.name}</h1>
        <span class="genre">Drama · Comedy · 2021</span>

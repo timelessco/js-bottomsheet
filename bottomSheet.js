@@ -861,4 +861,4 @@ export async function replaceInnerContent(bottomsheetID, content) {
   }
 }
 
-export { BottomSheet };
+export default BottomSheet;

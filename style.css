@@ -273,7 +273,7 @@ h4 {
   color: #ffffff;
   font-variation-settings: "slnt" 0, "opsz" 72;
 }
-.gradient {
+/* .gradient {
   position: absolute;
   width: 100%;
   height: 186px;
@@ -285,7 +285,7 @@ h4 {
       rgba(0, 0, 0, 0.93) 99%
     ),
     url(image.png);
-}
+} */
 
 .series {
   font-style: normal;
@@ -382,6 +382,22 @@ h4 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+.img-wrapper {
+  position: relative;
+}
+.gradient {
+  position: absolute;
+  width: 100%;
+  height: 186px;
+  left: 0px;
+  bottom: 0px;
+  background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) 73.15%,
+      rgba(0, 0, 0, 0.93) 99%
+    ),
+    url(image.png);
 }
 
 .round-2 {
