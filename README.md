@@ -13,7 +13,9 @@ A pure Js snappable, scrollable, customisable bottomsheet!
 
 ## Installation
 
-`npm i js-bottomsheet`
+```
+npm i js-bottomsheet
+```
 
 ## Usage
 
