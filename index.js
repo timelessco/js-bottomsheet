@@ -1,7 +1,14 @@
-import BottomSheet from "./lib/bottomsheet.es";
+// import BottomSheet from "./lib/bottomsheet.es";
+
+// import BottomSheet from "./bottomSheet";
 
 let bottomsheet1;
-
+// console.log(
+//   BottomSheet({
+//     trigger: `target-1`,
+//   }),
+//   "this"
+// );
 Promise.resolve(fetchAllShows()).then(async (res) => {
   document.querySelector(".scroll-snap-slider").innerHTML = res;
   document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
