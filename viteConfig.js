@@ -3,6 +3,9 @@ import { resolve } from "path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
+  define: {
+    NODE_ENV: "production",
+  },
   build: {
     outDir: "lib",
     lib: {
