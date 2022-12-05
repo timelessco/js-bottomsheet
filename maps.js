@@ -15,6 +15,12 @@ let bottomsheet1 = BottomSheet({
 <figure class="round"><img src="./assets/train.svg" width="30" height="30" /></figure><p class="sm">Transit</p> </div><div class="fav-box" id="map-target" data-bottomsheet-id="maps-2"><figure class="round"><img src="./assets/pin.svg" width="30" height="30" /></figure><p class="sm">6th street</p></div></div><div class="flex"><p class="fav">Recents</p></div><div class="cont-box"><div><div class="flex-start" id="map-target" data-bottomsheet-id="maps-2" ><figure class="round-2"> <img src="./assets/pin.svg" width="20" height="20" /></figure><div><p class="md" >Dropped Pin</p> <p class="xs">Chennai</p></div></div><div class="flex-start" id="map-target" data-bottomsheet-id="maps-2" ><figure class="round-2"><img src="./assets/arrow.svg" width="18" height="18" /></figure><div><p class="md">6th street</p><p class="xs">From my location</p>
 </div> </div></div></div><div class="share"><button class="surround" id="target-map-3" data-bottomsheet-id="maps-3" ><p class="more">Share My Location</p></button><button class="surround" id="target-map-3" data-bottomsheet-id="maps-3"> <p class="more">Mark My Location</p></button><button class="surround" id="target-map-3" data-bottomsheet-id="maps-3"> <p class="more">Report An Issue</p></button><button class="surround" id="target-map-3" data-bottomsheet-id="maps-3"><p class="more">Report An Issue</p></button></div></div>`,
   openOnLoad: true,
+  onDragStart: () => {
+    console.log("drag start");
+  },
+  onDragEnd: () => {
+    console.log("drag end");
+  },
 });
 
 let bottomsheet2 = BottomSheet({
