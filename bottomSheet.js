@@ -44,6 +44,8 @@ function BottomSheet(props) {
     distanceThreshold = 150,
     closeOnOverlayClick = true,
     animateOnDrag = {},
+    onDragStart = () => {},
+    onDragEnd = () => {},
   } = props;
   let lastSetSnapPoint;
   content =
@@ -549,6 +551,7 @@ function BottomSheet(props) {
         },
         onDragStart: () => {
           document.body.style.overflow = "hidden";
+          onDragStart();
         },
         onDragEnd: ({ direction }) => {
           currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
@@ -570,6 +573,7 @@ function BottomSheet(props) {
           ) {
             newBottomSheet.style.overflow = "hidden";
           }
+          onDragEnd();
         },
       },
       {
