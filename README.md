@@ -13,6 +13,7 @@ A pure Js snappable, scrollable, customisable bottomsheet!
 
 ## Installation
 
+npm: 
 ```
 npm i js-bottomsheet
 ```
@@ -236,6 +237,36 @@ BottomSheet({
       trigger: `target-1`,
       onClose: () => {
         console.log("close");
+      }
+    });
+```
+
+### onDragStart
+
+Operations to be run dragging of the bottomsheet starts can be done using this callback function.
+
+> Type: function
+
+```
+BottomSheet({
+      trigger: `target-1`,
+      onDragStart: () => {
+        console.log("drag start");
+      }
+    });
+```
+
+### onDragEnd
+
+Operations to be run dragging of the bottomsheet ends can be done using this callback function.
+
+> Type: function
+
+```
+BottomSheet({
+      trigger: `target-1`,
+      onDragEnd: () => {
+        console.log("drag end");
       }
     });
 ```
