@@ -549,9 +549,9 @@ function BottomSheet(props) {
             }
           }
         },
-        onDragStart: () => {
+        onDragStart: ({ direction }) => {
           document.body.style.overflow = "hidden";
-          onDragStart();
+          onDragStart(direction);
         },
         onDragEnd: ({ direction }) => {
           currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
@@ -573,7 +573,7 @@ function BottomSheet(props) {
           ) {
             newBottomSheet.style.overflow = "hidden";
           }
-          onDragEnd();
+          onDragEnd(direction);
         },
       },
       {
