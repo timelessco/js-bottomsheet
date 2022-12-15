@@ -27,25 +27,25 @@ function BottomSheet(props) {
     <path d="M33.112 36.9133C34.3649 38.15 36.3963 38.15 37.6492 36.9133C38.9022 35.6766 38.9022 33.6716 37.6492 32.435L24.0375 19L37.6492 5.56496C38.9022 4.3283 38.9022 2.32328 37.6492 1.08662C36.3963 -0.150042 34.3649 -0.150042 33.112 1.08662L19.5002 14.5216L5.88835 1.08655C4.63541 -0.150108 2.60401 -0.150107 1.35108 1.08655C0.0981471 2.32321 0.0981459 4.32824 1.35108 5.5649L14.9629 19L1.35108 32.435C0.0981434 33.6717 0.0981443 35.6767 1.35108 36.9134C2.60401 38.15 4.63541 38.15 5.88834 36.9134L19.5002 23.4783L33.112 36.9133Z" fill="white"/>
     </svg>
     `,
-    sideSheetLeftIcon = `
+    defaultSideSheetClose = true,
+    cleanUpOnClose = false,
+    dismissible = true,
+    velocityThreshold = 0.9,
+    distanceThreshold = 150,
+    closeOnOverlayClick = true,
+    onDragStart = () => {},
+    onDragEnd = () => {},
+    sideSheetIcon = `
     <svg width="16" height="14" viewBox="0 0 26 42" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M24.5046 40.8036C23.2926 42.0804 21.2623 42.1465 19.9698 40.9513L1.76653 24.118C0.474022 22.9228 0.408779 20.9188 1.62081 19.6421L18.6906 1.66043C19.9026 0.383653 21.9329 0.317552 23.2254 1.51279C24.5179 2.70802 24.5832 4.71199 23.3712 5.98876L8.49597 21.6586L24.3589 36.3277C25.6514 37.5229 25.7166 39.5269 24.5046 40.8036Z" fill="white"/>
     </svg> 
     `,
-    sideSheetRightIcon = `<svg width="16" height="14" viewBox="0 0 25 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.21057 1.34418C2.46351 0.107522 4.49491 0.107522 5.74784 1.34418L23.3937 18.7608C24.6466 19.9975 24.6466 22.0025 23.3937 23.2392L5.74784 40.6559C4.49491 41.8925 2.46351 41.8925 1.21057 40.6559C-0.0423591 39.4192 -0.0423591 37.4142 1.21057 36.1775L16.5878 21L1.21057 5.82253C-0.0423591 4.58586 -0.0423591 2.58084 1.21057 1.34418Z" fill="white"/>
-    </svg>   
-    `,
-    defaultSideSheetClose = true,
-    cleanUpOnClose = false,
-    dismissible = true,
-    sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
-    velocityThreshold = 0.9,
-    distanceThreshold = 150,
-    closeOnOverlayClick = true,
-    animateOnDrag = {},
-    onDragStart = () => {},
-    onDragEnd = () => {},
+    sideSheetIconPosition = `left`,
+    sideSheetOpenValue = "50%",
+    sideSheetCloseValue = "30%",
+    scaleOnDrag = true,
+    scaleItems = [],
+    scaleValues = [],
   } = props;
   let lastSetSnapPoint;
   content =
@@ -66,8 +66,9 @@ function BottomSheet(props) {
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
   overlay.id = `${targetBottomSheet?.id}-overlay`;
-  let closeAnimation = `spring(1, 85, 45, 15)`;
-  let openAnimation = `spring(1, 85, 35, 5)`;
+  let closeAnimation = `spring(1, 95, 25, 13)`;
+  let openAnimation = `spring(1, 95, 25, 13)`;
+  let scaleValue = 0.93;
 
   document.addEventListener("click", (e) => {
     setTimeout(() => {
@@ -119,6 +120,9 @@ function BottomSheet(props) {
     ) {
       document.body.append(targetBottomSheet);
     }
+
+    observeMutation();
+
     if (displayOverlay) {
       overlay.classList.add("overlay");
       addOverlay(overlay);
@@ -144,8 +148,7 @@ function BottomSheet(props) {
     let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
     let lastSnapPoint = snapPointConversion(snapPoints[snapPoints.length - 1]);
     let modalClose = document.createElement("div");
-    let sideSheetLeft = document.createElement("div");
-    let sideSheetRight = document.createElement("div");
+    let sideSheetIconWrapper = document.createElement("div");
     let draggableId = "";
 
     targetBottomSheet.style.display = "block";
@@ -154,21 +157,20 @@ function BottomSheet(props) {
     modalClose.addEventListener("click", () =>
       closeModal(targetBottomSheet, overlay)
     );
-    sideSheetLeft.id = "side-left";
+    if (sideSheetIconPosition === "left") {
+      sideSheetIconWrapper.id = "side-left";
+    } else {
+      sideSheetIconWrapper.id = "side-right";
+    }
     defaultSideSheetClose
-      ? sideSheetLeft.addEventListener("click", () => {
-          closeLeftSideSheet(targetBottomSheet, overlay);
+      ? sideSheetIconWrapper.addEventListener("click", () => {
+          closeSideSheet(overlay);
         })
       : "";
-    sideSheetRight.id = "side-right";
-    defaultSideSheetClose
-      ? sideSheetRight.addEventListener("click", () =>
-          closeRightSideSheet(targetBottomSheet)
-        )
-      : "";
     modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
-    sideSheetLeft.insertAdjacentHTML("afterbegin", sideSheetLeftIcon);
-    sideSheetRight.insertAdjacentHTML("afterbegin", sideSheetRightIcon);
+    console.log(sideSheetIconWrapper.children);
+    if (sideSheetIconWrapper.children.length === 0)
+      sideSheetIconWrapper.insertAdjacentHTML("afterbegin", sideSheetIcon);
     if (draggableArea) {
       if (typeof draggableArea === "string") {
         draggableArea = new DOMParser().parseFromString(
@@ -185,8 +187,7 @@ function BottomSheet(props) {
     }
     handleCloseIcons(
       targetBottomSheet,
-      sideSheetLeft,
-      sideSheetRight,
+      sideSheetIconWrapper,
       isWeb,
       draggableId,
       overlay,
@@ -194,8 +195,7 @@ function BottomSheet(props) {
     );
     isWeb = windowResizeListener(
       targetBottomSheet,
-      sideSheetLeft,
-      sideSheetRight,
+      sideSheetIconWrapper,
       isWeb,
       overlay,
       modalClose,
@@ -234,11 +234,25 @@ function BottomSheet(props) {
       ).style.display = "block";
     }
   }
-
+  function observeMutation() {
+    var config = { attributes: true, childList: true };
+    var callback = function (mutationsList) {
+      for (var mutation of mutationsList) {
+        if (
+          mutation.type == "attributes" &&
+          window.innerWidth < minWidthForModal &&
+          scaleOnDrag
+        ) {
+          stackAnimation();
+        }
+      }
+    };
+    var observer = new MutationObserver(callback);
+    observer.observe(targetBottomSheet, config);
+  }
   function windowResizeListener(
     targetBottomSheet,
-    sideSheetLeft,
-    sideSheetRight,
+    sideSheetIconWrapper,
     isWeb,
     overlay,
     modalClose,
@@ -247,8 +261,7 @@ function BottomSheet(props) {
     window.addEventListener("resize", () => {
       handleCloseIcons(
         targetBottomSheet,
-        sideSheetLeft,
-        sideSheetRight,
+        sideSheetIconWrapper,
         isWeb,
         draggableId,
         overlay,
@@ -278,7 +291,7 @@ function BottomSheet(props) {
   function close(isWeb = false, dismissible = true, vy = 7) {
     displayOverlay && overlay ? hideOverlay(overlay) : "";
     document.body.style.overflow = "scroll";
-    if (!isWeb) {
+    if (window.innerWidth < minWidthForModal) {
       anime({
         targets: targetBottomSheet,
         translateY: `${
@@ -293,9 +306,9 @@ function BottomSheet(props) {
       if (webLayout === "modal") {
         closeModal(targetBottomSheet, overlay);
       } else if (webLayout === "sideSheetLeft") {
-        closeLeftSideSheet(targetBottomSheet, overlay);
+        closeSideSheet(overlay);
       } else {
-        closeRightSideSheet(targetBottomSheet, overlay);
+        closeSideSheet(overlay);
       }
     }
     lastSetSnapPoint = convertToPx(100);
@@ -310,8 +323,7 @@ function BottomSheet(props) {
 
   function handleCloseIcons(
     targetBottomSheet,
-    sideSheetLeft,
-    sideSheetRight,
+    sideSheetIconWrapper,
     isWeb,
     draggableId,
     overlay,
@@ -336,16 +348,12 @@ function BottomSheet(props) {
       ) {
         targetBottomSheet.prepend(modalClose);
       } else if (
-        !document.querySelector(`#${targetBottomSheet.id} #side-left`) &&
-        webLayout === "sideSheetLeft"
-      ) {
-        targetBottomSheet.prepend(sideSheetLeft);
-      } else if (
         !document.querySelector(`#${targetBottomSheet.id} #side-right`) &&
-        webLayout === "sideSheetRight"
+        !document.querySelector(`#${targetBottomSheet.id} #side-left`) &&
+        webLayout !== "modal"
       ) {
-        targetBottomSheet.prepend(sideSheetRight);
-        closeRightSideSheet(targetBottomSheet);
+        targetBottomSheet.prepend(sideSheetIconWrapper);
+        closeSideSheet();
       }
     } else {
       if (
@@ -358,10 +366,10 @@ function BottomSheet(props) {
         targetBottomSheet.removeChild(modalClose);
       }
       if (document.querySelector(`#${targetBottomSheet.id} #side-left`)) {
-        targetBottomSheet.removeChild(sideSheetLeft);
+        targetBottomSheet.removeChild(sideSheetIconWrapper);
       }
       if (document.querySelector(`#${targetBottomSheet.id} #side-right`)) {
-        targetBottomSheet.removeChild(sideSheetRight);
+        targetBottomSheet.removeChild(sideSheetIconWrapper);
       }
 
       targetBottomSheet.classList.add("bottomsheet"),
@@ -381,7 +389,8 @@ function BottomSheet(props) {
           anime({
             targets: targetBottomSheet,
             left: "0",
-            width: sideSheetSnapPoints[0],
+            width: sideSheetOpenValue,
+            opacity: 1,
             easing: openAnimation,
             duration: 1,
           });
@@ -389,11 +398,13 @@ function BottomSheet(props) {
       } else if (webLayout === "sideSheetRight") {
         targetBottomSheet.style.top = 0;
         targetBottomSheet.style.right = `-100%`;
+        targetBottomSheet.style.left = "unset";
         setTimeout(() => {
           anime({
             targets: targetBottomSheet,
             right: "0",
-            width: sideSheetSnapPoints[0],
+            opacity: 1,
+            width: sideSheetOpenValue,
             easing: openAnimation,
             duration: 1,
           });
@@ -408,7 +419,7 @@ function BottomSheet(props) {
           targets: targetBottomSheet,
           opacity: 1,
           rotateX: "1deg",
-          easing: closeAnimation,
+          easing: openAnimation,
           duration: 0.1,
         });
       }
@@ -429,7 +440,7 @@ function BottomSheet(props) {
           anime({
             targets: targetBottomSheet,
             translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
-            easing: "spring(1, 85, 15, 3)",
+            easing: openAnimation,
             opacity: 1,
             duration: 1,
           });
@@ -458,6 +469,7 @@ function BottomSheet(props) {
           distance: [dx, dy],
           target,
           direction,
+          ...props
         }) => {
           let minSnapPoint = 0;
           let maxSnapPoint = Infinity;
@@ -601,7 +613,6 @@ function BottomSheet(props) {
     isWeb
   ) {
     let actualOffset = offset[1];
-
     if (maxSnapPoint === null) {
       if (active) {
         moveBottomSheet(
@@ -677,9 +688,11 @@ function BottomSheet(props) {
   }
 
   function getCurrentSnapPoint(newBottomSheet) {
-    return +newBottomSheet?.style?.transform.slice(11).replace("px)", "");
+    return +newBottomSheet?.style?.transform.slice(
+      11,
+      newBottomSheet?.style?.transform.indexOf("px")
+    );
   }
-
   function translateToNextSnapPoint(
     convertXy,
     newBottomSheet,
@@ -800,31 +813,90 @@ function BottomSheet(props) {
     }
   }
 
-  function closeLeftSideSheet(targetBottomSheet, overlay) {
-    anime({
-      targets: targetBottomSheet,
-      width: 0,
-      easing: "spring(1, 85, 45, 3)",
-      duration: 0,
-    });
+  function closeSideSheet(overlay) {
+    if (targetBottomSheet.style.width === sideSheetCloseValue) {
+      anime({
+        targets: targetBottomSheet,
+        width: sideSheetOpenValue,
+        easing: openAnimation,
+        duration: 0.1,
+      });
+    } else {
+      anime({
+        targets: targetBottomSheet,
+        width: sideSheetCloseValue,
+        easing: openAnimation,
+        duration: 0.1,
+      });
+    }
     setTimeout(() => {
       cleanUpOnClose ? cleanUp(targetBottomSheet, overlay) : "";
     }, 400);
     hideOverlay(overlay);
   }
-  function closeRightSideSheet(targetBottomSheet) {
-    anime({
-      targets: targetBottomSheet,
-      width: 0,
-      easing: "spring(1, 85, 45, 3)",
-      duration: 0,
-    });
-    setTimeout(() => {
-      cleanUpOnClose ? cleanUp(targetBottomSheet, overlay) : "";
-    }, 400);
-    hideOverlay(overlay);
-  }
+  let bottomSheets = document.querySelectorAll(`[data-bottomsheet]`);
+  let scaledValue = 1;
+  function stackAnimation() {
+    let actualIndex;
+    let scaleIndex;
+    if (scaleItems.length) {
+      scaleItems.forEach((i, index) => {
+        if (
+          document.getElementById(i) &&
+          scaledValue !==
+            scaleValues[index] +
+              ((1 - scaleValues[index]) / window.innerHeight) *
+                getCurrentSnapPoint(targetBottomSheet).toFixed(1)
+        ) {
+          anime({
+            targets: `#${i}`,
+            scale:
+              scaleValues[index] +
+              ((1 - scaleValues[index]) / window.innerHeight) *
+                getCurrentSnapPoint(targetBottomSheet),
+            easing: `linear`,
+            duration: 0.1,
+          });
 
+          scaledValue =
+            scaleValues[index] +
+            ((1 - scaleValues[index]) / window.innerHeight) *
+              getCurrentSnapPoint(targetBottomSheet).toFixed(1);
+        }
+      });
+    }
+    // else {
+    //   bottomSheets.forEach((i, index) => {
+    //     if (
+    //       i.style.display &&
+    //       i.style.transform &&
+    //       getCurrentSnapPoint(i) &&
+    //       getCurrentSnapPoint(i) < window.innerHeight
+    //     ) {
+    //       actualIndex = index;
+    //       if (index === 0) {
+    //         scaleIndex = bottomSheets.length - 1;
+    //       } else if (index === bottomSheets.length - 1) {
+    //         scaleIndex = 0;
+    //       } else {
+    //         scaleIndex = index - 1;
+    //       }
+    //     }
+    //   });
+    //   // }
+    //   if (scaleIndex && bottomSheets[scaleIndex]) {
+    //     anime({
+    //       targets: `#${bottomSheets[scaleIndex].id}`,
+    //       scale:
+    //         scaleValue +
+    //         ((1 - scaleValue) / window.innerHeight) *
+    //           getCurrentSnapPoint(bottomSheets[actualIndex]),
+    //       easing: `spring(1, 95, 25, 23)`,
+    //       duration: 1,
+    //     });
+    //   }
+    // }
+  }
   function cleanUp(targetBottomSheet) {
     targetBottomSheet.remove();
   }
@@ -837,32 +909,24 @@ function BottomSheet(props) {
       init(false);
     });
   }
+  function moveSideSheetTo(value) {
+    if (window.innerWidth > minWidthForModal) {
+      anime({
+        targets: targetBottomSheet,
+        // padding: 0,
+        width: value,
+        easing: openAnimation,
+        duration: 0.1,
+      });
+    }
+  }
   const self = {
     close,
     init,
     open,
     destroy,
+    moveSideSheetTo,
   };
   return self;
 }
-
-// export async function replaceInnerContent(bottomsheetID, content) {
-//   content = typeof content !== "string" ? await content : content;
-//   let draggableItem;
-//   if (content && bottomsheetID && document.getElementById(`${bottomsheetID}`)) {
-//     draggableItem = document.getElementById(`${bottomsheetID}`).children[0];
-//     document.getElementById(`${bottomsheetID}`).innerHTML = "";
-//     if (
-//       draggableItem &&
-//       (draggableItem?.getAttribute("data-draggable") ||
-//         draggableItem.children[0] instanceof SVGElement)
-//     ) {
-//       document.getElementById(`${bottomsheetID}`).appendChild(draggableItem);
-//     }
-//     document
-//       .getElementById(`${bottomsheetID}`)
-//       .insertAdjacentHTML("beforeend", content);
-//   }
-// }
-
 export default BottomSheet;

@@ -46,9 +46,9 @@
   display: block;
   opacity: 0;
 }
-[data-draggable]{
+[data-draggable] {
   position: sticky;
-  top:0;
+  top: 0;
   width: 100%;
 }
 #modal-close {
@@ -85,4 +85,11 @@ input[type="week"],
 select:focus,
 textarea {
   font-size: 16px;
+}
+#side-left {
+  text-align: left;
+}
+
+#side-right {
+  text-align: right;
 }
