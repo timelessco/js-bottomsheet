@@ -1,5 +1,7 @@
 # Js Bottomsheet
 
+[![npm](https://badgen.net/npm/dt/js-bottomsheet)](https://www.npmjs.com/package/js-bottomsheet)
+
 A pure Js snappable, scrollable, customisable bottomsheet!
 
 ## Features
@@ -11,9 +13,15 @@ A pure Js snappable, scrollable, customisable bottomsheet!
 - Is scrollable at the last snappoint.
 - Supports dynamic content.
 
+## Dependencies: 
+
+1. https://use-gesture.netlify.app/docs/#vanilla-javascript 
+2. https://animejs.com/
+
 ## Installation
 
 npm: 
+
 ```
 npm i js-bottomsheet
 ```
