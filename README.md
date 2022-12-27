@@ -13,14 +13,14 @@ A pure Js snappable, scrollable, customisable bottomsheet!
 - Is scrollable at the last snappoint.
 - Supports dynamic content.
 
-## Dependencies: 
+## Dependencies:
 
-1. https://use-gesture.netlify.app/docs/#vanilla-javascript 
+1. https://use-gesture.netlify.app/docs/#vanilla-javascript
 2. https://animejs.com/
 
 ## Installation
 
-npm: 
+npm:
 
 ```
 npm i js-bottomsheet
@@ -37,9 +37,10 @@ HTML:
   <div id="bottomsheet-1" data-bottomsheet>The Bottomsheet</div>
 ```
 
-The trigger should have an ID which would be used in the initialisation of the bottomsheet, and a data attribute containing the ID referring to
-it's corresponding bottomsheet `data-bottomsheet-id=[id]`.
-The bottomsheet should have the ID as well as the data attribute `data-bottomsheet`
+The trigger should have an ID which would be used in the initialisation of the
+bottomsheet, and a data attribute containing the ID referring to it's
+corresponding bottomsheet `data-bottomsheet-id=[id]`. The bottomsheet should
+have the ID as well as the data attribute `data-bottomsheet`
 
 JS:
 
@@ -61,7 +62,8 @@ The Id of the trigger element.
 
 ### snapPoints:
 
-An array of all the snappoints percentages you'd like the bottomsheet to snap at, from bottom to top.
+An array of all the snappoints percentages you'd like the bottomsheet to snap
+at, from bottom to top.
 
 > Type: Array of strings
 
@@ -78,7 +80,8 @@ BottomSheet({
 
 ### content:
 
-Your content needn't always be a DOM element, it could be passed in dynamically too, as a string or as a promise.
+Your content needn't always be a DOM element, it could be passed in dynamically
+too, as a string or as a promise.
 
 > Type: string | promise
 
@@ -101,7 +104,9 @@ A boolean defining whether to display an overlay or not.
 
 ### draggableArea:
 
-An area which would be sticky to the top of the sheet and would always listen to drag events, even if the content of the sheet is scrollable. It should have an ID.
+An area which would be sticky to the top of the sheet and would always listen to
+drag events, even if the content of the sheet is scrollable. It should have an
+ID.
 
 > Type: string
 
@@ -126,7 +131,8 @@ The minimum width at which you'd like a modal to appear.
 
 ### openOnLoad:
 
-This property helps the bottomsheet to be open on load, without a trigger. Since there is no trigger, content is required to be passed in dynamically.
+This property helps the bottomsheet to be open on load, without a trigger. Since
+there is no trigger, content is required to be passed in dynamically.
 
 > Type: boolean
 
@@ -173,7 +179,8 @@ Determines whether the bottomsheet is dismissible or not.
 
 ### velocityThreshold
 
-The velocity greater than which the bottomsheet would be snappable to the next snappoint, otherwise it would snap back to the old one.
+The velocity greater than which the bottomsheet would be snappable to the next
+snappoint, otherwise it would snap back to the old one.
 
 > Type: number
 
@@ -181,7 +188,8 @@ The velocity greater than which the bottomsheet would be snappable to the next s
 
 ### distanceThreshold
 
-The distance greater than which the bottomsheet would be snappable to the next snappoint, otherwise it would snap back to the old one.
+The distance greater than which the bottomsheet would be snappable to the next
+snappoint, otherwise it would snap back to the old one.
 
 > Type: number
 
@@ -199,7 +207,8 @@ An option to keep the bottomsheet open or close it on overlay click.
 
 ### onInit
 
-Operations to be run on initialisation of the bottomsheet can be done using this callback function.
+Operations to be run on initialisation of the bottomsheet can be done using this
+callback function.
 
 > Type: function
 
@@ -216,7 +225,8 @@ BottomSheet({
 
 ### onOpen
 
-Operations to be run once the bottomsheet is open can be done using this callback function.
+Operations to be run once the bottomsheet is open can be done using this
+callback function.
 
 > Type: function
 
@@ -234,7 +244,8 @@ BottomSheet({
 
 ### onClose
 
-Operations to be run while closing the bottomsheet can be done using this callback function.
+Operations to be run while closing the bottomsheet can be done using this
+callback function.
 
 > Type: function
 
@@ -251,7 +262,8 @@ BottomSheet({
 
 ### onDragStart
 
-Operations to be run dragging of the bottomsheet starts can be done using this callback function.
+Operations to be run dragging of the bottomsheet starts can be done using this
+callback function.
 
 > Type: function
 
@@ -266,7 +278,8 @@ BottomSheet({
 
 ### onDragEnd
 
-Operations to be run dragging of the bottomsheet ends can be done using this callback function.
+Operations to be run dragging of the bottomsheet ends can be done using this
+callback function.
 
 > Type: function
 
@@ -283,7 +296,8 @@ BottomSheet({
 
 ### open
 
-Can be used to open the bottomsheet programatically. This works only if the sheet it already initialised.
+Can be used to open the bottomsheet programatically. This works only if the
+sheet it already initialised.
 
 eg:
 
@@ -297,7 +311,8 @@ let bottomsheet1 = BottomSheet({
 
 ### close
 
-Can be used to close the bottomsheet programatically. This works only if the sheet it already initialised and open.
+Can be used to close the bottomsheet programatically. This works only if the
+sheet it already initialised and open.
 
 eg:
 
@@ -311,7 +326,8 @@ let bottomsheet1 = BottomSheet({
 
 ### destroy
 
-Can be used to remove the event listeners on the triggers when it's no longer needed.
+Can be used to remove the event listeners on the triggers when it's no longer
+needed.
 
 eg:
 
