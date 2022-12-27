@@ -14,7 +14,7 @@
       "import": "./lib/bottomsheet.es.js",
       "require": "./lib/bottomsheet.umd.js"
     },
-    "./bottomsheet.css": "./bottomsheet.css"
+    "./bottomsheet.css": "./lib/index.css"
   },
   "browser": "./lib/bottomsheet.umd.js",
   "unpkg": "./lib/bottomsheet.umd.js",

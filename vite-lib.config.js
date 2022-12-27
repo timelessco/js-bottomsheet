@@ -25,6 +25,7 @@ export default defineConfig(mode => {
     },
     base: "./",
     build: {
+      cssCodeSplit: true,
       outDir: path.resolve(__dirname, "lib"),
       lib: {
         entry: path.resolve(__dirname, "src/index.js"),
@@ -33,10 +34,10 @@ export default defineConfig(mode => {
         fileName: format => fileName[format],
       },
       rollupOptions: {
-        external: ["animejs/lib/anime.es.js"],
+        external: ["animejs/lib/anime.es"],
         output: {
           globals: {
-            "animejs/lib/anime.es.js": "anime",
+            "animejs/lib/anime.es": "anime",
           },
         },
       },
