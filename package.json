@@ -1,21 +1,14 @@
 {
   "name": "js-bottomsheet",
   "version": "1.0.4",
-  "description":"A pure Js snappable, scrollable, customisable bottomsheet!",
-  "keywords": [
-    "bottomsheet",
-    "js-bottomsheet",
-    "javascript",
-    "snappable",
-    "modal"
-  ],
+  "type": "module",
+  "description": "A pure Js snappable, scrollable, customisable bottomsheet!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SamrithaS/js-bottomsheet"
   },
-  "files":["lib", "bottomsheet.css"],
-  "main":"./lib/bottomsheet.umd.js",
-  "module":"./lib/bottomsheet.es.js",
+  "main": "./lib/bottomsheet.umd.js",
+  "module": "./lib/bottomsheet.es.js",
   "exports": {
     ".": {
       "import": "./lib/bottomsheet.es.js",
@@ -23,20 +16,103 @@
     },
     "./bottomsheet.css": "./bottomsheet.css"
   },
+  "browser": "./lib/bottomsheet.umd.js",
+  "unpkg": "./lib/bottomsheet.umd.js",
+  "files": [
+    "bottomsheet.css",
+    "lib"
+  ],
+  "keywords": [
+    "bottomsheet",
+    "js-bottomsheet",
+    "javascript",
+    "snappable",
+    "modal"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build-lib": "vite build --config viteConfig.js",
+    "build": "vite build --config vite-lib.config.js",
+    "build:website": "vite build",
+    "check": "pnpm lint:check && pnpm csslint:check && pnpm format:check",
+    "commit": "gacp",
+    "csslint:check": "stylelint '**/*.css' --cache --color --ignore-path .prettierignore -f verbose",
+    "csslint:fix": "stylelint '**/*.css' --fix --cache --color --ignore-path .prettierignore -f verbose",
+    "dev": "vite --host",
+    "fix": "pnpm lint:fix &&  pnpm csslint:fix && pnpm format:fix",
+    "format:check": "prettier -l --cache \"./**/*.{html,css,js,cjs,jsx,ts,cts,tsx,md,json}\"",
+    "format:fix": "prettier --write --cache --check \"./**/*.{html,css,js,cjs,jsx,ts,cts,tsx,md,json}\"",
+    "lint:check": "eslint --cache --color --ext .js,.cjs,.jsx,.ts,.cts,.tsx .",
+    "lint:fix": "eslint --cache --color --ext .js,.cjs,.jsx,.ts,.cts,.tsx . --fix",
+    "postinstall": "husky install",
+    "postpublish": "pinst --enable",
+    "prepublishOnly": "pinst --disable",
     "preview": "vite preview",
-    "host": "vite --host"
-  },
-  "devDependencies": {
-    "@rollup/plugin-replace": "^5.0.1",
-    "scroll-snap-slider": "SamrithaS/scroll-snap-slider",
-    "vite": "^3.2.4"
+    "release": "release-it",
+    "release:check": "release-it --dry-run",
+    "test": "echo \"no test specified\" && exit 0"
   },
   "dependencies": {
     "@use-gesture/vanilla": "^10.2.20",
-    "animejs": "^3.2.1"
-  }
+    "animejs": "^3.2.1",
+    "scroll-snap-slider": "SamrithaS/scroll-snap-slider"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.5",
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/preset-env": "^7.20.2",
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
+    "@ianvs/prettier-plugin-sort-imports": "^3.7.1",
+    "@release-it/conventional-changelog": "^5.1.1",
+    "browserslist-to-esbuild": "^1.2.0",
+    "eslint": "^8.30.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "gacp": "^3.0.3",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.1.0",
+    "pinst": "^3.0.0",
+    "prettier": "^2.8.1",
+    "prettier-plugin-pkg": "^0.17.1",
+    "release-it": "^15.5.1",
+    "stylelint": "^14.16.0",
+    "stylelint-config-prettier": "^9.0.4",
+    "stylelint-config-standard": "^29.0.0",
+    "vite": "^4.0.2",
+    "vite-plugin-top-level-await": "^1.2.2"
+  },
+  "sideEffects": false,
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "last 2 versions",
+      "Firefox ESR",
+      "not dead"
+    ],
+    "development": [
+      "last 2 versions",
+      "not dead"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "gacp": {
+    "add": false,
+    "push": false,
+    "emoji": "emoji",
+    "editor": false
+  },
+  "lint-staged": {
+    "**/*.{js,cjs,jsx,ts,cts,tsx}": [
+      "pnpm lint:fix"
+    ],
+    "**/*.{html,css,js,cjs,jsx,ts,cts,tsx,md,json}": [
+      "pnpm format:fix"
+    ]
+  },
+  "source": "./src/index.js"
 }
