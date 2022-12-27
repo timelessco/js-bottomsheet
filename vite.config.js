@@ -13,8 +13,8 @@ export default defineConfig(() => {
       emptyOutDir: true,
       rollupOptions: {
         input: {
-          main: resolve(__dirname, "/index.html"),
-          maps: resolve(__dirname, "/maps.html"),
+          main: resolve(__dirname, "website/index.html"),
+          maps: resolve(__dirname, "website/maps.html"),
         },
       },
     },
