@@ -113,6 +113,20 @@ function BottomSheet(props) {
         "text/html"
       ).body.firstChild.innerHTML;
     }
+    let bottomsheetArray = JSON.parse(localStorage.getItem("array")) || [];
+    if (
+      !bottomsheetArray.length ||
+      (bottomsheetArray.length &&
+        bottomsheetArray?.indexOf(targetBottomSheet.id) === -1 &&
+        targetBottomSheet.id.length > 0)
+    ) {
+      bottomsheetArray?.push(targetBottomSheet.id);
+      let obj = {};
+      bottomsheetArray.forEach((i) => {
+        obj[i] = false;
+      });
+      localStorage.setItem("array", JSON.stringify(bottomsheetArray));
+    }
 
     if (
       targetBottomSheet &&
@@ -121,7 +135,7 @@ function BottomSheet(props) {
       document.body.append(targetBottomSheet);
     }
 
-    observeMutation();
+    observeMutation(bottomsheetArray);
 
     if (displayOverlay) {
       overlay.classList.add("overlay");
@@ -132,19 +146,31 @@ function BottomSheet(props) {
         : "";
       if (closeOnOverlayClick) {
         overlay.addEventListener("click", () => {
-          close(isWeb, dismissible);
+          close(dismissible, bottomsheetArray);
         });
       }
     }
     let isWeb = window.innerWidth < minWidthForModal ? false : true;
     if (document.querySelectorAll(`#${targetBottomSheet?.id}`).length < 2) {
-      createBottomSheet(targetBottomSheet, isWeb, overlay, openOnLoad);
+      createBottomSheet(
+        targetBottomSheet,
+        isWeb,
+        overlay,
+        openOnLoad,
+        bottomsheetArray
+      );
     } else {
       open(isWeb, openOnLoad);
     }
   }
 
-  function createBottomSheet(targetBottomSheet, isWeb, overlay, openOnLoad) {
+  function createBottomSheet(
+    targetBottomSheet,
+    isWeb,
+    overlay,
+    openOnLoad,
+    bottomsheetArray
+  ) {
     let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
     let lastSnapPoint = snapPointConversion(snapPoints[snapPoints.length - 1]);
     let modalClose = document.createElement("div");
@@ -168,7 +194,6 @@ function BottomSheet(props) {
         })
       : "";
     modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
-    console.log(sideSheetIconWrapper.children);
     if (sideSheetIconWrapper.children.length === 0)
       sideSheetIconWrapper.insertAdjacentHTML("afterbegin", sideSheetIcon);
     if (draggableArea) {
@@ -209,7 +234,7 @@ function BottomSheet(props) {
       lastSetSnapPoint < window.innerHeight &&
       window.innerWidth < minWidthForModal
     ) {
-      close(isWeb, dismissible);
+      close(dismissible, bottomsheetArray);
     } else {
       open(isWeb, openOnLoad);
     }
@@ -224,7 +249,8 @@ function BottomSheet(props) {
         targetBottomSheet,
         draggableId,
         overlay,
-        isWeb
+        isWeb,
+        bottomsheetArray
       );
     }, 400);
 
@@ -234,7 +260,7 @@ function BottomSheet(props) {
       ).style.display = "block";
     }
   }
-  function observeMutation() {
+  function observeMutation(bottomsheetArray) {
     var config = { attributes: true, childList: true };
     var callback = function (mutationsList) {
       for (var mutation of mutationsList) {
@@ -243,7 +269,7 @@ function BottomSheet(props) {
           window.innerWidth < minWidthForModal &&
           scaleOnDrag
         ) {
-          stackAnimation();
+          stackAnimation(bottomsheetArray);
         }
       }
     };
@@ -288,7 +314,7 @@ function BottomSheet(props) {
     hideOverlay(overlay);
   }
 
-  function close(isWeb = false, dismissible = true, vy = 7) {
+  function close(dismissible = true, bottomsheetArray) {
     displayOverlay && overlay ? hideOverlay(overlay) : "";
     document.body.style.overflow = "scroll";
     if (window.innerWidth < minWidthForModal) {
@@ -302,6 +328,18 @@ function BottomSheet(props) {
         easing: getSnapPointAnimation(),
         duration: 1,
       });
+      if (scaleOnDrag) {
+        console.log("close");
+        bottomsheetArray?.forEach((item, index) => {
+          if (index !== targetBottomSheet.id)
+            anime({
+              targets: `#${item}`,
+              top: "0px",
+              easing: `linear`,
+              duration: 1,
+            });
+        });
+      }
     } else {
       if (webLayout === "modal") {
         closeModal(targetBottomSheet, overlay);
@@ -457,7 +495,8 @@ function BottomSheet(props) {
     newBottomSheet,
     draggableId,
     overlay,
-    isWeb
+    isWeb,
+    bottomsheetArray
   ) {
     const gesture = new Gesture(
       draggableTarget,
@@ -495,7 +534,7 @@ function BottomSheet(props) {
                   isWeb
                 );
                 if (lastSetSnapPoint >= window.innerHeight)
-                  close(isWeb, dismissible, vy);
+                  close(dismissible, bottomsheetArray);
 
                 if (lastSetSnapPoint >= window.innerHeight) {
                   hideOverlay(overlay);
@@ -526,7 +565,7 @@ function BottomSheet(props) {
                     isWeb
                   );
                   if (lastSetSnapPoint >= window.innerHeight)
-                    close(isWeb, dismissible, vy);
+                    close(dismissible, bottomsheetArray);
                 }
               }
             } else {
@@ -556,7 +595,7 @@ function BottomSheet(props) {
                   isWeb
                 );
                 if (lastSetSnapPoint >= window.innerHeight)
-                  close(isWeb, dismissible, vy);
+                  close(dismissible, bottomsheetArray);
               }
             }
           }
@@ -836,36 +875,81 @@ function BottomSheet(props) {
   }
   let bottomSheets = document.querySelectorAll(`[data-bottomsheet]`);
   let scaledValue = 1;
-  function stackAnimation() {
+  function stackAnimation(bottomsheetArray) {
     let actualIndex;
     let scaleIndex;
-    if (scaleItems.length) {
-      scaleItems.forEach((i, index) => {
+    bottomsheetArray.forEach((i, index) => {
+      if (
+        i === targetBottomSheet.id &&
+        bottomsheetArray[index - 1] &&
+        document.getElementById(bottomsheetArray[index - 1])
+      ) {
+        anime({
+          targets: `#${bottomsheetArray[index - 1]}`,
+          scale:
+            scaleValue +
+            ((1 - scaleValue) / window.innerHeight) *
+              getCurrentSnapPoint(targetBottomSheet),
+          easing: `linear`,
+          duration: 0.1,
+          // translateY: "0%",
+        });
+        bottomsheetArray.forEach((item, ind) => {
+          // if (ind !== index - 1)
+          // if (document.getElementById(item).style.top === "50px")
+          //   anime({
+          //     targets: `#${item}`,
+          //     top: "0px",
+          //     easing: `linear`,
+          //     duration: 1,
+          //   });
+        });
+        // console.log(
+        //   getCurrentSnapPoint(targetBottomSheet),
+        //   "getCurrentSnapPoint(targetBottomSheet"
+        // );
         if (
-          document.getElementById(i) &&
-          scaledValue !==
-            scaleValues[index] +
-              ((1 - scaleValues[index]) / window.innerHeight) *
-                getCurrentSnapPoint(targetBottomSheet).toFixed(1)
+          index - 1 > 0 &&
+          getCurrentSnapPoint(document.getElementById(bottomsheetArray[index]))
         ) {
-          anime({
-            targets: `#${i}`,
-            scale:
-              scaleValues[index] +
-              ((1 - scaleValues[index]) / window.innerHeight) *
-                getCurrentSnapPoint(targetBottomSheet),
-            easing: `linear`,
-            duration: 0.1,
+          console.log("inside", targetBottomSheet.id);
+          bottomsheetArray.slice(0, index - 1).forEach((item) => {
+            anime({
+              targets: `#${item}`,
+              top: "50px",
+              easing: `linear`,
+              duration: 1,
+            });
           });
-
-          scaledValue =
-            scaleValues[index] +
-            ((1 - scaleValues[index]) / window.innerHeight) *
-              getCurrentSnapPoint(targetBottomSheet).toFixed(1);
         }
-      });
-    }
-    // else {
+      }
+    });
+    // if (scaleItems.length) {
+    //   scaleItems.forEach((i, index) => {
+    //     if (
+    //       document.getElementById(i) &&
+    //       scaledValue !==
+    //         scaleValues[index] +
+    //           ((1 - scaleValues[index]) / window.innerHeight) *
+    //             getCurrentSnapPoint(targetBottomSheet).toFixed(1)
+    //     ) {
+    //       anime({
+    //         targets: `#${i}`,
+    //         scale:
+    //           scaleValues[index] +
+    //           ((1 - scaleValues[index]) / window.innerHeight) *
+    //             getCurrentSnapPoint(targetBottomSheet),
+    //         easing: `linear`,
+    //         duration: 0.1,
+    //       });
+
+    //       scaledValue =
+    //         scaleValues[index] +
+    //         ((1 - scaleValues[index]) / window.innerHeight) *
+    //           getCurrentSnapPoint(targetBottomSheet).toFixed(1);
+    //     }
+    //   });
+    // } else {
     //   bottomSheets.forEach((i, index) => {
     //     if (
     //       i.style.display &&

@@ -25,8 +25,8 @@ let bottomsheet2 = BottomSheet({
   trigger: `map-target`,
   snapPoints: ["93%"],
   webLayout: "sideSheetRight",
-  scaleItems: ["maps-1"],
-  scaleValues: [0.93],
+  // scaleItems: ["maps-1"],
+  // scaleValues: [0.93],
 });
 
 document.getElementById("done").addEventListener("click", () => {
@@ -36,7 +36,7 @@ document.getElementById("done").addEventListener("click", () => {
 let bottomsheet3 = BottomSheet({
   trigger: `target-map-3`,
   displayOverlay: true,
-  snapPoints: ["35%"],
+  snapPoints: ["85%"],
 });
 document.querySelector(".cancel").addEventListener("click", () => {
   bottomsheet3.close();
