@@ -1,4 +1,4 @@
-import BottomSheet from "../lib/bottomSheet.es";
+import BottomSheet from "../lib/BottomSheet.es";
 
 import "./style.css";
 

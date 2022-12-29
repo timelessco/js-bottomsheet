@@ -2,7 +2,7 @@ import path from "path";
 import { defineConfig } from "vite";
 
 const getPackageName = () => {
-  return "bottomSheet";
+  return "BottomSheet";
 };
 
 const getPackageNameCamelCase = () => {
@@ -25,6 +25,7 @@ export default defineConfig(mode => {
     },
     base: "./",
     build: {
+      // minify: false,
       cssCodeSplit: true,
       outDir: path.resolve(__dirname, "lib"),
       lib: {
