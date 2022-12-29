@@ -1,6 +1,6 @@
 {
   "name": "js-bottomsheet",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description":"A pure Js snappable, scrollable, customisable bottomsheet!",
   "keywords": [
     "bottomsheet",
@@ -33,7 +33,7 @@
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.1",
     "scroll-snap-slider": "SamrithaS/scroll-snap-slider",
-    "vite": "^3.2.4"
+    "vite": "^4.0.3"
   },
   "dependencies": {
     "@use-gesture/vanilla": "^10.2.20",

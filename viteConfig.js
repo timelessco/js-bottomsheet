@@ -1,22 +1,37 @@
-import { resolve } from "path";
+import path from "path";
 import { defineConfig } from "vite";
-import replace from "@rollup/plugin-replace";
 
-export default defineConfig(({ mode }) => {
+const getPackageName = () => {
+  return "bottomSheet";
+};
+
+const getPackageNameCamelCase = () => {
+  try {
+    return getPackageName().replace(/-./g, (char) => char[1].toUpperCase());
+  } catch (err) {
+    throw new Error("Name property in package.json is missing.");
+  }
+};
+
+const fileName = {
+  es: `${getPackageName()}.es.js`,
+  umd: `${getPackageName()}.umd.js`,
+};
+
+export default defineConfig((mode) => {
   return {
-    plugins: [
-      replace({
-        preventAssignment: true,
-        "process.env.NODE_ENV": JSON.stringify(mode),
-      }),
-    ],
+    define: {
+      "process.env.NODE_ENV": `'${mode}'`,
+    },
+    base: "./",
     build: {
-      outDir: "lib",
+      cssCodeSplit: true,
+      outDir: path.resolve(__dirname, "lib"),
       lib: {
-        entry: resolve(__dirname, "./bottomSheet.js"),
-        name: "BottomSheet",
-        fileName: (format) => `bottomsheet.${format}.js`,
-        formats: ["umd", "es"],
+        entry: path.resolve(__dirname, "bottomSheet.js"),
+        name: getPackageNameCamelCase(),
+        formats: ["es", "umd"],
+        fileName: (format) => fileName[format],
       },
       rollupOptions: {
         external: ["animejs/lib/anime.es.js"],
