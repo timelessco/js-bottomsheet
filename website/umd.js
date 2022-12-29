@@ -1,5 +1,4 @@
-import BottomSheet from "../src/index";
-
+/* global BottomSheet */
 import "./style.css";
 
 async function fetchAllShows() {

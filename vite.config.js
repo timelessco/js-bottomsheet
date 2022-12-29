@@ -15,6 +15,8 @@ export default defineConfig(() => {
         input: {
           main: resolve(__dirname, "website/index.html"),
           maps: resolve(__dirname, "website/maps.html"),
+          umd: resolve(__dirname, "website/umd.html"),
+          es: resolve(__dirname, "website/es.html"),
         },
       },
     },
