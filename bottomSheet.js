@@ -2,6 +2,7 @@ import anime from "animejs/lib/anime.es.js";
 import { Gesture } from "@use-gesture/vanilla";
 import { hideOverlay, addOverlay } from "./helpers/overlayHelpers";
 import { moveBottomSheet } from "./helpers/translationHelpers";
+
 import {
   snapPointConversion,
   checkType,
@@ -46,6 +47,7 @@ function BottomSheet(props) {
     animateOnDrag = {},
     onDragStart = () => {},
     onDragEnd = () => {},
+    scrollableSheet = true,
   } = props;
   let lastSetSnapPoint;
   content =
@@ -92,7 +94,7 @@ function BottomSheet(props) {
       }, 400);
 
   function init(openOnLoad = false) {
-    document.body.style.overflowY = "contain";
+    // document.body.style.overflowY = "contain";
     if (onInit) {
       onInit();
     }
@@ -213,9 +215,11 @@ function BottomSheet(props) {
     } else {
       open(isWeb, openOnLoad);
     }
-    targetBottomSheet.click();
-    targetBottomSheet.style.overflow = "scroll";
-    targetBottomSheet.style.touchAction = "auto";
+    if (scrollableSheet) {
+      targetBottomSheet.click();
+      targetBottomSheet.style.overflow = "scroll";
+      targetBottomSheet.style.touchAction = "auto";
+    }
     setTimeout(() => {
       handleDragGesture(
         targetBottomSheet,
@@ -284,7 +288,7 @@ function BottomSheet(props) {
         translateY: `${
           !dismissible
             ? differenceOfWindowHt(checkType(snapPoints[0]))
-            : convertToPx(100)
+            : convertToPx(120)
         }px`,
         easing: getSnapPointAnimation(),
         duration: 1,
@@ -298,7 +302,7 @@ function BottomSheet(props) {
         closeRightSideSheet(targetBottomSheet, overlay);
       }
     }
-    lastSetSnapPoint = convertToPx(100);
+    lastSetSnapPoint = convertToPx(120);
     setTimeout(() => {
       if (lastSetSnapPoint >= window.innerHeight) {
         cleanUpOnClose ? cleanUp(targetBottomSheet, overlay) : "";
@@ -370,10 +374,11 @@ function BottomSheet(props) {
     }
   }
 
-  function open(isWeb = false, openOnLoad = false) {
-    document.body.style.overflow = "hidden";
+  function open(isWeb = false, openOnLoad = false, withoutAnimation = false) {
     displayOverlay ? addOverlay(overlay) : "";
     if (isWeb) {
+      document.body.style.overflow = "hidden";
+
       if (webLayout === "sideSheetLeft") {
         targetBottomSheet.style.top = 0;
         targetBottomSheet.style.left = `-100%`;
@@ -419,21 +424,28 @@ function BottomSheet(props) {
           checkType(snapPoints[0])
         )}px)`;
       } else {
-        anime({
-          targets: targetBottomSheet,
-          translateY: `${convertToPx(100)}px`,
-          easing: "linear",
-          duration: 1,
-        });
-        setTimeout(() => {
+        if (withoutAnimation) {
+          targetBottomSheet.style.transform = `translateY(${differenceOfWindowHt(
+            checkType(snapPoints[0])
+          )}px)`;
+        } else {
+          document.body.style.overflow = "hidden";
           anime({
             targets: targetBottomSheet,
-            translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
-            easing: "spring(1, 85, 15, 3)",
-            opacity: 1,
+            translateY: `${convertToPx(100)}px`,
+            easing: "linear",
             duration: 1,
           });
-        }, 60);
+          setTimeout(() => {
+            anime({
+              targets: targetBottomSheet,
+              translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
+              easing: "spring(1, 85, 15, 3)",
+              opacity: 1,
+              duration: 1,
+            });
+          }, 60);
+        }
       }
     }
     lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
@@ -495,9 +507,11 @@ function BottomSheet(props) {
                   (!draggableId ||
                     target !== document.querySelector(`#${draggableId}`))
                 ) {
-                  newBottomSheet.style.overflow = "scroll";
-                  newBottomSheet.style.touchAction = "auto";
-                  newBottomSheet.click();
+                  if (scrollableSheet) {
+                    newBottomSheet.style.overflow = "scroll";
+                    newBottomSheet.style.touchAction = "auto";
+                    newBottomSheet.click();
+                  }
                 } else {
                   newBottomSheet.style.overflow = "hidden";
                   newBottomSheet.style.touchAction = "none";
@@ -522,12 +536,16 @@ function BottomSheet(props) {
                 getCurrentSnapPoint(targetBottomSheet) <=
                 convertToPx(100 - lastSnapPoint)
               ) {
-                newBottomSheet.click();
-                newBottomSheet.style.overflow = "scroll";
-                if (convertToPx(100 - lastSnapPoint) > 0)
-                  newBottomSheet.style.minHeight = "unset";
-                newBottomSheet.style.height = `${convertToPx(lastSnapPoint)}px`;
-                newBottomSheet.style.touchAction = "auto";
+                if (scrollableSheet) {
+                  newBottomSheet.click();
+                  newBottomSheet.style.overflow = "scroll";
+                  if (convertToPx(100 - lastSnapPoint) > 0)
+                    newBottomSheet.style.minHeight = "unset";
+                  newBottomSheet.style.height = `${convertToPx(
+                    lastSnapPoint
+                  )}px`;
+                  newBottomSheet.style.touchAction = "auto";
+                }
               } else {
                 newBottomSheet.style.overflow = "hidden";
                 newBottomSheet.style.touchAction = "none";
@@ -561,9 +579,11 @@ function BottomSheet(props) {
             direction[1] < 0 &&
             targetBottomSheet.scrollTop >= 0
           ) {
-            newBottomSheet.style.overflow = "scroll";
-            newBottomSheet.click();
-            newBottomSheet.style.touchAction = "auto";
+            if (scrollableSheet) {
+              newBottomSheet.style.overflow = "scroll";
+              newBottomSheet.click();
+              newBottomSheet.style.touchAction = "auto";
+            }
           }
           if (
             (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
