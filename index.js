@@ -1,6 +1,6 @@
 // import BottomSheet from "./lib/bottomsheet.es";
 
-// import BottomSheet from "./bottomSheet";
+import BottomSheet from "./bottomSheet";
 
 let bottomsheet1;
 // console.log(

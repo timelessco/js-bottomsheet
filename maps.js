@@ -1,4 +1,4 @@
-import BottomSheet from "./lib/BottomSheet.es";
+import BottomSheet from "./bottomSheet";
 
 let bottomsheet1 = BottomSheet({
   snapPoints: ["20%", "40%", "100%"],
