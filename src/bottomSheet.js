@@ -327,13 +327,49 @@ function BottomSheet(props) {
     lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
   }
 
+  function translateToPreviousSnapablePoint(
+    convertXy,
+    newBottomSheet,
+    vy,
+    lastSnapPoint,
+    dy,
+    overlayArg,
+    dismissibleArg,
+  ) {
+    let minSnapPoint = 0;
+    snapPoints.forEach(element => {
+      const elem = snapPointConversion(element);
+      if (
+        convertToPx(elem) < differenceOfWindowHt(convertXy) &&
+        convertToPx(elem) > minSnapPoint
+      ) {
+        minSnapPoint = convertToPx(elem);
+      }
+    });
+
+    moveBottomSheet(
+      newBottomSheet,
+      `${
+        // TODO: Fix this eslint error
+        // eslint-disable-next-line no-nested-ternary
+        !dismissibleArg
+          ? minSnapPoint <= checkType(snapPoints[0])
+            ? differenceOfWindowHt(checkType(snapPoints[0]))
+            : differenceOfWindowHt(minSnapPoint)
+          : differenceOfWindowHt(minSnapPoint)
+      }px`,
+      getSnapPointAnimation(),
+    );
+    lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
+    return lastSetSnapPoint;
+  }
+
   function translateToNextSnapPoint(
     convertXy,
     newBottomSheet,
     vy,
     lastSnapPoint,
     dy,
-    snappable,
     overlayArg,
     isWeb,
   ) {
@@ -348,15 +384,6 @@ function BottomSheet(props) {
       }
     });
     if (maxSnapPoint !== Infinity) {
-      if (snappable) {
-        moveBottomSheet(
-          newBottomSheet,
-          `${differenceOfWindowHt(maxSnapPoint)}px`,
-          getSnapPointAnimation(),
-        );
-        lastSetSnapPoint = differenceOfWindowHt(maxSnapPoint);
-        return lastSetSnapPoint;
-      }
       if (vy > velocityThreshold || dy < distanceThreshold) {
         moveBottomSheet(
           newBottomSheet,
@@ -366,15 +393,13 @@ function BottomSheet(props) {
         lastSetSnapPoint = differenceOfWindowHt(maxSnapPoint);
         return lastSetSnapPoint;
       }
-      // TODO: Fix this eslint error
-      // eslint-disable-next-line no-use-before-define
-      return translateToPreviousSnapPoint(
+
+      return translateToPreviousSnapablePoint(
         convertXy,
         newBottomSheet,
         vy,
         lastSnapPoint,
         dy,
-        true,
         overlayArg,
         dismissible,
         isWeb,
@@ -390,7 +415,6 @@ function BottomSheet(props) {
     vy,
     lastSnapPoint,
     dy,
-    snappable,
     overlayArg,
     dismissibleArg,
     isWeb,
@@ -405,23 +429,7 @@ function BottomSheet(props) {
         minSnapPoint = convertToPx(elem);
       }
     });
-    if (snappable) {
-      moveBottomSheet(
-        newBottomSheet,
-        `${
-          // TODO: Fix this eslint error
-          // eslint-disable-next-line no-nested-ternary
-          !dismissibleArg
-            ? minSnapPoint <= checkType(snapPoints[0])
-              ? differenceOfWindowHt(checkType(snapPoints[0]))
-              : differenceOfWindowHt(minSnapPoint)
-            : differenceOfWindowHt(minSnapPoint)
-        }px`,
-        getSnapPointAnimation(),
-      );
-      lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
-      return lastSetSnapPoint;
-    }
+
     if (vy > velocityThreshold || dy > distanceThreshold) {
       moveBottomSheet(
         newBottomSheet,
@@ -463,7 +471,7 @@ function BottomSheet(props) {
     overlayArg,
     isWeb,
   ) {
-    const actualOffset = offset[1];
+    let actualOffset = offset[1];
 
     if (maxSnapPoint === null) {
       if (active) {
@@ -502,9 +510,7 @@ function BottomSheet(props) {
 
       if (!active) {
         if (previousSnappointInputs() !== undefined) {
-          // TODO: Fix this
-          // eslint-disable-next-line no-param-reassign
-          offset[1] = previousSnappointInputs();
+          actualOffset = previousSnappointInputs();
         }
       }
     } else {
@@ -525,7 +531,6 @@ function BottomSheet(props) {
       }
       const nextSnappointInputs = () =>
         translateToNextSnapPoint(
-          // TODO: Fix this eslint error
           // eslint-disable-next-line no-nested-ternary
           actualOffset > window.innerHeight
             ? window.innerHeight
@@ -543,9 +548,7 @@ function BottomSheet(props) {
 
       if (!active) {
         if (nextSnappointInputs() !== undefined) {
-          // TODO: Fix this
-          // eslint-disable-next-line no-param-reassign
-          offset[1] = nextSnappointInputs();
+          actualOffset = nextSnappointInputs();
         }
       }
     }

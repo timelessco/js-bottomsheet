@@ -71,7 +71,7 @@ const allShowsHTML = allShows
 document.querySelector(".scroll-snap-slider").innerHTML = allShowsHTML;
 
 document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
-  const show = await fetchShow(allShows[index].key);
+  const show = await fetchShow(i.getAttribute("key"));
   const bottomSheetContent = await getBottomsheet1content(show);
 
   BottomSheet({
