@@ -5,7 +5,6 @@ import {
   checkType,
   convertToPx,
   differenceOfWindowHt,
-  getMobileOperatingSystem,
   snapPointConversion,
 } from "./helpers/convertionHelpers";
 import { addOverlay, hideOverlay } from "./helpers/overlayHelpers";
@@ -771,16 +770,6 @@ function BottomSheet(props) {
       open(isWeb, openOnLoad);
     }
   }
-  document.addEventListener("click", e => {
-    setTimeout(() => {
-      if (
-        e.target.tagName.toLowerCase() === "input" &&
-        getMobileOperatingSystem() === "Android"
-      ) {
-        moveBottomSheet(targetBottomSheet, "0px", springConfig);
-      }
-    }, 100);
-  });
   if (openOnLoad) {
     init(openOnLoad);
   } else {
