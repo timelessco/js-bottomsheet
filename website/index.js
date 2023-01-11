@@ -1,4 +1,4 @@
-import BottomSheet from "../src/bottomSheet";
+import BottomSheet from "../src";
 
 async function fetchAllShows() {
   const shows = await fetch(
@@ -62,6 +62,7 @@ const showsHTML = `${showsContent
 document.querySelector(".scroll-snap-slider").innerHTML = showsHTML;
 document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
   const content = await getBottomsheet1content(i.getAttribute("key"));
+
   BottomSheet({
     trigger: `target-${index}`,
     snapPoints: ["100%"],

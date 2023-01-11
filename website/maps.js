@@ -1,4 +1,4 @@
-import BottomSheet from "../src/bottomSheet";
+import BottomSheet from "../src";
 
 BottomSheet({
   snapPoints: ["20%", "40%", "100%"],

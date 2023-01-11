@@ -48,6 +48,7 @@ function BottomSheet(props) {
   } = props;
 
   let { content = "", draggableArea = `` } = props;
+
   function getSnapPointAnimation() {
     return `spring(1, 95, 25, 13)`;
   }
@@ -65,6 +66,7 @@ function BottomSheet(props) {
   let targetBottomSheet = targetid
     ? document?.querySelector(`#${targetid}`)
     : "";
+
   function getCurrentSnapPoint(newBottomSheet) {
     const transformValue = newBottomSheet?.style?.transform
       .slice(11)
@@ -74,9 +76,9 @@ function BottomSheet(props) {
     }
     return null;
   }
+
   let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
   let isWeb = !(window.innerWidth < minWidthForModal);
-
   const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
@@ -161,6 +163,7 @@ function BottomSheet(props) {
     }
     lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
   }
+
   function cleanUp() {
     targetBottomSheet.remove();
   }
@@ -178,6 +181,7 @@ function BottomSheet(props) {
     }, 500);
     hideOverlay(overlay);
   }
+
   function closeLeftSideSheet() {
     anime({
       targets: targetBottomSheet,
@@ -234,6 +238,7 @@ function BottomSheet(props) {
     hideOverlay(overlay);
     onClose();
   }
+
   function handleCloseIcons(
     sideSheetLeft,
     sideSheetRight,
@@ -397,6 +402,7 @@ function BottomSheet(props) {
       overlay,
     );
   }
+
   function handleSnapPoints(
     newBottomSheet,
     minSnapPoint,
@@ -482,6 +488,7 @@ function BottomSheet(props) {
       }
     }
   }
+
   function handleDragGesture(
     draggableTarget,
     lastSnapPoint,
@@ -625,6 +632,7 @@ function BottomSheet(props) {
       },
     );
   }
+
   function windowResizeListener(
     sideSheetLeft,
     sideSheetRight,
@@ -639,6 +647,7 @@ function BottomSheet(props) {
     });
     return isWeb;
   }
+
   function createBottomSheet() {
     const lastSnapPoint = snapPointConversion(
       snapPoints[snapPoints.length - 1],
