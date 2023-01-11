@@ -30,7 +30,8 @@
     "modal"
   ],
   "scripts": {
-    "build": "vite build --config vite-lib.config.js",
+    "build": "pnpm build:lib && pnpm build:website",
+    "build:lib": "vite build --config vite-lib.config.js",
     "build:website": "vite build",
     "check": "pnpm lint:check && pnpm csslint:check && pnpm format:check",
     "commit": "gacp",
