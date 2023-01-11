@@ -14,7 +14,7 @@ export default defineConfig(() => {
       rollupOptions: {
         input: {
           main: resolve(__dirname, "website/index.html"),
-          maps: resolve(__dirname, "website/maps.html"),
+          maps: resolve(__dirname, "website/shows.html"),
           umd: resolve(__dirname, "website/umd.html"),
           es: resolve(__dirname, "website/es.html"),
         },
