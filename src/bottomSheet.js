@@ -11,6 +11,8 @@ import {
 import { addOverlay, hideOverlay } from "./helpers/overlayHelpers";
 import { moveBottomSheet } from "./helpers/translationHelpers";
 
+import "./bottomsheet.css";
+
 function BottomSheet(props) {
   const {
     snapPoints = ["100%"],
