@@ -79,7 +79,7 @@ function BottomSheet(props) {
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
   overlay.id = `${targetBottomSheet?.id}-overlay`;
-  const springConfig = `spring(1, 95, 25, 13)`;
+  const springConfig = `spring(1,200,16,13)`;
 
   function open(
     isWebView = false,
