@@ -50,11 +50,6 @@ function BottomSheet(props) {
   } = props;
 
   let { content = "", draggableArea = `` } = props;
-
-  function getSnapPointAnimation() {
-    return `spring(1, 95, 25, 13)`;
-  }
-
   let lastSetSnapPoint;
   content =
     typeof content !== "string"
@@ -85,8 +80,7 @@ function BottomSheet(props) {
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
   overlay.id = `${targetBottomSheet?.id}-overlay`;
-  const closeAnimation = `spring(1, 85, 45, 15)`;
-  const openAnimation = `spring(1, 85, 35, 5)`;
+  const springConfig = `spring(1, 95, 25, 13)`;
 
   function open(
     isWebView = false,
@@ -106,7 +100,7 @@ function BottomSheet(props) {
             targets: targetBottomSheet,
             left: "0",
             width: sideSheetSnapPoints[0],
-            easing: openAnimation,
+            easing: springConfig,
             duration: 1,
           });
         }, 100);
@@ -118,7 +112,7 @@ function BottomSheet(props) {
             targets: targetBottomSheet,
             right: "0",
             width: sideSheetSnapPoints[0],
-            easing: openAnimation,
+            easing: springConfig,
             duration: 1,
           });
         }, 100);
@@ -132,7 +126,7 @@ function BottomSheet(props) {
           targets: targetBottomSheet,
           opacity: 1,
           rotateX: "1deg",
-          easing: closeAnimation,
+          easing: springConfig,
           duration: 0.1,
         });
       }
@@ -174,7 +168,7 @@ function BottomSheet(props) {
     anime({
       targets: targetBottomSheet,
       opacity: 0,
-      easing: closeAnimation,
+      easing: springConfig,
       duration: 0.1,
       translateY: "-40%",
     });
@@ -221,7 +215,7 @@ function BottomSheet(props) {
             ? differenceOfWindowHt(checkType(snapPoints[0]))
             : convertToPx(120)
         }px`,
-        easing: getSnapPointAnimation(),
+        easing: springConfig,
         duration: 1,
       });
     } else if (webLayout === "modal") {
@@ -322,7 +316,7 @@ function BottomSheet(props) {
     } else {
       value = differenceOfWindowHt(minSnapPoint);
     }
-    moveBottomSheet(newBottomSheet, `${value}px`, getSnapPointAnimation());
+    moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
     lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
     return lastSetSnapPoint;
   }
@@ -349,7 +343,7 @@ function BottomSheet(props) {
         moveBottomSheet(
           newBottomSheet,
           `${differenceOfWindowHt(maxSnapPoint)}px`,
-          getSnapPointAnimation(),
+          springConfig,
         );
         lastSetSnapPoint = differenceOfWindowHt(maxSnapPoint);
         return lastSetSnapPoint;
@@ -390,7 +384,7 @@ function BottomSheet(props) {
       } else {
         value = differenceOfWindowHt(minSnapPoint);
       }
-      moveBottomSheet(newBottomSheet, `${value}px`, getSnapPointAnimation());
+      moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
       lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
       return lastSetSnapPoint;
     }
@@ -783,7 +777,7 @@ function BottomSheet(props) {
         e.target.tagName.toLowerCase() === "input" &&
         getMobileOperatingSystem() === "Android"
       ) {
-        moveBottomSheet(targetBottomSheet, "0px", getSnapPointAnimation());
+        moveBottomSheet(targetBottomSheet, "0px", springConfig);
       }
     }, 100);
   });
