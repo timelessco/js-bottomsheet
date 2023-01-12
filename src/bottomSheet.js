@@ -79,8 +79,7 @@ function BottomSheet(props) {
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
   overlay.id = `${targetBottomSheet?.id}-overlay`;
-  const springConfig = `spring(1,200,16,13)`;
-
+  const springConfig = `spring(1,250,20,13)`;
   function open(
     isWebView = false,
     openOnLoading = false,
@@ -150,7 +149,7 @@ function BottomSheet(props) {
         anime({
           targets: targetBottomSheet,
           translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
-          easing: "spring(1, 85, 15, 3)",
+          easing: springConfig,
           opacity: 1,
           duration: 1,
         });
@@ -181,7 +180,7 @@ function BottomSheet(props) {
     anime({
       targets: targetBottomSheet,
       width: 0,
-      easing: "spring(1, 85, 45, 3)",
+      easing: springConfig,
       duration: 0,
     });
     setTimeout(() => {
@@ -194,7 +193,7 @@ function BottomSheet(props) {
     anime({
       targets: targetBottomSheet,
       width: 0,
-      easing: "spring(1, 85, 45, 3)",
+      easing: springConfig,
       duration: 0,
     });
     setTimeout(() => {
@@ -420,7 +419,7 @@ function BottomSheet(props) {
         value = actualOffset;
       }
       if (active) {
-        moveBottomSheet(newBottomSheet, `${value}px`, `spring(1, 250, 25, 25)`);
+        moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
       }
 
       if (!active) {
@@ -456,7 +455,7 @@ function BottomSheet(props) {
         value = actualOffset;
       }
       if (active) {
-        moveBottomSheet(newBottomSheet, `${value}px`, `spring(1, 250, 25, 25)`);
+        moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
       }
       if (!active) {
         if (
