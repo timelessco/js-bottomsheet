@@ -40,6 +40,12 @@ function BottomSheet(props) {
     <path fill-rule="evenodd" clip-rule="evenodd" d="M24.5046 40.8036C23.2926 42.0804 21.2623 42.1465 19.9698 40.9513L1.76653 24.118C0.474022 22.9228 0.408779 20.9188 1.62081 19.6421L18.6906 1.66043C19.9026 0.383653 21.9329 0.317552 23.2254 1.51279C24.5179 2.70802 24.5832 4.71199 23.3712 5.98876L8.49597 21.6586L24.3589 36.3277C25.6514 37.5229 25.7166 39.5269 24.5046 40.8036Z" fill="white"/>
     </svg> 
     `,
+    sideSheetRightIcon = `<svg width="16" height="14" viewBox="0 0 25 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.21057 1.34418C2.46351 0.107522 4.49491 0.107522 5.74784 1.34418L23.3937 18.7608C24.6466 19.9975 24.6466 22.0025 23.3937 23.2392L5.74784 40.6559C4.49491 41.8925 2.46351 41.8925 1.21057 40.6559C-0.0423591 39.4192 -0.0423591 37.4142 1.21057 36.1775L16.5878 21L1.21057 5.82253C-0.0423591 4.58586 -0.0423591 2.58084 1.21057 1.34418Z" fill="white"/>
+    </svg>   
+    `,
+    sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
+    animateOnDrag = {},
     sideSheetIconPosition = `left`,
     sideSheetOpenValue = "50%",
     sideSheetCloseValue = "30%",
@@ -47,6 +53,7 @@ function BottomSheet(props) {
     scaleItems = [],
     scaleValues = [],
     springConfig = `spring(1, 95, 25, 13)`,
+    scrollableSheet = true,
   } = props;
   let lastSetSnapPoint;
   content =
@@ -92,7 +99,7 @@ function BottomSheet(props) {
       }, 400);
 
   function init(openOnLoad = false) {
-    document.body.style.overflowY = "contain";
+    // document.body.style.overflowY = "contain";
     if (onInit) {
       onInit();
     }
@@ -133,7 +140,6 @@ function BottomSheet(props) {
     ) {
       document.body.append(targetBottomSheet);
     }
-
     observeMutation(bottomsheetArray);
 
     if (displayOverlay) {
@@ -237,9 +243,11 @@ function BottomSheet(props) {
     } else {
       open(isWeb, openOnLoad);
     }
-    targetBottomSheet.click();
-    targetBottomSheet.style.overflow = "scroll";
-    targetBottomSheet.style.touchAction = "auto";
+    if (scrollableSheet) {
+      targetBottomSheet.click();
+      targetBottomSheet.style.overflow = "scroll";
+      targetBottomSheet.style.touchAction = "auto";
+    }
     setTimeout(() => {
       handleDragGesture(
         targetBottomSheet,
@@ -322,7 +330,7 @@ function BottomSheet(props) {
         translateY: `${
           !dismissible
             ? differenceOfWindowHt(checkType(snapPoints[0]))
-            : convertToPx(100)
+            : convertToPx(120)
         }px`,
         easing: getSnapPointAnimation(),
         duration: 1,
@@ -347,7 +355,7 @@ function BottomSheet(props) {
         closeSideSheet(overlay);
       }
     }
-    lastSetSnapPoint = convertToPx(100);
+    lastSetSnapPoint = convertToPx(120);
     setTimeout(() => {
       if (lastSetSnapPoint >= window.innerHeight) {
         cleanUpOnClose ? cleanUp(targetBottomSheet, overlay) : "";
@@ -414,10 +422,11 @@ function BottomSheet(props) {
     }
   }
 
-  function open(isWeb = false, openOnLoad = false) {
-    document.body.style.overflow = "hidden";
+  function open(isWeb = false, openOnLoad = false, withoutAnimation = false) {
     displayOverlay ? addOverlay(overlay) : "";
     if (isWeb) {
+      document.body.style.overflow = "hidden";
+
       if (webLayout === "sideSheetLeft") {
         targetBottomSheet.style.top = 0;
         targetBottomSheet.style.left = `-100%`;
@@ -466,21 +475,28 @@ function BottomSheet(props) {
           checkType(snapPoints[0])
         )}px)`;
       } else {
-        anime({
-          targets: targetBottomSheet,
-          translateY: `${convertToPx(100)}px`,
-          easing: "linear",
-          duration: 1,
-        });
-        setTimeout(() => {
+        if (withoutAnimation) {
+          targetBottomSheet.style.transform = `translateY(${differenceOfWindowHt(
+            checkType(snapPoints[0])
+          )}px)`;
+        } else {
+          document.body.style.overflow = "hidden";
           anime({
             targets: targetBottomSheet,
-            translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
-            easing: springConfig,
-            opacity: 1,
+            translateY: `${convertToPx(100)}px`,
+            easing: "linear",
             duration: 1,
           });
-        }, 60);
+          setTimeout(() => {
+            anime({
+              targets: targetBottomSheet,
+              translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
+              easing: "spring(1, 85, 15, 3)",
+              opacity: 1,
+              duration: 1,
+            });
+          }, 60);
+        }
       }
     }
     lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
@@ -511,6 +527,7 @@ function BottomSheet(props) {
           let minSnapPoint = 0;
           let maxSnapPoint = Infinity;
           currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
+
           if (window.innerWidth < minWidthForModal) {
             if (direction[1] > 0) {
               if (
@@ -544,9 +561,11 @@ function BottomSheet(props) {
                   (!draggableId ||
                     target !== document.querySelector(`#${draggableId}`))
                 ) {
-                  newBottomSheet.style.overflow = "scroll";
-                  newBottomSheet.style.touchAction = "auto";
-                  newBottomSheet.click();
+                  if (scrollableSheet) {
+                    newBottomSheet.style.overflow = "scroll";
+                    newBottomSheet.style.touchAction = "auto";
+                    newBottomSheet.click();
+                  }
                 } else {
                   newBottomSheet.style.overflow = "hidden";
                   newBottomSheet.style.touchAction = "none";
@@ -571,12 +590,16 @@ function BottomSheet(props) {
                 getCurrentSnapPoint(targetBottomSheet) <=
                 convertToPx(100 - lastSnapPoint)
               ) {
-                newBottomSheet.click();
-                newBottomSheet.style.overflow = "scroll";
-                if (convertToPx(100 - lastSnapPoint) > 0)
-                  newBottomSheet.style.minHeight = "unset";
-                newBottomSheet.style.height = `${convertToPx(lastSnapPoint)}px`;
-                newBottomSheet.style.touchAction = "auto";
+                if (scrollableSheet) {
+                  newBottomSheet.click();
+                  newBottomSheet.style.overflow = "scroll";
+                  if (convertToPx(100 - lastSnapPoint) > 0)
+                    newBottomSheet.style.minHeight = "unset";
+                  newBottomSheet.style.height = `${convertToPx(
+                    lastSnapPoint
+                  )}px`;
+                  newBottomSheet.style.touchAction = "auto";
+                }
               } else {
                 newBottomSheet.style.overflow = "hidden";
                 newBottomSheet.style.touchAction = "none";
@@ -610,9 +633,11 @@ function BottomSheet(props) {
             direction[1] < 0 &&
             targetBottomSheet.scrollTop >= 0
           ) {
-            newBottomSheet.style.overflow = "scroll";
-            newBottomSheet.click();
-            newBottomSheet.style.touchAction = "auto";
+            if (scrollableSheet) {
+              newBottomSheet.style.overflow = "scroll";
+              newBottomSheet.click();
+              newBottomSheet.style.touchAction = "auto";
+            }
           }
           if (
             (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
@@ -651,7 +676,6 @@ function BottomSheet(props) {
   ) {
     let actualOffset = offset[1];
     if (maxSnapPoint === null) {
-      console.log("if");
       if (active) {
         moveBottomSheet(
           newBottomSheet,
@@ -888,7 +912,11 @@ function BottomSheet(props) {
       if (
         i === targetBottomSheet.id &&
         bottomsheetArray[index - 1] &&
-        document.getElementById(bottomsheetArray[index - 1])
+        document.getElementById(bottomsheetArray[index - 1]) &&
+        getCurrentSnapPoint(
+          document.getElementById(bottomsheetArray[index - 1])
+        ) === 0 &&
+        snapPoints[snapPoints.length - 1].includes("100")
       ) {
         anime({
           targets: `#${bottomsheetArray[index - 1]}`,
@@ -900,6 +928,10 @@ function BottomSheet(props) {
           duration: 0.1,
           // translateY: "0%",
         });
+        // anime({
+        //   targets: `#${i}`,
+        //   translateY: "10%",
+        // });
         bottomsheetArray.forEach((item, ind) => {
           // if (ind !== index - 1)
           // if (document.getElementById(item).style.top === "50px")
