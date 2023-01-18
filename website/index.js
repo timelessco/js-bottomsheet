@@ -1,6 +1,6 @@
-import BottomSheet from "./bottomSheet";
+import BottomSheet from "../src";
 
-let bottomsheet1 = BottomSheet({
+BottomSheet({
   snapPoints: ["20%", "40%", "100%"],
   draggableArea: `<div id="drag">
   <svg  width="45" height="7" viewBox="0 0 45 7" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -17,14 +17,14 @@ let bottomsheet1 = BottomSheet({
   openOnLoad: true,
 });
 
-let bottomsheet2 = BottomSheet({
+const bottomsheet2 = BottomSheet({
   trigger: `map-target`,
 });
 document.getElementById("done").addEventListener("click", () => {
   bottomsheet2.close();
 });
 
-let bottomsheet3 = BottomSheet({
+const bottomsheet3 = BottomSheet({
   trigger: `target-map-3`,
   displayOverlay: true,
   snapPoints: ["35%"],

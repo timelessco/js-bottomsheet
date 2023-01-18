@@ -1,4 +1,4 @@
-import anime from "animejs/lib/anime.es.js";
+import anime from "animejs/lib/anime.es";
 
 export function hideOverlay(overlay) {
   anime({

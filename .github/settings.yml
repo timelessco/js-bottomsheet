@@ -1,0 +1,184 @@
+# These settings are synced to GitHub by https://probot.github.io/apps/settings/
+
+repository:
+  # https://docs.github.com/en/rest/reference/repos#update-a-repository
+
+  # The name of the repository. Changing this will rename the repository
+  name: "browser-js-library-template"
+
+  # Either `true` to make this repo available as a template repository or false to prevent it.
+  is_template: true,
+
+  # A short description of the repository that will show up on GitHub
+  description:
+    "This project is a template for creating a JavaScript library that can be
+    used in production."
+
+  # A URL with more information about the repository
+  homepage: https://github.com
+
+  # A comma-separated list of topics to set on the repository
+  topics: "js, library, production, template, vanilla"
+
+  # Either `true` to make the repository private, or `false` to make it public.
+  private: false
+
+  # Either `true` to enable issues for this repository, `false` to disable them.
+  has_issues: true
+
+  # Either `true` to enable projects for this repository, or `false` to disable them.
+  # If projects are disabled for the organization, passing `true` will cause an API error.
+  has_projects: false
+
+  # Either `true` to enable the wiki for this repository, `false` to disable it.
+  has_wiki: false
+
+  # Either `true` to enable downloads for this repository, `false` to disable them.
+  has_downloads: true
+
+  # Updates the default branch for this repository.
+  default_branch: main
+
+  # Either `true` to allow squash-merging pull requests, or `false` to prevent
+  # squash-merging.
+  allow_squash_merge: true
+
+  # Either `true` to allow merging pull requests with a merge commit, or `false`
+  # to prevent merging pull requests with merge commits.
+  allow_merge_commit: true
+
+  # Either `true` to allow rebase-merging pull requests, or `false` to prevent
+  # rebase-merging.
+  allow_rebase_merge: false
+
+  # Either `true` to allow automatically deleting head branches when pull requests are merged, or `false` to prevent automatic deletion.
+  delete_branch_on_merge: true
+
+  # Whether to archive this repository. false will unarchive a previously archived repository.
+  archived: false
+
+# https://docs.github.com/en/rest/reference/issues#create-a-label
+# https://docs.github.com/en/rest/reference/issues#update-a-label
+
+labels:
+  - name: "autoapprove ✅"
+    color: "ff0000"
+
+  - name: "autoupdate 🔁"
+    color: "#bfdadc"
+
+  - name: "Feature"
+    description: "Added Feature"
+    color: "90db3f"
+
+  - name: "Dependency ⏫"
+    description: "Pull requests that update a dependency file"
+    color: "e1f788"
+
+  - name: "OtherDependencies ⬆️"
+    description: "OtherDependencies Changed"
+    color: "fbca04"
+
+  - name: "DevDependency 🔼"
+    description: "Pull requests that update a dev dependency file"
+    color: "fd73c3"
+
+  - name: "Deprecated 🛑"
+    description: "Deprecated"
+    color: "1d76db"
+
+  - name: "Duplicate"
+    color: "000000"
+
+  - name: "Enhancement"
+    color: "d7e102"
+
+  - name: "Stale"
+    color: "000000"
+
+  - name: "Security"
+    description: "Changelog Security"
+    color: "ed3e3b"
+
+  - name: "Status: Good first issue"
+    color: "d7e102"
+
+  - name: "Status: Help wanted"
+    color: "85d84e"
+
+  - name: "Status: Needs Work"
+    color: "fad8c7"
+
+  - name: "Status: Waiting for feedback"
+    color: "fef2c0"
+
+  - name: "Type: Bug"
+    color: "b60205"
+
+  - name: "Type: Critical"
+    color: "ff8c00"
+
+  - name: "Type: RFC"
+    color: "fbca04"
+
+  - name: "Type: Unconfirmed"
+    color: "444444"
+
+  - name: "Type: Wontfix"
+    color: "000000"
+
+# Collaborators: give specific users access to this repository.
+# See https://docs.github.com/en/rest/reference/repos#add-a-repository-collaborator for available options
+collaborators:
+  - username: navin-moorthy
+    permission: admin
+  # - username: hubot
+  #   permission: pull
+
+branches:
+  # https://docs.github.com/en/rest/reference/repos#update-branch-protection
+  # Branch Protection settings. Set to null to disable
+  - name: main
+    protection:
+      # Required. Require at least one approving review on a pull request, before merging. Set to null to disable.
+      required_pull_request_reviews:
+        # The number of approvals required. (1-6)
+        required_approving_review_count: 1
+        # Dismiss approved reviews automatically when a new commit is pushed.
+        dismiss_stale_reviews: true
+        # Blocks merge until code owners have reviewed.
+        # require_code_owner_reviews: true
+        # Specify which users and teams can dismiss pull request reviews. Pass an empty dismissal_restrictions object to disable. User and team dismissal_restrictions are only available for organization-owned repositories. Omit this parameter for personal repositories.
+        dismissal_restrictions:
+          users: []
+          teams: []
+        # Allow specific users, teams, or apps to bypass pull request requirements.
+        bypass_pull_request_allowances:
+          users: []
+          teams: []
+      # Required. Require status checks to pass before merging. Set to null to disable
+      required_status_checks:
+        # Required. Require branches to be up to date before merging.
+        strict: true
+        # Required. The list of status checks to require in order to merge into this branch
+        checks:
+          [
+            { context: "Cache & install node_modules" },
+            { "context": "Check lint & format" },
+            { "context": "Test" },
+            { "context": "Build" },
+          ]
+      # Required. Enforce all configured restrictions for administrators. Set to true to enforce required status checks for repository administrators. Set to null to disable.
+      enforce_admins: false
+      # Prevent merge commits from being pushed to matching branches
+      required_linear_history: true
+      # Required. Restrict who can push to this branch. Team and user restrictions are only available for organization-owned repositories. Set to null to disable.
+      restrictions:
+        users: []
+        teams: []
+        apps: ["renovate", "kodiakhq"]
+
+      # Ensure all review conversations are seen and addressed prior to merging
+      required_conversation_resolution: true
+      # Permits force pushes for all users with push access. Set to null to disable.
+      allow_force_pushes: true

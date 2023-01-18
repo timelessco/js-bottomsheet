@@ -4,14 +4,14 @@ export function snapPointConversion(snapPoint) {
     : +snapPoint;
 }
 
+export function convertToPx(percentage) {
+  return Math.round((window.innerHeight * percentage) / 100);
+}
+
 export function checkType(value) {
   return typeof value === "string"
     ? convertToPx(+value.replace("%", ""))
     : +value;
-}
-
-export function convertToPx(percentage) {
-  return Math.round((window.innerHeight * percentage) / 100);
 }
 
 export function convertToPercentage(px) {
@@ -23,7 +23,7 @@ export function differenceOfWindowHt(value) {
 }
 
 export function getMobileOperatingSystem() {
-  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  const userAgent = navigator.userAgent || window.opera;
 
   // Windows Phone must come first because its UA also contains "Android"
   if (/windows phone/i.test(userAgent)) {

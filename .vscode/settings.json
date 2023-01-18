@@ -1,0 +1,177 @@
+{
+  "git.branchProtection": ["main"],
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  // Editor Visuals
+  "editor.renderLineHighlight": "all",
+  "editor.minimap.enabled": false,
+  "editor.padding.top": 10,
+  "editor.tabSize": 2,
+  "editor.rulers": [80, 100, 120],
+  "editor.wordWrap": "bounded",
+  "editor.wordWrapColumn": 120,
+  "editor.guides.bracketPairs": true,
+
+  // Editor cursor
+  "editor.cursorWidth": 5,
+  "editor.cursorBlinking": "solid",
+  "editor.cursorSmoothCaretAnimation": true,
+
+  // Editor Indents
+  "editor.renderWhitespace": "all",
+  "editor.detectIndentation": true,
+
+  // Editor Formatters & Linters.
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "editor.codeActionsOnSave": {
+    "source.addMissingImports": true,
+    // "source.organizeImports": true,
+    // "source.sortImports": true,
+    // "source.fixAll": true
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  "[markdown]": {
+    "editor.quickSuggestions": {
+      "comments": "on",
+      "strings": "on",
+      "other": "on"
+    }
+  },
+  "[blade]": {
+    "editor.defaultFormatter": "onecentlin.laravel-blade",
+    "editor.autoClosingBrackets": "always"
+  },
+
+  // Files Customization
+  "files.autoSave": "onFocusChange",
+  // "files.autoSaveDelay": 500,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.eol": "\n",
+  "files.defaultLanguage": "markdown",
+  "files.associations": {
+    "*.ejs": "html",
+    "*.svg": "html",
+    ".php_cs": "php",
+    ".php_cs.dist": "php",
+    "*.module": "php",
+    ".exports": "shellscript",
+    ".paths": "shellscript",
+    "*.php": "php",
+    "*.blade.php": "blade",
+    "*.snippet": "plaintext"
+  },
+  "files.exclude": {
+    "USE_GITIGNORE": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/coverage": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.build": true,
+    "**/.gh-pages": true
+  },
+
+  // Language based settings
+  "css.validate": false,
+  "css.lint.unknownAtRules": "ignore",
+  "less.validate": false,
+  "scss.validate": false,
+  "stylelint.validate": ["css", "scss"],
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "javascript.referencesCodeLens.enabled": true,
+  "javascript.referencesCodeLens.showOnAllFunctions": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.validate.enable": true,
+  // Check JS files with TS linter
+  // "js/ts.implicitProjectConfig.checkJs": true,
+  "markdown.validate.enabled": true,
+  "markdown.experimental.editor.pasteLinks.enabled": true,
+
+  // PHP
+  "blade.format.enable": true,
+  "php.suggest.basic": false,
+
+  // Linters & Formatters
+  // "prettier.enable": false,
+  "prettier.printWidth": 120,
+  "prettier.jsxSingleQuote": true,
+  // "prettier.singleQuote": true,
+  // "prettier.tabWidth": 2,
+  // "eslint.enable": false,
+  "eslint.alwaysShowStatus": true,
+  "eslint.useESLintClass": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "vue",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.options": {
+    "overrideConfig": {
+      "env": {
+        "browser": true,
+        "es6": true
+      },
+      "parserOptions": {
+        "ecmaVersion": 2019,
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "jsx": true
+        }
+      },
+      "rules": {
+        "no-debugger": "off"
+      }
+    }
+  },
+
+  // Emmet
+  "emmet.includeLanguages": {
+    "vue-html": "html",
+    "blade": "html",
+    "javascript": "javascriptreact",
+    "jsx-sublime-babel-tags": "javascriptreact"
+  },
+  "emmet.triggerExpansionOnTab": true,
+  "emmet.showAbbreviationSuggestions": false,
+  "emmet.showExpandedAbbreviation": "never",
+  "emmet.showSuggestionsAsSnippets": false,
+
+  // Conventional Commit
+  "conventionalCommits.emojiFormat": "emoji",
+  "conventionalCommits.showEditor": true,
+  "conventionalCommits.lineBreak": "\\n",
+  "conventionalCommits.promptFooter": false,
+  "conventionalCommits.promptBody": false,
+
+  // Auto close tag
+  "auto-close-tag.SublimeText3Mode": true,
+  "auto-close-tag.activationOnLanguage": [
+    "xml",
+    "php",
+    "blade",
+    "ejs",
+    "jinja",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "plaintext",
+    "markdown",
+    "vue",
+    "liquid",
+    "erb",
+    "lang-cfml",
+    "cfml",
+    "HTML (Eex)",
+    "mdx"
+  ]
+}

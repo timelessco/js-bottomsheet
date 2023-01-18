@@ -62,8 +62,12 @@ jspm_packages
 # Storybook Build
 storybook-static
 
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
-## library folder
-lib
+# Library files
 dist
-
+CHANGELOG.md
+lib

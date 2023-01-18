@@ -1,7 +1,7 @@
-import anime from "animejs/lib/anime.es.js";
+import anime from "animejs/lib/anime.es";
 
 export function moveBottomSheet(targetBottomSheet, top, ease, duration) {
-  let result = {
+  const result = {
     targets: targetBottomSheet,
     translateY: top,
     easing: ease,

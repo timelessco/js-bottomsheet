@@ -1,0 +1,89 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", ":semanticCommitTypeAll(chore)"],
+  "schedule": ["after 12am and before 5am every weekday", "every weekend"],
+  "commitMessageAction": "⬆️ update",
+  "commitMessageTopic": "{{depName}}",
+  "pinVersions": false,
+  "dependencyDashboardTitle": "Renovate Dependency Updates",
+  "prCreation": "immediate",
+  "timezone": "Asia/Kolkata",
+  "rangeStrategy": "bump",
+  "prHourlyLimit": 10,
+  "prConcurrentLimit": 10,
+  "separateMultipleMajor": true,
+  "separateMinorPatch": true,
+  "rebaseStalePrs": true,
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["Security", "Type: Critical"]
+  },
+  "automerge": true,
+  "major": {
+    "automerge": false
+  },
+  "automergeStrategy": "squash",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "automergeType": "pr",
+    "platformAutomerge": true
+  },
+  "packageRules": [
+    {
+      "matchDatasources": ["npm"],
+      "groupName": "renovate-meta",
+      "labels": ["OtherDependencies ⬆️"],
+      "semanticCommitScope": "other-deps",
+      "prPriority": -1
+    },
+    {
+      "groupName": "dependencies (non-major)",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "rollback",
+        "bump"
+      ],
+      "labels": ["Dependency ⏫"],
+      "prPriority": 2
+    },
+    {
+      "groupName": "devDependencies (non-major)",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "pinDigest",
+        "digest",
+        "rollback",
+        "bump"
+      ],
+      "labels": ["DevDependency 🔼"],
+      "semanticCommitScope": "dev-deps",
+      "prPriority": 2
+    },
+    {
+      "groupName": "dependencies (major)",
+      "matchDepTypes": ["dependencies"],
+      "matchUpdateTypes": ["major"],
+      "labels": ["DevDependency 🔼"],
+      "prPriority": 3,
+      "commitMessageAction": "⬆️ upgrade"
+    },
+    {
+      "groupName": "devDependencies (major)",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["major"],
+      "labels": ["Dependency ⏫"],
+      "prPriority": 3,
+      "commitMessageAction": "⬆️ upgrade",
+      "semanticCommitScope": "dev-deps"
+    }
+  ]
+}
