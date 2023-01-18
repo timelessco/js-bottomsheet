@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+
+    // Optional
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag",
+    "christian-kohler.npm-intellisense",
+    "christian-kohler.path-intellisense",
+    "vivaxy.vscode-conventional-commits",
+    "aaron-bond.better-comments"
+  ]
+}
