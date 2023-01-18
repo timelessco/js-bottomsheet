@@ -93,3 +93,15 @@ textarea {
 #side-right {
   text-align: right;
 }
+#resizable{
+  position: fixed;
+  height: 100%;
+  top: 0;
+  min-width: 30px;
+  background-color: #46474d;
+  cursor: col-resize;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 120;
+}

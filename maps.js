@@ -1,7 +1,7 @@
 import BottomSheet from "./bottomSheet";
 
 let bottomsheet1 = BottomSheet({
-  snapPoints: ["20%", "40%", "80%", "100%"],
+  snapPoints: ["20%", "40%", "100%"],
   draggableArea: `<div id="drag">
   <svg  width="45" height="7" viewBox="0 0 45 7" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="45" height="7" rx="3.5" fill="#38383D"/>
@@ -19,6 +19,8 @@ let bottomsheet1 = BottomSheet({
   sideSheetOpenValue: "50%",
   sideSheetCloseValue: "30%",
   sideSheetIconPosition: "right",
+  // scrollableSheet: false,
+  resizablePosition: "right",
 });
 
 let bottomsheet2 = BottomSheet({
@@ -40,4 +42,16 @@ let bottomsheet3 = BottomSheet({
 });
 document.querySelector(".cancel").addEventListener("click", () => {
   bottomsheet3.close();
+});
+
+let bottomsheet4 = BottomSheet({
+  trigger: `target-map-4`,
+  displayOverlay: true,
+  snapPoints: ["100%"],
+});
+
+let bottomsheet5 = BottomSheet({
+  trigger: `target-map-5`,
+  displayOverlay: true,
+  snapPoints: ["100%"],
 });
