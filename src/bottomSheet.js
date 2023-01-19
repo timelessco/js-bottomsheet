@@ -223,12 +223,13 @@ function BottomSheet(props) {
     } else {
       closeRightSideSheet(targetBottomSheet, overlay);
     }
+    // document.body.style.overscrollBehavior = "auto";
     lastSetSnapPoint = convertToPx(120);
-    setTimeout(() => {
-      if (lastSetSnapPoint >= window.innerHeight) {
-        if (cleanUpOnClose) cleanUp(targetBottomSheet, overlay);
-      }
-    }, 500);
+    // setTimeout(() => {
+    if (lastSetSnapPoint >= window.innerHeight) {
+      if (cleanUpOnClose) cleanUp(targetBottomSheet, overlay);
+    }
+    // }, 300);
     hideOverlay(overlay);
     onClose();
   }
@@ -723,7 +724,8 @@ function BottomSheet(props) {
   }
 
   function init() {
-    document.body.style.overflowY = "contain";
+    document.body.style.overscrollBehavior = "contain";
+
     if (onInit) {
       onInit();
     }
