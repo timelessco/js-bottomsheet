@@ -1,34 +1,37 @@
 import BottomSheet from "../src";
 
 BottomSheet({
-  snapPoints: ["20%", "40%", "100%"],
+  snapPoints: ["10%", "40%", "100%"],
   draggableArea: `<div id="drag">
-  <svg  width="45" height="7" viewBox="0 0 45 7" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="45" height="7" rx="3.5" fill="#38383D"/>
+  <svg width="36" height="4" viewBox="0 0 36 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="36" height="4" rx="2" fill="black" fill-opacity="0.22"/>
   </svg>
+
   </div>
   `,
   webLayout: "sideSheetLeft",
   dismissible: false,
-  content: ` <div id="maps-1" data-bottomsheet><input class="search" placeholder="Search Maps" /><div class="flex">
- <p class="fav">Favourites</p> <!-- <p class="more">More</p> --></div><div class="cont-box"> <div class="fav-box" id="map-target" data-bottomsheet-id="maps-2"><figure class="round"><img src="./assets/home.svg" width="30" height="30" /></figure> <p class="sm">Home</p></div><div class="fav-box" id="map-target" data-bottomsheet-id="maps-2">
-<figure class="round"> <img src="./assets/work.svg" width="30" height="30" /></figure> <p class="sm">Work</p></div><div class="fav-box" id="map-target" data-bottomsheet-id="maps-2">
-<figure class="round"><img src="./assets/train.svg" width="30" height="30" /></figure><p class="sm">Transit</p> </div><div class="fav-box" id="map-target" data-bottomsheet-id="maps-2"><figure class="round"><img src="./assets/pin.svg" width="30" height="30" /></figure><p class="sm">6th street</p></div></div><div class="flex"><p class="fav">Recents</p></div><div class="cont-box"><div><div class="flex-start" id="map-target" data-bottomsheet-id="maps-2" ><figure class="round-2"> <img src="./assets/pin.svg" width="20" height="20" /></figure><div><p class="md" >Dropped Pin</p> <p class="xs">Chennai</p></div></div><div class="flex-start" id="map-target" data-bottomsheet-id="maps-2" ><figure class="round-2"><img src="./assets/arrow.svg" width="18" height="18" /></figure><div><p class="md">6th street</p><p class="xs">From my location</p>
-</div> </div></div></div><div class="share"><button class="surround" id="target-map-3" data-bottomsheet-id="maps-3" ><p class="more">Share My Location</p></button><button class="surround" id="target-map-3" data-bottomsheet-id="maps-3"> <p class="more">Mark My Location</p></button><button class="surround" id="target-map-3" data-bottomsheet-id="maps-3"> <p class="more">Report An Issue</p></button><button class="surround" id="target-map-3" data-bottomsheet-id="maps-3"><p class="more">Report An Issue</p></button></div></div>`,
+  content: ` <div id="maps-1" data-bottomsheet><div class="flex-input"><input class="search" placeholder="Search Maps" /><img src="/assets/avatar.png" width="32px" height="32px" /></div><div class="flex"><p class="fav">Favorites</p> <p class="more fav">More</p></div><div class="cont-box"> <div class="fav-box" id="map-target"><img src="./assets/home.svg" /><div> <p class="sm">Home</p><p class="xs">12 min</p></div></div><div class="fav-box" id="map-target">
+ <img src="./assets/work.svg" /><div> <p class="sm">Work</p><p class="xs">24 min</p></div></div><div class="fav-box" id="map-target">
+<img src="./assets/train.svg" /><div><p class="sm">Transit</p><p class="xs">Nearby</p></div> </div><div class="fav-box" id="map-target"><img src="./assets/pin.svg" /><p class="sm">Add</p></div></div><div class="flex"><p class="fav">Recents</p><p class="more fav">More</p></div><div class="cont-box flex-col"><div class="flex-start" id="map-target" > <img src="./assets/beach.svg" /><div><p class="md" >Palavakkam Beach</p> <p class="xs">Anna Salai, Chennai</p></div></div><div class="flex-start" id="map-target" ><img src="./assets/furniture.svg" /><div><p class="md">Amutha Furniture</p><p class="xs">Keelkattalai, Chennai</p>
+</div> </div><div class="flex-start" id="map-target" > <img src="./assets/beach.svg" /><div><p class="md"> ECR Beach</p> <p class="xs">Rajaji Avenue, Chennai</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/park.svg" /><div><p class="md" >Kamakoti Nagar Park</p> <p class="xs">Kamakoti Nagar, Pallikaranai</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/timeless.svg" /><div><p class="md" >Timeless</p> <p class="xs"> Kamakoti Nagar, Pallikaranai</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/beach.svg" /><div><p class="md" >Rippon Building</p> <p class="xs">Anna Salai, Chennai</p></div></div></div><div class="flex"><p class="fav">My Guides</p></div>
+<div class="cont-box flex-col"><div class="flex-start" id="map-target" > <img src="./assets/place.svg" /><div><p class="md" >My Places</p> <p class="xs">6 places</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/frequently.svg" /><div><p class="md" >Frequently</p> <p class="xs">14 places</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/new.svg" /><div><p class="md more" >New Guide</p> </div></div></div>
+<button class="dismiss md">Dismiss</button>
+</div>`,
   openOnLoad: true,
   sideSheetOpenValue: "50%",
   sideSheetCloseValue: "30%",
   sideSheetIconPosition: "right",
   // scrollableSheet: false,
   resizablePosition: "right",
-  scaleOnDrag: true,
+  scaleOnDrag: false,
 });
 
 const bottomsheet2 = BottomSheet({
   trigger: `map-target`,
   snapPoints: ["100%"],
   webLayout: "sideSheetRight",
-  scaleOnDrag: true,
+  scaleOnDrag: false,
 
   // scaleItems: ["maps-1"],
   // scaleValues: [0.93],

@@ -108,8 +108,8 @@ textarea {
   position: fixed;
   height: 100%;
   top: 0;
-  min-width: 30px;
-  background-color: #46474d;
+  min-width: 3px;
+  background-color: transparent;
   cursor: col-resize;
   display: flex;
   align-items: center;

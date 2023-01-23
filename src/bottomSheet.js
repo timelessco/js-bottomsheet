@@ -27,14 +27,10 @@ function BottomSheet(props) {
     <path d="M33.112 36.9133C34.3649 38.15 36.3963 38.15 37.6492 36.9133C38.9022 35.6766 38.9022 33.6716 37.6492 32.435L24.0375 19L37.6492 5.56496C38.9022 4.3283 38.9022 2.32328 37.6492 1.08662C36.3963 -0.150042 34.3649 -0.150042 33.112 1.08662L19.5002 14.5216L5.88835 1.08655C4.63541 -0.150108 2.60401 -0.150107 1.35108 1.08655C0.0981471 2.32321 0.0981459 4.32824 1.35108 5.5649L14.9629 19L1.35108 32.435C0.0981434 33.6717 0.0981443 35.6767 1.35108 36.9134C2.60401 38.15 4.63541 38.15 5.88834 36.9134L19.5002 23.4783L33.112 36.9133Z" fill="white"/>
     </svg>
     `,
-    sideSheetIcon = `
-    <svg width="16" height="14" viewBox="0 0 26 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M24.5046 40.8036C23.2926 42.0804 21.2623 42.1465 19.9698 40.9513L1.76653 24.118C0.474022 22.9228 0.408779 20.9188 1.62081 19.6421L18.6906 1.66043C19.9026 0.383653 21.9329 0.317552 23.2254 1.51279C24.5179 2.70802 24.5832 4.71199 23.3712 5.98876L8.49597 21.6586L24.3589 36.3277C25.6514 37.5229 25.7166 39.5269 24.5046 40.8036Z" fill="white"/>
-    </svg>
-    `,
+    sideSheetIcon = ``,
     sideSheetIconPosition = `left`,
-    sideSheetOpenValue = "50%",
-    sideSheetCloseValue = "30%",
+    sideSheetMinValue = 20,
+    sideSheetMaxValue = 50,
     scaleOnDrag = false,
     // scaleItems = [],
     // scaleValues = [],
@@ -104,10 +100,11 @@ function BottomSheet(props) {
           anime({
             targets: targetBottomSheet,
             left: "0",
-            width: sideSheetOpenValue,
+            width: `${sideSheetMinValue}%`,
             opacity: 1,
             easing: springConfig,
             duration: 1,
+            translateX: 0,
           });
         }, 100);
       } else if (webLayout === "sideSheetRight") {
@@ -119,9 +116,10 @@ function BottomSheet(props) {
             targets: targetBottomSheet,
             right: "0",
             opacity: 1,
-            width: sideSheetOpenValue,
+            width: `${sideSheetMinValue}%`,
             easing: springConfig,
             duration: 1,
+            translateX: 0,
           });
         }, 100);
       } else {
@@ -136,6 +134,7 @@ function BottomSheet(props) {
           rotateX: "1deg",
           easing: springConfig,
           duration: 0.1,
+          translateX: 0,
         });
       }
     } else {
@@ -192,17 +191,17 @@ function BottomSheet(props) {
   }
 
   function closeSideSheet() {
-    if (targetBottomSheet.style.width === sideSheetCloseValue) {
+    if (targetBottomSheet.style.width === 0) {
       anime({
         targets: targetBottomSheet,
-        width: sideSheetOpenValue,
+        width: "0",
         easing: springConfig,
         duration: 0.1,
       });
     } else {
       anime({
         targets: targetBottomSheet,
-        width: sideSheetCloseValue,
+        width: "0",
         easing: springConfig,
         duration: 0.1,
       });
@@ -219,7 +218,6 @@ function BottomSheet(props) {
     document.body.style.overflow = "scroll";
 
     if (window.innerWidth < minWidthForModal) {
-      console.log("over");
       anime({
         targets: targetBottomSheet,
         translateY: `${
@@ -674,22 +672,79 @@ function BottomSheet(props) {
       Gesture(
         resizableDiv,
         {
-          onDrag: ({ offset }) => {
+          onDrag: ({ offset, direction }) => {
+            let translateX;
+            if (webLayout === "sideSheetLeft") {
+              if (
+                Math.round(
+                  (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
+                ) < sideSheetMinValue &&
+                direction[0] <= 0
+                // velocity[0] > 0.5
+              ) {
+                translateX = "-105%";
+              }
+            } else if (
+              100 -
+                Math.round(
+                  (offset[0] / window.innerWidth) * 100 +
+                    (100 - sideSheetMinValue),
+                ) <
+                sideSheetMinValue &&
+              direction[0] >= 0
+            ) {
+              translateX = "105%";
+            }
+
             anime({
               targets: targetBottomSheet,
               width: `${
                 webLayout === "sideSheetLeft"
-                  ? Math.round((offset[0] / window.innerWidth) * 100 + 50)
-                  : 100 - Math.round((offset[0] / window.innerWidth) * 100 + 50)
+                  ? Math.round(
+                      (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
+                    )
+                  : 100 -
+                    Math.round(
+                      (offset[0] / window.innerWidth) * 100 +
+                        (100 - sideSheetMinValue),
+                    )
               }%`,
-              easing: "linear",
+              easing: `spring(1,250,20,25)`,
               duration: 0,
+              translateX,
+              // opacity: `${width === 0 ? 0 : 1}`,
             });
           },
         },
         {
           drag: {
             axis: "x",
+            bounds: {
+              left:
+                webLayout === "sideSheetRight"
+                  ? -(
+                      Math.round(
+                        (window.innerWidth * sideSheetMaxValue) / 100,
+                      ) -
+                      Math.round(
+                        (window.innerWidth *
+                          +targetBottomSheet.style.width.replace("%", "")) /
+                          100,
+                      )
+                    )
+                  : -window.innerWidth,
+              right:
+                webLayout === "sideSheetLeft"
+                  ? Math.round((window.innerWidth * sideSheetMaxValue) / 100) -
+                    Math.round(
+                      (window.innerWidth *
+                        +targetBottomSheet.style.width.replace("%", "")) /
+                        100,
+                    )
+                  : window.innerWidth,
+              top: -50,
+              bottom: 50,
+            },
           },
         },
       );
@@ -723,8 +778,8 @@ function BottomSheet(props) {
     const modalClose = document.createElement("div");
     const sideSheetIconWrapper = document.createElement("div");
     const resizableDiv = document.createElement("div");
-    resizableDiv.innerHTML =
-      '<svg width="18" height="47" viewBox="0 0 8 27" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 0V26.5" stroke="black"/><path d="M7 0V26.5" stroke="black"/><path d="M1 0V26.5" stroke="black"/></svg>';
+    // resizableDiv.innerHTML =
+    //   '<svg width="18" height="47" viewBox="0 0 8 27" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 0V26.5" stroke="black"/><path d="M7 0V26.5" stroke="black"/><path d="M1 0V26.5" stroke="black"/></svg>';
     if (resizablePosition === "left") {
       resizableDiv.style.left = "0";
     } else {
@@ -814,10 +869,7 @@ function BottomSheet(props) {
   function stackAnimation(bottomsheetArray) {
     // let actualIndex;
     // let scaleIndex;
-    console.log(
-      snapPoints[snapPoints.length - 1],
-      " snapPoints[snapPoints.length - 1]",
-    );
+
     bottomsheetArray.forEach((i, index) => {
       if (
         i === targetBottomSheet.id
@@ -990,13 +1042,6 @@ function BottomSheet(props) {
     ) {
       document.body.append(targetBottomSheet);
     }
-    console.log(
-      bottomsheetArray.length > 1,
-      targetBottomSheet ===
-        document.getElementById(bottomsheetArray[bottomsheetArray.length - 1]),
-      snapPoints[snapPoints.length - 1].includes("100"),
-      scaleOnDrag,
-    );
     if (
       bottomsheetArray.length > 1 &&
       targetBottomSheet ===
@@ -1007,7 +1052,6 @@ function BottomSheet(props) {
       scaleOnDrag
     ) {
       snapPoints[snapPoints.length - 1] = "95%";
-      console.log("change snap", snapPoints);
     }
     observeMutation(bottomsheetArray);
 
