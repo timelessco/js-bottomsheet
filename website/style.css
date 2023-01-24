@@ -26,6 +26,7 @@ body {
   min-width: 100%;
   background: white;
   font-family: Pretendard, sans-serif;
+  overscroll-behavior: contain;
 }
 
 h1 {
@@ -726,6 +727,7 @@ iframe {
   border-radius: 12px;
   margin-bottom: 58px;
   font-family: Pretendard, sans-serif;
+  padding: 9px 0;
 }
 
 .dismiss:focus {
@@ -776,8 +778,10 @@ iframe {
   #maps-1 {
     padding: 0 12px;
     border-radius: 0;
-    border-right: 1px solid rgb(0 0 0 / 2%);
     box-shadow: none;
+    background: rgb(255 255 255 / 90%);
+    border-right: 1px solid rgb(0 0 0 / 2%);
+    backdrop-filter: blur(20.5px);
   }
 
   .search {
@@ -824,5 +828,8 @@ iframe {
     margin: 0 8px;
     width: 100%;
     max-width: -webkit-fill-available;
+    padding: 6.5px 0;
+    background: #f3f3f3;
+    border-radius: 8px;
   }
 }
