@@ -52,7 +52,7 @@
     "test": "echo \"no test specified\" && exit 0"
   },
   "dependencies": {
-    "@use-gesture/vanilla": "^10.2.20",
+    "@use-gesture/vanilla": "^10.2.23",
     "animejs": "^3.2.1",
     "scroll-snap-slider": "SamrithaS/scroll-snap-slider"
   },
