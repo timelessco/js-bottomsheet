@@ -84,7 +84,7 @@ function BottomSheet(props) {
     : document.createElement("div");
   overlay.id = `${targetBottomSheet?.id}-overlay`;
   const springConfig = `spring(1,250,20,13)`;
-  const scaleValue = 0.93;
+  // const scaleValue = 0.93;
 
   function open(bottomsheetArray, openOnLoading, withoutAnimation = false) {
     if (displayOverlay) {
@@ -124,7 +124,7 @@ function BottomSheet(props) {
         }, 100);
       } else {
         targetBottomSheet.style.top = "50%";
-        targetBottomSheet.style.opacity = 0;
+        // targetBottomSheet.style.opacity = 0;
         targetBottomSheet.style.transform =
           "translateX(-50%) translateY(-40%) rotateX(-20deg)";
         anime({
@@ -134,7 +134,6 @@ function BottomSheet(props) {
           rotateX: "1deg",
           easing: springConfig,
           duration: 0.1,
-          translateX: 0,
         });
       }
     } else {
@@ -151,6 +150,7 @@ function BottomSheet(props) {
           checkType(snapPoints[0]),
         )}px)`;
       } else {
+        console.log("should be here");
         document.body.style.overflow = "hidden";
         anime({
           targets: targetBottomSheet,
@@ -162,18 +162,18 @@ function BottomSheet(props) {
           anime({
             targets: targetBottomSheet,
             translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
-            easing: "spring(1, 85, 15, 3)",
+            easing: springConfig,
             opacity: 1,
             duration: 1,
           });
-        }, 60);
+        }, 200);
       }
     }
     lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
   }
 
   function cleanUp() {
-    targetBottomSheet.remove();
+    targetBottomSheet?.remove();
   }
 
   function closeModal() {
@@ -184,6 +184,7 @@ function BottomSheet(props) {
       duration: 0.1,
       translateY: "-40%",
     });
+
     setTimeout(() => {
       cleanUp();
     }, 500);
@@ -212,6 +213,8 @@ function BottomSheet(props) {
     dismissable = true,
     bottomsheetArray = JSON.parse(localStorage.getItem("array")),
   ) {
+    console.log("in", targetBottomSheet);
+
     if (displayOverlay && overlay) {
       hideOverlay(overlay);
     }
@@ -252,6 +255,7 @@ function BottomSheet(props) {
       //   });
       // }
     } else if (webLayout === "modal") {
+      console.log("in", targetBottomSheet);
       closeModal(targetBottomSheet, overlay);
     } else if (webLayout === "sideSheetLeft") {
       closeSideSheet();
@@ -679,7 +683,8 @@ function BottomSheet(props) {
                 Math.round(
                   (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
                 ) < sideSheetMinValue &&
-                direction[0] <= 0
+                dismissible
+
                 // velocity[0] > 0.5
               ) {
                 translateX = "-105%";
@@ -691,7 +696,8 @@ function BottomSheet(props) {
                     (100 - sideSheetMinValue),
                 ) <
                 sideSheetMinValue &&
-              direction[0] >= 0
+              direction[0] >= 0 &&
+              dismissible
             ) {
               translateX = "105%";
             }
@@ -709,7 +715,7 @@ function BottomSheet(props) {
                         (100 - sideSheetMinValue),
                     )
               }%`,
-              easing: `spring(1,250,20,25)`,
+              easing: springConfig,
               duration: 0,
               translateX,
               // opacity: `${width === 0 ? 0 : 1}`,
@@ -732,7 +738,12 @@ function BottomSheet(props) {
                           100,
                       )
                     )
-                  : -window.innerWidth,
+                  : Math.round((window.innerWidth * sideSheetMinValue) / 100) -
+                    Math.round(
+                      (window.innerWidth *
+                        +targetBottomSheet.style.width.replace("%", "")) /
+                        100,
+                    ),
               right:
                 webLayout === "sideSheetLeft"
                   ? Math.round((window.innerWidth * sideSheetMaxValue) / 100) -
@@ -866,141 +877,141 @@ function BottomSheet(props) {
       ).style.display = "block";
     }
   }
-  function stackAnimation(bottomsheetArray) {
-    // let actualIndex;
-    // let scaleIndex;
+  // function stackAnimation(bottomsheetArray) {
+  //   // let actualIndex;
+  //   // let scaleIndex;
 
-    bottomsheetArray.forEach((i, index) => {
-      if (
-        i === targetBottomSheet.id
-        // bottomsheetArray[index - 1] &&
-        // document.getElementById(bottomsheetArray[index - 1]) &&
-        // getCurrentSnapPoint(
-        //   document.getElementById(bottomsheetArray[index - 1]),
-        // ) === 0 &&
-        // snapPoints[snapPoints.length - 1].includes("95")
-      ) {
-        anime({
-          targets: `#${bottomsheetArray[index - 1]}`,
-          scale:
-            scaleValue +
-            ((1 - scaleValue) / window.innerHeight) *
-              getCurrentSnapPoint(targetBottomSheet),
-          easing: `linear`,
-          duration: 0.1,
-          // translateY: "0%",
-        });
-        // anime({
-        //   targets: `#${i}`,
-        //   translateY: "10%",
-        // });
-        // bottomsheetArray.forEach((item, ind) => {
-        // if (ind !== index - 1)
-        // if (document.getElementById(item).style.top === "50px")
-        //   anime({
-        //     targets: `#${item}`,
-        //     top: "0px",
-        //     easing: `linear`,
-        //     duration: 1,
-        //   });
-        // });
-        if (
-          index - 1 > 0 &&
-          getCurrentSnapPoint(document.getElementById(bottomsheetArray[index]))
-        ) {
-          bottomsheetArray.slice(0, index - 1).forEach(item => {
-            anime({
-              targets: `#${item}`,
-              top: "50px",
-              easing: `linear`,
-              duration: 1,
-            });
-          });
-        } else {
-          bottomsheetArray.slice(0, index - 1).forEach(item => {
-            anime({
-              targets: `#${item}`,
-              // top: "0px",
-              easing: `linear`,
-              duration: 1,
-            });
-          });
-        }
-      }
-    });
-    // if (scaleItems.length) {
-    //   scaleItems.forEach((i, index) => {
-    //     if (
-    //       document.getElementById(i) &&
-    //       scaledValue !==
-    //         scaleValues[index] +
-    //           ((1 - scaleValues[index]) / window.innerHeight) *
-    //             getCurrentSnapPoint(targetBottomSheet).toFixed(1)
-    //     ) {
-    //       anime({
-    //         targets: `#${i}`,
-    //         scale:
-    //           scaleValues[index] +
-    //           ((1 - scaleValues[index]) / window.innerHeight) *
-    //             getCurrentSnapPoint(targetBottomSheet),
-    //         easing: `linear`,
-    //         duration: 0.1,
-    //       });
+  //   bottomsheetArray.forEach((i, index) => {
+  //     if (
+  //       i === targetBottomSheet.id
+  //       // bottomsheetArray[index - 1] &&
+  //       // document.getElementById(bottomsheetArray[index - 1]) &&
+  //       // getCurrentSnapPoint(
+  //       //   document.getElementById(bottomsheetArray[index - 1]),
+  //       // ) === 0 &&
+  //       // snapPoints[snapPoints.length - 1].includes("95")
+  //     ) {
+  //       anime({
+  //         targets: `#${bottomsheetArray[index - 1]}`,
+  //         scale:
+  //           scaleValue +
+  //           ((1 - scaleValue) / window.innerHeight) *
+  //             getCurrentSnapPoint(targetBottomSheet),
+  //         easing: `linear`,
+  //         duration: 0.1,
+  //         // translateY: "0%",
+  //       });
+  //       // anime({
+  //       //   targets: `#${i}`,
+  //       //   translateY: "10%",
+  //       // });
+  //       // bottomsheetArray.forEach((item, ind) => {
+  //       // if (ind !== index - 1)
+  //       // if (document.getElementById(item).style.top === "50px")
+  //       //   anime({
+  //       //     targets: `#${item}`,
+  //       //     top: "0px",
+  //       //     easing: `linear`,
+  //       //     duration: 1,
+  //       //   });
+  //       // });
+  //       if (
+  //         index - 1 > 0 &&
+  //         getCurrentSnapPoint(document.getElementById(bottomsheetArray[index]))
+  //       ) {
+  //         bottomsheetArray.slice(0, index - 1).forEach(item => {
+  //           anime({
+  //             targets: `#${item}`,
+  //             top: "50px",
+  //             easing: `linear`,
+  //             duration: 1,
+  //           });
+  //         });
+  //       } else {
+  //         bottomsheetArray.slice(0, index - 1).forEach(item => {
+  //           anime({
+  //             targets: `#${item}`,
+  //             // top: "0px",
+  //             easing: `linear`,
+  //             duration: 1,
+  //           });
+  //         });
+  //       }
+  //     }
+  //   });
+  //   // if (scaleItems.length) {
+  //   //   scaleItems.forEach((i, index) => {
+  //   //     if (
+  //   //       document.getElementById(i) &&
+  //   //       scaledValue !==
+  //   //         scaleValues[index] +
+  //   //           ((1 - scaleValues[index]) / window.innerHeight) *
+  //   //             getCurrentSnapPoint(targetBottomSheet).toFixed(1)
+  //   //     ) {
+  //   //       anime({
+  //   //         targets: `#${i}`,
+  //   //         scale:
+  //   //           scaleValues[index] +
+  //   //           ((1 - scaleValues[index]) / window.innerHeight) *
+  //   //             getCurrentSnapPoint(targetBottomSheet),
+  //   //         easing: `linear`,
+  //   //         duration: 0.1,
+  //   //       });
 
-    //       scaledValue =
-    //         scaleValues[index] +
-    //         ((1 - scaleValues[index]) / window.innerHeight) *
-    //           getCurrentSnapPoint(targetBottomSheet).toFixed(1);
-    //     }
-    //   });
-    // } else {
-    //   bottomSheets.forEach((i, index) => {
-    //     if (
-    //       i.style.display &&
-    //       i.style.transform &&
-    //       getCurrentSnapPoint(i) &&
-    //       getCurrentSnapPoint(i) < window.innerHeight
-    //     ) {
-    //       actualIndex = index;
-    //       if (index === 0) {
-    //         scaleIndex = bottomSheets.length - 1;
-    //       } else if (index === bottomSheets.length - 1) {
-    //         scaleIndex = 0;
-    //       } else {
-    //         scaleIndex = index - 1;
-    //       }
-    //     }
-    //   });
-    //   // }
-    //   if (scaleIndex && bottomSheets[scaleIndex]) {
-    //     anime({
-    //       targets: `#${bottomSheets[scaleIndex].id}`,
-    //       scale:
-    //         scaleValue +
-    //         ((1 - scaleValue) / window.innerHeight) *
-    //           getCurrentSnapPoint(bottomSheets[actualIndex]),
-    //       easing: `spring(1, 95, 25, 23)`,
-    //       duration: 1,
-    //     });
-    //   }
-    // }
-  }
-  function observeMutation(bottomsheetArray) {
-    const config = { attributes: true, childList: true };
-    const callback = mutationsList => {
-      mutationsList.forEach(mutation => {
-        if (
-          mutation.type === "attributes" &&
-          window.innerWidth < minWidthForModal &&
-          scaleOnDrag
-        ) {
-          stackAnimation(bottomsheetArray);
-        }
-      });
-    };
-    const observer = new MutationObserver(callback);
-    observer.observe(targetBottomSheet, config);
-  }
+  //   //       scaledValue =
+  //   //         scaleValues[index] +
+  //   //         ((1 - scaleValues[index]) / window.innerHeight) *
+  //   //           getCurrentSnapPoint(targetBottomSheet).toFixed(1);
+  //   //     }
+  //   //   });
+  //   // } else {
+  //   //   bottomSheets.forEach((i, index) => {
+  //   //     if (
+  //   //       i.style.display &&
+  //   //       i.style.transform &&
+  //   //       getCurrentSnapPoint(i) &&
+  //   //       getCurrentSnapPoint(i) < window.innerHeight
+  //   //     ) {
+  //   //       actualIndex = index;
+  //   //       if (index === 0) {
+  //   //         scaleIndex = bottomSheets.length - 1;
+  //   //       } else if (index === bottomSheets.length - 1) {
+  //   //         scaleIndex = 0;
+  //   //       } else {
+  //   //         scaleIndex = index - 1;
+  //   //       }
+  //   //     }
+  //   //   });
+  //   //   // }
+  //   //   if (scaleIndex && bottomSheets[scaleIndex]) {
+  //   //     anime({
+  //   //       targets: `#${bottomSheets[scaleIndex].id}`,
+  //   //       scale:
+  //   //         scaleValue +
+  //   //         ((1 - scaleValue) / window.innerHeight) *
+  //   //           getCurrentSnapPoint(bottomSheets[actualIndex]),
+  //   //       easing: `spring(1, 95, 25, 23)`,
+  //   //       duration: 1,
+  //   //     });
+  //   //   }
+  //   // }
+  // }
+  // function observeMutation(bottomsheetArray) {
+  //   const config = { attributes: true, childList: true };
+  //   const callback = mutationsList => {
+  //     mutationsList.forEach(mutation => {
+  //       if (
+  //         mutation.type === "attributes" &&
+  //         window.innerWidth < minWidthForModal &&
+  //         scaleOnDrag
+  //       ) {
+  //         stackAnimation(bottomsheetArray);
+  //       }
+  //     });
+  //   };
+  //   const observer = new MutationObserver(callback);
+  //   observer.observe(targetBottomSheet, config);
+  // }
   function init() {
     document.body.style.overflowY = "contain";
     if (onInit) {
@@ -1053,7 +1064,7 @@ function BottomSheet(props) {
     ) {
       snapPoints[snapPoints.length - 1] = "95%";
     }
-    observeMutation(bottomsheetArray);
+    // observeMutation(bottomsheetArray);
 
     if (displayOverlay) {
       overlay.classList.add("overlay");

@@ -19,10 +19,9 @@ BottomSheet({
 <button class="dismiss md">Dismiss</button>
 </div>`,
   openOnLoad: true,
-  sideSheetOpenValue: "50%",
-  sideSheetCloseValue: "30%",
+  sideSheetMinValue: 20,
+  sideSheetMaxValue: 30,
   sideSheetIconPosition: "right",
-  // scrollableSheet: false,
   resizablePosition: "right",
   scaleOnDrag: false,
 });
@@ -32,9 +31,6 @@ const bottomsheet2 = BottomSheet({
   snapPoints: ["100%"],
   webLayout: "sideSheetRight",
   scaleOnDrag: false,
-
-  // scaleItems: ["maps-1"],
-  // scaleValues: [0.93],
 });
 
 document.getElementById("done").addEventListener("click", () => {

@@ -14,6 +14,7 @@
   overflow: scroll;
   touch-action: none;
   color: white;
+  z-index: 100;
 }
 
 #maps-2 {
@@ -22,15 +23,16 @@
 
 .modal {
   background-color: black;
-  position: absolute;
+
+  /* position: absolute; */
   overflow: scroll;
   display: block;
   max-width: 50%;
-  height: 50% !important;
+  height: 50%;
   margin: auto;
   left: 50%;
   transform: translate(-50%, -50%);
-  top: 50% !important;
+  top: 50%;
   box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
   border-radius: 30px;
   touch-action: none;
