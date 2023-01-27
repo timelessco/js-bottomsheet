@@ -1,19 +1,24 @@
 [data-bottomsheet] {
-  display: none;
-  background-color: black;
-  width: 100%;
-  position: fixed;
-  height: 100%;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  transform: unset;
-  box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
-  min-height: -webkit-fill-available;
-  will-change: transform;
-  overflow: scroll;
   touch-action: none;
+  will-change: transform;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: unset;
+
+  overflow: scroll;
+  display: none;
+
+  width: 100%;
+  height: 100%;
+  min-height: -webkit-fill-available;
+
   color: white;
+
+  opacity: 0;
+  background-color: black;
+  box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
 }
 
 #maps-2 {
@@ -21,30 +26,37 @@
 }
 
 .modal {
-  background-color: black;
+  touch-action: none;
+
   position: absolute;
+  top: 50% !important;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   overflow: scroll;
   display: block;
+
   max-width: 50%;
   height: 50% !important;
   margin: auto;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  top: 50% !important;
-  box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
+
+  background-color: black;
   border-radius: 30px;
-  touch-action: none;
+  box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
 }
 
 .overlay {
   position: fixed;
-  display: none;
-  width: 100%;
-  height: 100%;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
+  left: 0;
+
+  display: none;
+
+  width: 100%;
+  height: 100%;
+
   background-color: rgb(0 0 0 / 50%);
 }
 
@@ -60,21 +72,24 @@
 }
 
 #modal-close {
+  position: sticky;
+  z-index: 100;
+  top: 0;
+
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  position: sticky;
-  top: 0;
+
   padding: 4px;
-  z-index: 100;
 }
 
 [data-bottomsheet] img {
-  -webkit-user-drag: none;
-  user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+  user-select: none;
+
+  -webkit-user-drag: none;
 }
 
 [data-bottomsheet] input[type="color"],
