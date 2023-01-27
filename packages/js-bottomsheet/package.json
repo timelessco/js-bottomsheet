@@ -1,0 +1,69 @@
+{
+  "name": "js-bottomsheet",
+  "version": "1.0.4",
+  "type": "module",
+  "description": "A pure Js snappable, scrollable, customisable bottomsheet!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timelessco/js-bottomsheet"
+  },
+  "main": "./dist/BottomSheet.umd.js",
+  "module": "./dist/BottomSheet.es.js",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/BottomSheet.es.js",
+      "require": "./dist/BottomSheet.umd.js"
+    },
+    "./bottomsheet.css": "./dist/index.css"
+  },
+  "browser": "./dist/BottomSheet.umd.js",
+  "unpkg": "./dist/BottomSheet.umd.js",
+  "files": [
+    "dist/*"
+  ],
+  "keywords": [
+    "bottomsheet",
+    "js-bottomsheet",
+    "javascript",
+    "snappable",
+    "modal"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "format": "prettier --ignore-path ../../.prettierignore -l --cache .",
+    "format:fix": "prettier --ignore-path ../../.prettierignore --write --cache --check .",
+    "lint": "eslint --cache --color --ext .js,.cjs,.jsx,.ts,.cts,.tsx .",
+    "lint:fix": "eslint --cache --color --ext .js,.cjs,.jsx,.ts,.cts,.tsx . --fix",
+    "lintstyles": "stylelint --config ../../.stylelintrc.cjs --ignore-path ../../.stylelintignore '**/*.css' --fix --cache --color --ignore-path .prettierignore -f verbose",
+    "lintstyles:fix": "stylelint --config ../../.stylelintrc.cjs --ignore-path ../../.stylelintignore '**/*.css' --cache --color --ignore-path .prettierignore -f verbose",
+    "preview": "vite preview",
+    "test": "echo \"no test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@use-gesture/vanilla": "^10.2.23",
+    "animejs": "^3.2.1"
+  },
+  "devDependencies": {
+    "vite": "^4.0.4",
+    "vite-plugin-top-level-await": "^1.2.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "last 2 versions",
+      "Firefox ESR",
+      "not dead"
+    ],
+    "development": [
+      "last 2 versions",
+      "not dead"
+    ]
+  },
+  "source": "./src/index.js"
+}

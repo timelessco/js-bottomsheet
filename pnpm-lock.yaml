@@ -1,70 +1,88 @@
 lockfileVersion: 5.4
 
-specifiers:
-  '@babel/core': ^7.20.12
-  '@babel/eslint-parser': ^7.19.1
-  '@babel/preset-env': ^7.20.2
-  '@commitlint/cli': ^17.4.2
-  '@commitlint/config-conventional': ^17.4.2
-  '@ianvs/prettier-plugin-sort-imports': ^3.7.1
-  '@release-it/conventional-changelog': ^5.1.1
-  '@use-gesture/vanilla': ^10.2.23
-  animejs: ^3.2.1
-  browserslist-to-esbuild: ^1.2.0
-  eslint: ^8.32.0
-  eslint-config-airbnb-base: ^15.0.0
-  eslint-config-prettier: ^8.6.0
-  eslint-plugin-import: ^2.27.5
-  eslint-plugin-prettier: ^4.2.1
-  gacp: ^3.0.3
-  husky: ^8.0.3
-  lint-staged: ^13.1.0
-  npm-run-all: ^4.1.5
-  pinst: ^3.0.0
-  prettier: ^2.8.3
-  prettier-plugin-pkg: ^0.17.1
-  release-it: ^15.6.0
-  scroll-snap-slider: SamrithaS/scroll-snap-slider
-  stylelint: ^14.16.1
-  stylelint-config-clean-order: ^2.3.1
-  stylelint-config-prettier: ^9.0.4
-  stylelint-config-standard: ^29.0.0
-  vite: ^4.0.4
-  vite-plugin-top-level-await: ^1.2.2
+importers:
 
-dependencies:
-  '@use-gesture/vanilla': 10.2.23
-  animejs: 3.2.1
-  scroll-snap-slider: github.com/SamrithaS/scroll-snap-slider/8b5ba9db9b8d4920f6c131861035ff07fefdf91e
+  .:
+    specifiers:
+      '@babel/core': ^7.20.12
+      '@babel/eslint-parser': ^7.19.1
+      '@babel/preset-env': ^7.20.2
+      '@commitlint/cli': ^17.4.2
+      '@commitlint/config-conventional': ^17.4.2
+      '@ianvs/prettier-plugin-sort-imports': ^3.7.1
+      '@release-it/conventional-changelog': ^5.1.1
+      eslint: ^8.32.0
+      eslint-config-airbnb-base: ^15.0.0
+      eslint-config-prettier: ^8.6.0
+      eslint-plugin-import: ^2.27.5
+      eslint-plugin-prettier: ^4.2.1
+      gacp: ^3.0.3
+      husky: ^8.0.3
+      lint-staged: ^13.1.0
+      npm-run-all: ^4.1.5
+      pinst: ^3.0.0
+      prettier: ^2.8.3
+      prettier-plugin-pkg: ^0.17.1
+      release-it: ^15.6.0
+      stylelint: ^14.16.1
+      stylelint-config-clean-order: ^2.3.1
+      stylelint-config-prettier: ^9.0.4
+      stylelint-config-standard: ^29.0.0
+      turbo: ^1.7.0
+    devDependencies:
+      '@babel/core': 7.20.12
+      '@babel/eslint-parser': 7.19.1_2je5tsgpdnpnp4f5qs5fqust6m
+      '@babel/preset-env': 7.20.2_@babel+core@7.20.12
+      '@commitlint/cli': 17.4.2
+      '@commitlint/config-conventional': 17.4.2
+      '@ianvs/prettier-plugin-sort-imports': 3.7.1_prettier@2.8.3
+      '@release-it/conventional-changelog': 5.1.1_release-it@15.6.0
+      eslint: 8.32.0
+      eslint-config-airbnb-base: 15.0.0_ps7hf4l2dvbuxvtusmrfhmzsba
+      eslint-config-prettier: 8.6.0_eslint@8.32.0
+      eslint-plugin-import: 2.27.5_eslint@8.32.0
+      eslint-plugin-prettier: 4.2.1_cn4lalcyadplruoxa5mhp7j3dq
+      gacp: 3.0.3
+      husky: 8.0.3
+      lint-staged: 13.1.0
+      npm-run-all: 4.1.5
+      pinst: 3.0.0
+      prettier: 2.8.3
+      prettier-plugin-pkg: 0.17.1_prettier@2.8.3
+      release-it: 15.6.0
+      stylelint: 14.16.1
+      stylelint-config-clean-order: 2.3.1_stylelint@14.16.1
+      stylelint-config-prettier: 9.0.4_stylelint@14.16.1
+      stylelint-config-standard: 29.0.0_stylelint@14.16.1
+      turbo: 1.7.0
 
-devDependencies:
-  '@babel/core': 7.20.12
-  '@babel/eslint-parser': 7.19.1_2je5tsgpdnpnp4f5qs5fqust6m
-  '@babel/preset-env': 7.20.2_@babel+core@7.20.12
-  '@commitlint/cli': 17.4.2
-  '@commitlint/config-conventional': 17.4.2
-  '@ianvs/prettier-plugin-sort-imports': 3.7.1_prettier@2.8.3
-  '@release-it/conventional-changelog': 5.1.1_release-it@15.6.0
-  browserslist-to-esbuild: 1.2.0
-  eslint: 8.32.0
-  eslint-config-airbnb-base: 15.0.0_ps7hf4l2dvbuxvtusmrfhmzsba
-  eslint-config-prettier: 8.6.0_eslint@8.32.0
-  eslint-plugin-import: 2.27.5_eslint@8.32.0
-  eslint-plugin-prettier: 4.2.1_cn4lalcyadplruoxa5mhp7j3dq
-  gacp: 3.0.3
-  husky: 8.0.3
-  lint-staged: 13.1.0
-  npm-run-all: 4.1.5
-  pinst: 3.0.0
-  prettier: 2.8.3
-  prettier-plugin-pkg: 0.17.1_prettier@2.8.3
-  release-it: 15.6.0
-  stylelint: 14.16.1
-  stylelint-config-clean-order: 2.3.1_stylelint@14.16.1
-  stylelint-config-prettier: 9.0.4_stylelint@14.16.1
-  stylelint-config-standard: 29.0.0_stylelint@14.16.1
-  vite: 4.0.4_@types+node@18.11.18
-  vite-plugin-top-level-await: 1.2.2_vite@4.0.4
+  apps/website:
+    specifiers:
+      browserslist-to-esbuild: ^1.2.0
+      js-bottomsheet: workspace:*
+      scroll-snap-slider: SamrithaS/scroll-snap-slider
+      vite: ^4.0.4
+      vite-plugin-top-level-await: ^1.2.2
+    dependencies:
+      js-bottomsheet: link:../../packages/js-bottomsheet
+      scroll-snap-slider: github.com/SamrithaS/scroll-snap-slider/8b5ba9db9b8d4920f6c131861035ff07fefdf91e
+    devDependencies:
+      browserslist-to-esbuild: 1.2.0
+      vite: 4.0.4
+      vite-plugin-top-level-await: 1.2.2_vite@4.0.4
+
+  packages/js-bottomsheet:
+    specifiers:
+      '@use-gesture/vanilla': ^10.2.23
+      animejs: ^3.2.1
+      vite: ^4.0.4
+      vite-plugin-top-level-await: ^1.2.2
+    dependencies:
+      '@use-gesture/vanilla': 10.2.23
+      animejs: 3.2.1
+    devDependencies:
+      vite: 4.0.4
+      vite-plugin-top-level-await: 1.2.2_vite@4.0.4
 
 packages:
 
@@ -98,7 +116,7 @@ packages:
       '@babel/helper-compilation-targets': 7.20.7_@babel+core@7.20.12
       '@babel/helper-module-transforms': 7.20.11
       '@babel/helpers': 7.20.7
-      '@babel/parser': 7.20.7
+      '@babel/parser': 7.20.13
       '@babel/template': 7.20.7
       '@babel/traverse': 7.20.13
       '@babel/types': 7.20.7
@@ -259,7 +277,7 @@ packages:
       '@babel/helper-split-export-declaration': 7.18.6
       '@babel/helper-validator-identifier': 7.19.1
       '@babel/template': 7.20.7
-      '@babel/traverse': 7.20.10
+      '@babel/traverse': 7.20.13
       '@babel/types': 7.20.7
     transitivePeerDependencies:
       - supports-color
@@ -6745,6 +6763,67 @@ packages:
     resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
     dev: true
 
+  /turbo-darwin-64/1.7.0:
+    resolution: {integrity: sha512-hSGAueSf5Ko8J67mpqjpt9FsP6ePn1nMcl7IVPoJq5dHsgX3anCP/BPlexJ502bNK+87DDyhQhJ/LPSJXKrSYQ==}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo-darwin-arm64/1.7.0:
+    resolution: {integrity: sha512-BLLOW5W6VZxk5+0ZOj5AO1qjM0P5isIgjbEuyAl8lHZ4s9antUbY4CtFrspT32XxPTYoDl4UjviPMcSsbcl3WQ==}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo-linux-64/1.7.0:
+    resolution: {integrity: sha512-aw2qxmfZa+kT87SB3GNUoFimqEPzTlzlRqhPgHuAAT6Uf0JHnmebPt4K+ZPtDNl5yfVmtB05bhHPqw+5QV97Yg==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo-linux-arm64/1.7.0:
+    resolution: {integrity: sha512-AJEx2jX+zO5fQtJpO3r6uhTabj4oSA5ZhB7zTs/rwu/XqoydsvStA4X8NDW4poTbOjF7DcSHizqwi04tSMzpJw==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo-windows-64/1.7.0:
+    resolution: {integrity: sha512-ewj7PPv2uxqv0r31hgnBa3E5qwUu7eyVRP5M1gB/TJXfSHduU79gbxpKCyxIZv2fL/N2/3U7EPOQPSZxBAoljA==}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo-windows-arm64/1.7.0:
+    resolution: {integrity: sha512-LzjOUzveWkvTD0jP8DBMYiAnYemmydsvqxdSmsUapHHJkl6wKZIOQNSO7pxsy+9XM/1/+0f9Y9F9ZNl5lePTEA==}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /turbo/1.7.0:
+    resolution: {integrity: sha512-cwympNwQNnQZ/TffBd8yT0i0O10Cf/hlxccCYgUcwhcGEb9rDjE5thDbHoHw1hlJQUF/5ua7ERJe7Zr0lNE/ww==}
+    hasBin: true
+    requiresBuild: true
+    optionalDependencies:
+      turbo-darwin-64: 1.7.0
+      turbo-darwin-arm64: 1.7.0
+      turbo-linux-64: 1.7.0
+      turbo-linux-arm64: 1.7.0
+      turbo-windows-64: 1.7.0
+      turbo-windows-arm64: 1.7.0
+    dev: true
+
   /type-check/0.3.2:
     resolution: {integrity: sha512-ZCmOJdvOWDBYJlzAoFkC+Q0+bUyEOS1ltgp1MGU03fqHG+dbi9tBFU2Rd9QKiDZFAYrhPh2JUf7rZRIuHRKtOg==}
     engines: {node: '>= 0.8.0'}
@@ -6982,10 +7061,10 @@ packages:
       vite: '>=2.8'
     dependencies:
       '@swc/core': 1.3.24
-      vite: 4.0.4_@types+node@18.11.18
+      vite: 4.0.4
     dev: true
 
-  /vite/4.0.4_@types+node@18.11.18:
+  /vite/4.0.4:
     resolution: {integrity: sha512-xevPU7M8FU0i/80DMR+YhgrzR5KS2ORy1B4xcX/cXLsvnUWvfHuqMmVU6N0YiJ4JWGRJJsLCgjEzKjG9/GKoSw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -7010,7 +7089,6 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.11.18
       esbuild: 0.16.12
       postcss: 8.4.20
       resolve: 1.22.1

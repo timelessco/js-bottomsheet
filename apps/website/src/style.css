@@ -187,7 +187,7 @@ button {
   font-weight: 100 900;
   font-style: normal;
   font-display: block;
-  src: url("assets/fonts/Inter-V.woff2") format("woff2");
+  src: url("/assets/fonts/Inter-V.woff2") format("woff2");
 }
 
 .shows-section h3 {
@@ -676,7 +676,7 @@ input {
   line-height: 27px;
 
   background: rgb(0 0 0 / 4.7%);
-  background-image: url("assets/search.svg");
+  background-image: url("/assets/search.svg");
   background-repeat: no-repeat;
   background-position: bottom 10px left 10px;
   border: none;
@@ -894,7 +894,7 @@ input {
   height: 100%;
 
   opacity: 0.2;
-  background: url("assets/harlem.jpg");
+  background: url("/assets/harlem.jpg");
   background-size: contain;
   -webkit-filter: blur(20px);
   filter: blur(20px);
@@ -1154,7 +1154,7 @@ iframe {
     font-size: 14px;
     line-height: 22px;
 
-    background-image: url("assets/search-14.svg");
+    background-image: url("/assets/search-14.svg");
     background-position: bottom 7px left 10px;
   }
 

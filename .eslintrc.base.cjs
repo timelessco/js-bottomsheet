@@ -2,8 +2,7 @@
 const config = {
   root: true,
   env: {
-    browser: true,
-    es2021: true,
+    es2022: true,
   },
   parser: "@babel/eslint-parser",
   parserOptions: {
@@ -35,7 +34,7 @@ const config = {
     "no-underscore-dangle": "off",
 
     // import rules
-    "import/no-extraneous-dependencies": ["off"],
+    "import/no-extraneous-dependencies": "off",
     "import/prefer-default-export": "off",
   },
 };

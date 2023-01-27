@@ -1,4 +1,8 @@
-import BottomSheet from "../src";
+import BottomSheet from "js-bottomsheet";
+
+// eslint-disable-next-line import/no-unresolved
+import "js-bottomsheet/bottomsheet.css";
+import "scroll-snap-slider";
 
 async function fetchAllShows() {
   const shows = await fetch(
