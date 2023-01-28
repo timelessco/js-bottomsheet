@@ -87,6 +87,5 @@
     "push": false,
     "emoji": "emoji",
     "editor": false
-  },
-  "lint-staged": {}
+  }
 }

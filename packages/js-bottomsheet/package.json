@@ -65,5 +65,16 @@
       "not dead"
     ]
   },
+  "lint-staged": {
+    "**/*.{js,cjs,jsx,ts,cts,tsx}": [
+      "pnpm lint"
+    ],
+    "**/*.{html,css,js,cjs,jsx,ts,cts,tsx,md,json}": [
+      "pnpm format"
+    ],
+    "**/*.css": [
+      "pnpm lintstyles"
+    ]
+  },
   "source": "./src/index.js"
 }
