@@ -62,6 +62,9 @@ jspm_packages
 # Storybook Build
 storybook-static
 
+# Turbo Repo
+.turbo
+
 
 ## library folder
 lib

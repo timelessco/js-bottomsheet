@@ -1,0 +1,69 @@
+# dotenv environment variable files
+.env*
+
+# Logs
+*.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Optional tool caches
+.eslintcache
+.stylelintcache
+
+# Dependency directories
+node_modules
+jspm_packages
+
+# Optional npm cache directory
+.npm
+
+# Yarn 2
+.pnp/
+.pnp.*
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.yarn-integrity # Yarn Integrity file
+
+# Typescript
+*.tsbuildinfo
+
+# Testing
+/coverage
+
+# Next JS
+/.next/
+/out/
+
+# Vercel folder
+.vercel
+
+# Local Netlify
+.netlify
+.idea
+
+# Sentry
+.sentryclirc
+
+# Storybook Build
+storybook-static
+
+
+## library folder
+lib
+dist
+
