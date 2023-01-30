@@ -17,8 +17,12 @@
     "lintstyles:fix": {
       "outputs": [".stylelintcache"]
     },
-    "format": {},
-    "format:fix": {},
+    "format": {
+      "outputs": ["node_modules/.cache/prettier/.prettier-cache"]
+    },
+    "format:fix": {
+      "outputs": ["node_modules/.cache/prettier/.prettier-cache"]
+    },
     "test": {},
     "build": {
       "dependsOn": ["^build"],
