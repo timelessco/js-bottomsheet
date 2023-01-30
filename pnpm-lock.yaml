@@ -11,7 +11,7 @@ importers:
       '@commitlint/cli': ^17.4.2
       '@commitlint/config-conventional': ^17.4.2
       '@ianvs/prettier-plugin-sort-imports': ^3.7.1
-      eslint: ^8.32.0
+      eslint: ^8.33.0
       eslint-config-airbnb-base: ^15.0.0
       eslint-config-prettier: ^8.6.0
       eslint-plugin-import: ^2.27.5
@@ -30,17 +30,17 @@ importers:
       turbo: ^1.7.0
     devDependencies:
       '@babel/core': 7.20.12
-      '@babel/eslint-parser': 7.19.1_2je5tsgpdnpnp4f5qs5fqust6m
+      '@babel/eslint-parser': 7.19.1_b3mcivpi6zqbotlvqqcfprcnry
       '@babel/preset-env': 7.20.2_@babel+core@7.20.12
       '@changesets/cli': 2.26.0
       '@commitlint/cli': 17.4.2
       '@commitlint/config-conventional': 17.4.2
       '@ianvs/prettier-plugin-sort-imports': 3.7.1_prettier@2.8.3
-      eslint: 8.32.0
-      eslint-config-airbnb-base: 15.0.0_ps7hf4l2dvbuxvtusmrfhmzsba
-      eslint-config-prettier: 8.6.0_eslint@8.32.0
-      eslint-plugin-import: 2.27.5_eslint@8.32.0
-      eslint-plugin-prettier: 4.2.1_cn4lalcyadplruoxa5mhp7j3dq
+      eslint: 8.33.0
+      eslint-config-airbnb-base: 15.0.0_ohdts44xlqyeyrlje4qnefqeay
+      eslint-config-prettier: 8.6.0_eslint@8.33.0
+      eslint-plugin-import: 2.27.5_eslint@8.33.0
+      eslint-plugin-prettier: 4.2.1_jqplj6qf3uqpxpu4gdyhwwasnq
       gacp: 3.0.3
       husky: 8.0.3
       lint-staged: 13.1.0
@@ -60,27 +60,25 @@ importers:
       js-bottomsheet: workspace:*
       scroll-snap-slider: SamrithaS/scroll-snap-slider
       vite: ^4.0.4
-      vite-plugin-top-level-await: ^1.2.2
+      vite-plugin-top-level-await: ^1.2.3
     dependencies:
       js-bottomsheet: link:../../packages/js-bottomsheet
       scroll-snap-slider: github.com/SamrithaS/scroll-snap-slider/8b5ba9db9b8d4920f6c131861035ff07fefdf91e
     devDependencies:
       browserslist-to-esbuild: 1.2.0
       vite: 4.0.4
-      vite-plugin-top-level-await: 1.2.2_vite@4.0.4
+      vite-plugin-top-level-await: 1.2.3_vite@4.0.4
 
   packages/js-bottomsheet:
     specifiers:
-      '@use-gesture/vanilla': ^10.2.23
+      '@use-gesture/vanilla': ^10.2.24
       animejs: ^3.2.1
       vite: ^4.0.4
-      vite-plugin-top-level-await: ^1.2.2
     dependencies:
-      '@use-gesture/vanilla': 10.2.23
+      '@use-gesture/vanilla': 10.2.24
       animejs: 3.2.1
     devDependencies:
       vite: 4.0.4
-      vite-plugin-top-level-await: 1.2.2_vite@4.0.4
 
 packages:
 
@@ -127,7 +125,7 @@ packages:
       - supports-color
     dev: true
 
-  /@babel/eslint-parser/7.19.1_2je5tsgpdnpnp4f5qs5fqust6m:
+  /@babel/eslint-parser/7.19.1_b3mcivpi6zqbotlvqqcfprcnry:
     resolution: {integrity: sha512-AqNf2QWt1rtu2/1rLswy6CDP7H9Oh3mMhk177Y67Rg8d7RD9WfOLLv8CGn6tisFvS2htm86yIe1yLF6I1UDaGQ==}
     engines: {node: ^10.13.0 || ^12.13.0 || >=14.0.0}
     peerDependencies:
@@ -136,7 +134,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
-      eslint: 8.32.0
+      eslint: 8.33.0
       eslint-visitor-keys: 2.1.0
       semver: 6.3.0
     dev: true
@@ -2208,14 +2206,14 @@ packages:
     resolution: {integrity: sha512-KQf+QAMWKMrtBMsB8/24w53tEsxllMj6TuA80TT/5igJalLI/zm0L3oXRbIAl4Ohfc85gyHX/jhMwsVkmhLU4A==}
     dev: true
 
-  /@use-gesture/core/10.2.23:
-    resolution: {integrity: sha512-Ynap/Uh6RX1Vgn3zNmFTyKapapdf7Av+GzAe6h+RsBZaxMF1z3cK6aohHPJP6T1hLrPyH/yehxa7RBqyESG9RA==}
+  /@use-gesture/core/10.2.24:
+    resolution: {integrity: sha512-ZL7F9mgOn3Qlnp6QLI9jaOfcvqrx6JPE/BkdVSd8imveaFTm/a3udoO6f5Us/1XtqnL4347PsIiK6AtCvMHk2Q==}
     dev: false
 
-  /@use-gesture/vanilla/10.2.23:
-    resolution: {integrity: sha512-mhuRwVgYcm28VJqZr7cGFOMOietVweyqJANbLUha40IaeSKXHjZ3rQR6TwwZDzoZI3RWW9i/pQv0wJutTBHL2w==}
+  /@use-gesture/vanilla/10.2.24:
+    resolution: {integrity: sha512-vJ0Upd2dhhiQj0Q/joBweJl+e38uf7hT+mCFkkPYtpk2yzaV8Rf9DSjzpPaEw3vgFvC60Kvfz/GlX2Tz2seDUQ==}
     dependencies:
-      '@use-gesture/core': 10.2.23
+      '@use-gesture/core': 10.2.24
     dev: false
 
   /@vivaxy/git/4.2.1:
@@ -3094,7 +3092,7 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /eslint-config-airbnb-base/15.0.0_ps7hf4l2dvbuxvtusmrfhmzsba:
+  /eslint-config-airbnb-base/15.0.0_ohdts44xlqyeyrlje4qnefqeay:
     resolution: {integrity: sha512-xaX3z4ZZIcFLvh2oUNvcX5oEofXda7giYmuplVxoOg5A7EXJMrUyqRgR+mhDhPK8LZ4PttFOBvCYDbX3sUoUig==}
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
@@ -3102,20 +3100,20 @@ packages:
       eslint-plugin-import: ^2.25.2
     dependencies:
       confusing-browser-globals: 1.0.11
-      eslint: 8.32.0
-      eslint-plugin-import: 2.27.5_eslint@8.32.0
+      eslint: 8.33.0
+      eslint-plugin-import: 2.27.5_eslint@8.33.0
       object.assign: 4.1.4
       object.entries: 1.1.6
       semver: 6.3.0
     dev: true
 
-  /eslint-config-prettier/8.6.0_eslint@8.32.0:
+  /eslint-config-prettier/8.6.0_eslint@8.33.0:
     resolution: {integrity: sha512-bAF0eLpLVqP5oEVUFKpMA+NnRFICwn9X8B5jrR9FcqnYBuPbqWEjTEspPWMj5ye6czoSLDweCzSo3Ko7gGrZaA==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
     dependencies:
-      eslint: 8.32.0
+      eslint: 8.33.0
     dev: true
 
   /eslint-import-resolver-node/0.3.7:
@@ -3128,7 +3126,7 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-module-utils/2.7.4_tdm2zecdp3gdwhfxnfmevnwugq:
+  /eslint-module-utils/2.7.4_b5qyyy7jj6vxczv7eweintx4wu:
     resolution: {integrity: sha512-j4GT+rqzCoRKHwURX7pddtIPGySnX9Si/cgMI5ztrcqOPtk5dDEeZ34CQVPphnqkJytlc97Vuk05Um2mJ3gEQA==}
     engines: {node: '>=4'}
     peerDependencies:
@@ -3150,13 +3148,13 @@ packages:
         optional: true
     dependencies:
       debug: 3.2.7
-      eslint: 8.32.0
+      eslint: 8.33.0
       eslint-import-resolver-node: 0.3.7
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /eslint-plugin-import/2.27.5_eslint@8.32.0:
+  /eslint-plugin-import/2.27.5_eslint@8.33.0:
     resolution: {integrity: sha512-LmEt3GVofgiGuiE+ORpnvP+kAm3h6MLZJ4Q5HCyHADofsb4VzXFsRiWj3c0OFiV+3DWFh0qg3v9gcPlfc3zRow==}
     engines: {node: '>=4'}
     peerDependencies:
@@ -3171,9 +3169,9 @@ packages:
       array.prototype.flatmap: 1.3.1
       debug: 3.2.7
       doctrine: 2.1.0
-      eslint: 8.32.0
+      eslint: 8.33.0
       eslint-import-resolver-node: 0.3.7
-      eslint-module-utils: 2.7.4_tdm2zecdp3gdwhfxnfmevnwugq
+      eslint-module-utils: 2.7.4_b5qyyy7jj6vxczv7eweintx4wu
       has: 1.0.3
       is-core-module: 2.11.0
       is-glob: 4.0.3
@@ -3188,7 +3186,7 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-prettier/4.2.1_cn4lalcyadplruoxa5mhp7j3dq:
+  /eslint-plugin-prettier/4.2.1_jqplj6qf3uqpxpu4gdyhwwasnq:
     resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -3199,8 +3197,8 @@ packages:
       eslint-config-prettier:
         optional: true
     dependencies:
-      eslint: 8.32.0
-      eslint-config-prettier: 8.6.0_eslint@8.32.0
+      eslint: 8.33.0
+      eslint-config-prettier: 8.6.0_eslint@8.33.0
       prettier: 2.8.3
       prettier-linter-helpers: 1.0.0
     dev: true
@@ -3221,13 +3219,13 @@ packages:
       estraverse: 5.3.0
     dev: true
 
-  /eslint-utils/3.0.0_eslint@8.32.0:
+  /eslint-utils/3.0.0_eslint@8.33.0:
     resolution: {integrity: sha512-uuQC43IGctw68pJA1RgbQS8/NP7rch6Cwd4j3ZBtgo4/8Flj4eGE7ZYSZRN3iq5pVUv6GPdW5Z1RFleo84uLDA==}
     engines: {node: ^10.0.0 || ^12.0.0 || >= 14.0.0}
     peerDependencies:
       eslint: '>=5'
     dependencies:
-      eslint: 8.32.0
+      eslint: 8.33.0
       eslint-visitor-keys: 2.1.0
     dev: true
 
@@ -3241,8 +3239,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /eslint/8.32.0:
-    resolution: {integrity: sha512-nETVXpnthqKPFyuY2FNjz/bEd6nbosRgKbkgS/y1C7LJop96gYHWpiguLecMHQ2XCPxn77DS0P+68WzG6vkZSQ==}
+  /eslint/8.33.0:
+    resolution: {integrity: sha512-WjOpFQgKK8VrCnAtl8We0SUOy/oVZ5NHykyMiagV1M9r8IFpIJX7DduK6n1mpfhlG7T1NLWm2SuD8QB7KFySaA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     hasBin: true
     dependencies:
@@ -3257,7 +3255,7 @@ packages:
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.1.1
-      eslint-utils: 3.0.0_eslint@8.32.0
+      eslint-utils: 3.0.0_eslint@8.33.0
       eslint-visitor-keys: 3.3.0
       espree: 9.4.1
       esquery: 1.4.0
@@ -6008,6 +6006,11 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
 
+  /uuid/9.0.0:
+    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+    hasBin: true
+    dev: true
+
   /v8-compile-cache-lib/3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
     dev: true
@@ -6023,12 +6026,13 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite-plugin-top-level-await/1.2.2_vite@4.0.4:
-    resolution: {integrity: sha512-JBuY9X5KCxZyzwQUOIBpgX0Jbe2BECxwElWPeyrdRC5xaWzDibTG65QBW25COmwqHBeVlV04u8GTlJkuOWhfgw==}
+  /vite-plugin-top-level-await/1.2.3_vite@4.0.4:
+    resolution: {integrity: sha512-Hc4W7R+Hw4413lzv+kuVdXLrgNU+Pb07853Q15n/4JytEtyLykpN2rmtlG7J5uWij2btDXEEiv+DcrCiRZo/zA==}
     peerDependencies:
       vite: '>=2.8'
     dependencies:
       '@swc/core': 1.3.24
+      uuid: 9.0.0
       vite: 4.0.4
     dev: true
 

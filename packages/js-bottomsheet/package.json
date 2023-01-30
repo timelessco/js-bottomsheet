@@ -42,12 +42,11 @@
     "test": "echo \"no test specified\" && exit 0"
   },
   "dependencies": {
-    "@use-gesture/vanilla": "^10.2.23",
+    "@use-gesture/vanilla": "^10.2.24",
     "animejs": "^3.2.1"
   },
   "devDependencies": {
-    "vite": "^4.0.4",
-    "vite-plugin-top-level-await": "^1.2.2"
+    "vite": "^4.0.4"
   },
   "publishConfig": {
     "access": "public"
