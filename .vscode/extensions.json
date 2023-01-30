@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "folke.vscode-monorepo-workspace",
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "stylelint.vscode-stylelint",
