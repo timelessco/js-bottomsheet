@@ -262,6 +262,7 @@ function BottomSheet(props) {
     } else {
       closeSideSheet();
     }
+    // document.body.style.overscrollBehavior = "auto";
     lastSetSnapPoint = convertToPx(120);
     setTimeout(() => {
       if (lastSetSnapPoint >= window.innerHeight) {
@@ -1013,7 +1014,8 @@ function BottomSheet(props) {
   //   observer.observe(targetBottomSheet, config);
   // }
   function init() {
-    document.body.style.overflowY = "contain";
+    document.body.style.overscrollBehavior = "contain";
+
     if (onInit) {
       onInit();
     }

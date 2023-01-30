@@ -63,7 +63,8 @@
     ".paths": "shellscript",
     "*.php": "php",
     "*.blade.php": "blade",
-    "*.snippet": "plaintext"
+    "*.snippet": "plaintext",
+    ".env.*": "dotenv"
   },
   "files.exclude": {
     "USE_GITIGNORE": true
@@ -173,5 +174,10 @@
     "cfml",
     "HTML (Eex)",
     "mdx"
-  ]
+  ],
+
+  // Error Translator for TypeScript
+  "totalTypeScript.hideAllTips": true,
+  "totalTypeScript.hideBasicTips": true,
+  "totalTypeScript.showFullTranslation": true
 }

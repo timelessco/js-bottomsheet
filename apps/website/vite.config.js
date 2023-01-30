@@ -6,17 +6,13 @@ import topLevelAwait from "vite-plugin-top-level-await";
 
 export default defineConfig(() => {
   return {
-    root: resolve(__dirname, "website"),
+    root: resolve(__dirname, "src"),
     build: {
       target: browserslistToEsbuild(),
-      outDir: resolve(__dirname, "dist"),
-      emptyOutDir: true,
       rollupOptions: {
         input: {
-          main: resolve(__dirname, "website/index.html"),
-          maps: resolve(__dirname, "website/shows.html"),
-          umd: resolve(__dirname, "website/umd.html"),
-          es: resolve(__dirname, "website/es.html"),
+          main: resolve(__dirname, "src/index.html"),
+          shows: resolve(__dirname, "src/shows.html"),
         },
       },
     },

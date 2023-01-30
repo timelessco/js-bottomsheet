@@ -1,4 +1,7 @@
-import BottomSheet from "../src";
+import BottomSheet from "js-bottomsheet";
+
+// eslint-disable-next-line import/no-unresolved
+import "js-bottomsheet/bottomsheet.css";
 
 BottomSheet({
   snapPoints: ["10%", "40%", "100%"],

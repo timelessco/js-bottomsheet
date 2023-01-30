@@ -26,7 +26,6 @@ export default defineConfig(mode => {
     base: "./",
     build: {
       cssCodeSplit: true,
-      outDir: path.resolve(__dirname, "lib"),
       lib: {
         entry: path.resolve(__dirname, "src/index.js"),
         name: getPackageNameCamelCase(),

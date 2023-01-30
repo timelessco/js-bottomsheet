@@ -89,7 +89,7 @@ jobs:
         run: pnpm build:lib
 
       - name: Lint
-        run: pnpm check
+        run: pnpm lint
 
   build:
     name: Build
