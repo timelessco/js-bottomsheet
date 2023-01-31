@@ -150,7 +150,6 @@ function BottomSheet(props) {
           checkType(snapPoints[0]),
         )}px)`;
       } else {
-        console.log("should be here");
         document.body.style.overflow = "hidden";
         anime({
           targets: targetBottomSheet,
@@ -166,7 +165,7 @@ function BottomSheet(props) {
             opacity: 1,
             duration: 1,
           });
-        }, 200);
+        }, 300);
       }
     }
     lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
@@ -213,8 +212,6 @@ function BottomSheet(props) {
     dismissable = true,
     bottomsheetArray = JSON.parse(localStorage.getItem("array")),
   ) {
-    console.log("in", targetBottomSheet);
-
     if (displayOverlay && overlay) {
       hideOverlay(overlay);
     }
@@ -228,7 +225,7 @@ function BottomSheet(props) {
             ? differenceOfWindowHt(checkType(snapPoints[0]))
             : convertToPx(120)
         }px`,
-        easing: springConfig,
+        easing: `spring(1,250,20,8)`,
         duration: 1,
       });
       let bottomInd;
@@ -255,7 +252,6 @@ function BottomSheet(props) {
       //   });
       // }
     } else if (webLayout === "modal") {
-      console.log("in", targetBottomSheet);
       closeModal(targetBottomSheet, overlay);
     } else if (webLayout === "sideSheetLeft") {
       closeSideSheet();
@@ -410,7 +406,6 @@ function BottomSheet(props) {
         minSnapPoint = convertToPx(elem);
       }
     });
-
     if (vy > velocityThreshold || dy > distanceThreshold) {
       let value;
       if (!dismissible) {
@@ -447,8 +442,7 @@ function BottomSheet(props) {
     offset,
     dy,
   ) {
-    let actualOffset = offset[1];
-
+    const actualOffset = offset[1];
     if (maxSnapPoint === null) {
       let value;
       if (actualOffset > window.innerHeight) {
@@ -461,11 +455,10 @@ function BottomSheet(props) {
       if (active) {
         moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
       }
-
       if (!active) {
         if (
           translateToPreviousSnapPoint(
-            value,
+            offset[1],
             newBottomSheet,
             vy,
             lastSnapPoint,
@@ -474,8 +467,8 @@ function BottomSheet(props) {
             overlay,
           ) !== undefined
         ) {
-          actualOffset = translateToPreviousSnapPoint(
-            value,
+          value = translateToPreviousSnapPoint(
+            offset[1],
             newBottomSheet,
             vy,
             lastSnapPoint,
@@ -500,7 +493,7 @@ function BottomSheet(props) {
       if (!active) {
         if (
           translateToNextSnapPoint(
-            value,
+            offset[1],
             newBottomSheet,
             vy,
             lastSnapPoint,
@@ -509,8 +502,8 @@ function BottomSheet(props) {
             overlay,
           ) !== undefined
         ) {
-          actualOffset = translateToNextSnapPoint(
-            value,
+          value = translateToNextSnapPoint(
+            offset[1],
             newBottomSheet,
             vy,
             lastSnapPoint,
@@ -1098,7 +1091,7 @@ function BottomSheet(props) {
           }),
         );
       }
-    }, 400);
+    }, 350);
   }
 
   function destroy() {

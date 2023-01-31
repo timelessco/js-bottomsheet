@@ -34,8 +34,11 @@ async function getBottomsheet1content(key) {
        <div class="img-wrapper">
        <img src=${shows.banner.src}>
        <div class="gradient"></div>
+       <button class="watch-now md"> watch now</button>
        </div>
        <div class="container">
+       <div class="details">
+       <div class="flex-order">
        <h1 class="name">${shows.name}</h1>
        <span class="genre">Drama · Comedy · 2021</span>
        <p class="description">${shows.description}</p>
@@ -43,11 +46,21 @@ async function getBottomsheet1content(key) {
       <p class="cast-names">${shows.cast_and_crew
         .map(i => `</span>${i.name} </span>`)
         .join("")}</p>
+        <div class="awards-div">
         <img src="assets/outstanding.svg" width="35px" height="35px"/>
+        <div>
         <p class="outstanding">“Outstanding Directing in a Comedy Series of This Year”</p>
         <p class="glad">GLAAD Media Awards</p>
+        </div>
+        </div>
+        </div>
+        <div class="poster-img">
+        <img src="https://image.tmdb.org/t/p/original/q32wjcRi7Ix4DAqFA8kR7KGneyo.jpg"/>
+        </div>
+        </div>
+       
        <div>
-       <div class="flex-start">
+       <div class="flex-start-n">
        <h2>Season 1</h2> <img src="assets/arrow-down.svg" class="arrow" />
        </div>
        ${shows.videos
@@ -55,14 +68,17 @@ async function getBottomsheet1content(key) {
            return `<div class="container-box">
            <img src ='assets/white.png' class="white-play"/>
          <img src = ${item.poster} class="seasons"/>
-         <h4><span class="number">${index + 1}</span> ${item.name}</h4>
-         </div>`;
+         <div class="seasons-text"><h4><span class="number">${
+           index + 1
+         }</span> ${item.name}</h4>
+         <p>Just as Camille thinks she's in total control of her life, her ex shows up on her block making her question her choices.</p>
+         </div></div>`;
          })
          .join("")}
        </div>
+       </div>
        <button class="watch-now"> watch now</button>
 
-       </div>
     </div>
 `;
   return content;
