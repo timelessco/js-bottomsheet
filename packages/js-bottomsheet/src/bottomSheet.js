@@ -57,7 +57,6 @@ function BottomSheet(props) {
   document.addEventListener("resize", () => {
     innerHt = window.innerHeight;
   });
-  console.log(innerHt, "thiss");
   content =
     typeof content !== "string"
       ? Promise.resolve(content).then(value => value)
@@ -459,7 +458,6 @@ function BottomSheet(props) {
     offset,
     dy,
   ) {
-    console.log("snap");
     let actualOffset = offset[1];
     if (maxSnapPoint === null) {
       let value;
@@ -876,7 +874,6 @@ function BottomSheet(props) {
     } else {
       open(bottomsheetArray, openOnLoad);
     }
-    console.log(lastSetSnapPoint, convertToPx(lastSnapPoint), "tghem");
     if (
       scrollableSheet &&
       lastSetSnapPoint === innerHt - convertToPx(lastSnapPoint)
@@ -885,7 +882,8 @@ function BottomSheet(props) {
       targetBottomSheet.style.overflow = "scroll";
       targetBottomSheet.style.touchAction = "auto";
     }
-    targetBottomSheet.style.height = `${convertToPx(lastSnapPoint)}px`;
+    if (scrollableSheet)
+      targetBottomSheet.style.height = `${convertToPx(lastSnapPoint)}px`;
     setTimeout(() => {
       handleDragGesture(
         targetBottomSheet,

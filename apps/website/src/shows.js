@@ -4,8 +4,6 @@ import BottomSheet from "js-bottomsheet";
 import "js-bottomsheet/bottomsheet.css";
 import "scroll-snap-slider";
 
-console.log(document.querySelector(".banner-im").naturalHeight, "height");
-
 async function fetchAllShows() {
   const shows = await fetch(
     "https://strapi.tmls.dev/api/genres?sort[0]=id&fields[0]=name&populate[shows][sort][0]=id&populate[shows][fields][0]=key&populate[shows][fields][1]=name&populate[shows]&populate[shows][populate][poster][fields][0]=hash&populate[shows][populate][poster][fields][1]=src&populate[shows][populate][banner][fields][0]=hash&populate[shows][populate][banner][fields][1]=src",
@@ -133,10 +131,10 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
 
   const showsBottomsheet = BottomSheet({
     trigger: `target-${index}`,
-    snapPoints: ["100%"],
+    snapPoints: ["70%"],
     minWidthForModal: 600,
     webLayout: "modal",
-    scrollableSheet: true,
+    scrollableSheet: false,
     modalTranslate: [-50, 0],
     content: content
       ? `<div id="bottomsheet-${index}" data-bottomsheet> ${content} </div>`
