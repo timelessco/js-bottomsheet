@@ -463,7 +463,7 @@ input {
 
 .scroll-snap-slide {
   cursor: pointer;
-  
+
   position: relative;
 
   width: 144.52px;
@@ -788,6 +788,7 @@ input {
 
 .img-wrapper {
   position: relative;
+  min-height: 225px;
 }
 
 .gradient {
