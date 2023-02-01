@@ -183,15 +183,22 @@ function BottomSheet(props) {
   function closeModal() {
     anime({
       targets: targetBottomSheet,
-      opacity: 0,
       easing: springConfig,
       duration: 0.1,
-      translateY: "0%",
+      translateY: `${modalTranslate[1] + 10}%`,
     });
 
     setTimeout(() => {
+      anime({
+        targets: targetBottomSheet,
+        easing: springConfig,
+        duration: 0,
+        opacity: 0,
+      });
+    }, 30);
+    setTimeout(() => {
       cleanUp();
-    }, 500);
+    }, 400);
     hideOverlay(overlay);
   }
 

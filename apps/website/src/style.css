@@ -462,6 +462,8 @@ input {
 }
 
 .scroll-snap-slide {
+  cursor: pointer;
+  
   position: relative;
 
   width: 144.52px;
@@ -1151,6 +1153,10 @@ iframe {
 
   .img-wrapper img{
     min-height: 535px;
+  }
+
+  .img-wrapper{
+    min-height: 520px;
   }
 
   .banner-img img.banner-im {
