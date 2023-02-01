@@ -4,6 +4,8 @@ import BottomSheet from "js-bottomsheet";
 import "js-bottomsheet/bottomsheet.css";
 import "scroll-snap-slider";
 
+console.log(document.querySelector(".banner-im").naturalHeight, "height");
+
 async function fetchAllShows() {
   const shows = await fetch(
     "https://strapi.tmls.dev/api/genres?sort[0]=id&fields[0]=name&populate[shows][sort][0]=id&populate[shows][fields][0]=key&populate[shows][fields][1]=name&populate[shows]&populate[shows][populate][poster][fields][0]=hash&populate[shows][populate][poster][fields][1]=src&populate[shows][populate][banner][fields][0]=hash&populate[shows][populate][banner][fields][1]=src",
@@ -33,6 +35,22 @@ async function getBottomsheet1content(key) {
        <div class="list-items">
        <div class="img-wrapper">
        <img src=${shows.banner.src}>
+       <svg class="close-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_b_5593_50546)">
+<circle cx="16" cy="16" r="16" fill="black" fill-opacity="0.58"/>
+</g>
+<path d="M20.8001 11.2001L11.2001 20.8001" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.2001 11.2001L20.8001 20.8001" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<filter id="filter0_b_5593_50546" x="-19" y="-19" width="70" height="70" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImageFix" stdDeviation="9.5"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_5593_50546"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_5593_50546" result="shape"/>
+</filter>
+</defs>
+</svg>
+
        <div class="gradient"></div>
        <button class="watch-now md"> watch now</button>
        </div>
@@ -83,6 +101,7 @@ async function getBottomsheet1content(key) {
 `;
   return content;
 }
+
 const showsContent = await fetchAllShows();
 const showsHTML = `${showsContent
   .map((i, index) => {
@@ -91,7 +110,9 @@ const showsHTML = `${showsContent
     </li>`;
   })
   .join("")}`;
-document.querySelector(".scroll-snap-slider").innerHTML = showsHTML;
+document.querySelectorAll(".scroll-snap-slider").forEach(i => {
+  i.innerHTML = showsHTML;
+});
 if (window.innerWidth < 700) {
   document.querySelector(".banner-im").src = showsContent[0].poster.src;
 } else {
@@ -110,15 +131,24 @@ document.querySelector(".linear-grad").style.display = "block";
 document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
   const content = await getBottomsheet1content(i.getAttribute("key"));
 
-  BottomSheet({
+  const showsBottomsheet = BottomSheet({
     trigger: `target-${index}`,
     snapPoints: ["100%"],
     minWidthForModal: 600,
     webLayout: "modal",
+    scrollableSheet: true,
+    modalTranslate: [-50, 0],
     content: content
       ? `<div id="bottomsheet-${index}" data-bottomsheet> ${content} </div>`
       : `<div id="bottomsheet-${index}" data-bottomsheet><img src="assets/banner-blur.png"> </div>`,
     displayOverlay: true,
+    onOpen: () => {
+      document.querySelectorAll(".close-icon").forEach(icon =>
+        icon.addEventListener("click", () => {
+          showsBottomsheet.close();
+        }),
+      );
+    },
     modalCloseIcon: `<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_b_28_1042)">
     <circle cx="20" cy="20" r="20" fill="black" fill-opacity="0.58"/>
@@ -137,4 +167,20 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
 
   `,
   });
+});
+if (window.innerWidth < 700) {
+  document.querySelector(".banner-im").src =
+    "https://image.tmdb.org/t/p/original/q32wjcRi7Ix4DAqFA8kR7KGneyo.jpg";
+} else {
+  document.querySelector(".banner-im").src =
+    "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg";
+}
+window.addEventListener("resize", () => {
+  if (window.innerWidth < 700) {
+    document.querySelector(".banner-im").src =
+      "https://image.tmdb.org/t/p/original/q32wjcRi7Ix4DAqFA8kR7KGneyo.jpg";
+  } else {
+    document.querySelector(".banner-im").src =
+      "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg";
+  }
 });

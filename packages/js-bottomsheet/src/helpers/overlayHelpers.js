@@ -23,7 +23,7 @@ export function addOverlay(overlay) {
   anime({
     targets: overlay,
     opacity: 1,
-    easing: "spring(1, 85, 35, 3)",
+    easing: "spring(1, 85, 35, 12)",
     duration: 0,
   });
 }

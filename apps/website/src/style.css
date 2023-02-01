@@ -32,6 +32,19 @@ a:hover {
   color: #535bf2;
 }
 
+.close-icon{
+  position: fixed;
+  z-index: 50;
+  top:8px;
+  right:8px;
+}
+
+.bottomsheet{
+z-index: 150 !important;
+font-family: "Inter V", sans-serif;
+  border-radius: 14px 14px 0 0;
+}
+
 p {
   margin: 0;
   padding-top: 0;
@@ -87,7 +100,7 @@ h2 {
 
 .white-play {
   position: absolute;
-  top: 35%;
+  top:28%;
   left: 43%;
 
   width: 66px !important;
@@ -171,6 +184,12 @@ h2 {
   padding: 2em;
 }
 
+.scroll-snap-slide img{
+  min-height: 216px;
+  border-radius: 6px;
+
+}
+
 button {
   /* background-color: #1a1a1a; */
   cursor: pointer;
@@ -186,9 +205,6 @@ button {
   transition: border-color 0.25s;
 }
 
-.scroll-snap-slide img {
-  border-radius: 6px;
-}
 
 .universal img {
   top: 0;
@@ -252,23 +268,17 @@ button {
 .banner-img img.banner-im {
   width: 100%;
   height: auto;
+  min-height: 480px;
+
   background: linear-gradient(
     180deg,
     rgb(0 0 0 / 0%) 73.15%,
     rgb(0 0 0 / 44%) 99%
   );
+  -webkit-filter: blur(17.5px);
+  filter: blur(17.5px);
   border-radius: 12px;
-
-  /* -webkit-filter: blur(17.5px); */
 }
-
-/* .banner-img img { */
-
-/* height: 100%; */
-
-/* height: 430px; */
-
-/* } */
 
 .glad {
   margin-bottom: 45px;
@@ -345,6 +355,7 @@ img.play-svg {
   width: 100%;
 }
 
+
 #maps-1 img {
   width: unset;
 }
@@ -352,6 +363,7 @@ img.play-svg {
 button:hover {
   border-color: #646cff;
 }
+
 
 
 
@@ -449,19 +461,10 @@ input {
   margin-bottom: 20px;
 }
 
-#bottomsheet-2 {
-  background-color: black;
-}
-
-#bottomsheet-3 {
-  background-color: black;
-}
-
 .scroll-snap-slide {
   position: relative;
 
   width: 144.52px;
-  max-height: 320px;
   margin-right: 20px;
 
   -webkit-filter: drop-shadow(0 "0.785455px" "3.92727px" rgb(0 0 0 / 15%));
@@ -470,45 +473,12 @@ input {
 }
 
 .scroll-snap-slider {
+  min-height: 200px;
   margin-top: 8px;
   padding-bottom: 32px;
 }
 
-[data-bottomsheet] {
-  touch-action: none;
-  will-change: transform;
 
-  position: fixed;
-  top: 0;
-  left: 0;
-  transform: unset;
-
-  overflow: scroll;
-  display: none;
-
-  width: 100%;
-  height: 100%;
-  min-height: -webkit-fill-available;
-
-  color: white;
-
-  opacity: 0;
-  background-color: black;
-  box-shadow: 0 1px 37px 0 rgb(0 0 0 / 14%);
-}
-
-#bottomsheet-3 .scroll-snap-slide {
-  width: 60%;
-}
-
-#bottomsheet-3 .scroll-snap-slide img {
-  height: 100%;
-}
-
-#bottomsheet-3 h4 {
-  text-align: center;
-  text-transform: uppercase;
-}
 
 .blur {
   position: absolute;
@@ -968,7 +938,6 @@ input {
   background-size: contain;
   -webkit-filter: blur(20px);
   filter: blur(20px);
-  border-radius: 12px;
 }
 
 .li-overlay {
@@ -1034,11 +1003,6 @@ input {
   top: 80% !important;
 }
 
-.bottomsheet {
-  font-family: "Inter V", sans-serif;
-  border-radius: 14px 14px 0 0;
-}
-
 .overlay {
   position: absolute;
   z-index: 100;
@@ -1063,7 +1027,8 @@ input {
 
   top: 82px !important;
   left: 50%;
-  transform: translate(-50%, 0) !important;
+
+  /* transform: translate(-50%, 0) !important; */
 
   /* position: absolute; */
   overflow: scroll;
@@ -1081,11 +1046,12 @@ input {
 
 .nav {
   position: sticky;
-  z-index: 100;
+  z-index: 102;
   top: 0;
 
+/* 
   -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px); */
 }
 
 .overlay.display {
@@ -1173,17 +1139,30 @@ iframe {
   outline: none;
 }
 
+.seasons-text p{
+  display: none;
+}
+
 @media screen and (min-width: 700px) {
   .flex-input {
     margin-bottom: 16px;
     padding-top: 12px;
   }
 
-  .seasons-text {
-    margin-left: 24px;
+  .img-wrapper img{
+    min-height: 535px;
   }
 
-  .seasons p {
+  .banner-img img.banner-im {
+    min-height: 670px;
+      border-radius: 0;
+  }
+
+  .close-icon{
+    display: none;
+  }
+
+  .seasons-text p{
     display: block;
 
     padding-top:8px;
@@ -1194,7 +1173,10 @@ iframe {
     line-height: 22px;
     color: #c2c2c2;
     letter-spacing: 0.025em;
+  }
 
+  .seasons-text {
+    margin-left: 24px;
   }
 
   .watch-now.md {
@@ -1225,6 +1207,7 @@ iframe {
   }
 
   .nav .container-shows {
+    max-width: 1216px;
     padding: 0;
   }
 
@@ -1435,9 +1418,7 @@ iframe {
     margin: 0 0 35px;
   }
 
-  .banner-img img.banner-im {
-    border-radius: 0;
-  }
+
 
   .banner-im {
     height: auto;

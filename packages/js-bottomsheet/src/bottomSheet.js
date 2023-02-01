@@ -37,6 +37,7 @@ function BottomSheet(props) {
     defaultSideSheetClose = true,
     cleanUpOnClose = false,
     dismissible = true,
+    rubberband = true,
     // sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
     velocityThreshold = 0.9,
     distanceThreshold = 150,
@@ -46,14 +47,17 @@ function BottomSheet(props) {
     scrollableSheet = true,
     // resizableSheet = true,
     resizablePosition = "left",
+    modalTranslate = [50, 50],
   } = props;
 
   let { content = "", draggableArea = `` } = props;
   let lastSetSnapPoint;
-  // const bottomSheets = document.querySelectorAll(`[data-bottomsheet]`);
-  // window.onload = () => {
-  //   localStorage.removeItem("array");
-  // };
+  let innerHt = window.innerHeight;
+
+  document.addEventListener("resize", () => {
+    innerHt = window.innerHeight;
+  });
+  console.log(innerHt, "thiss");
   content =
     typeof content !== "string"
       ? Promise.resolve(content).then(value => value)
@@ -83,7 +87,8 @@ function BottomSheet(props) {
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
   overlay.id = `${targetBottomSheet?.id}-overlay`;
-  const springConfig = `spring(1,250,20,13)`;
+  const springConfig = `spring(1,200,20,13)`;
+  // const  = `easeInOutSine`;
   // const scaleValue = 0.93;
 
   function open(bottomsheetArray, openOnLoading, withoutAnimation = false) {
@@ -125,13 +130,14 @@ function BottomSheet(props) {
       } else {
         targetBottomSheet.style.top = "50%";
         // targetBottomSheet.style.opacity = 0;
-        targetBottomSheet.style.transform =
-          "translateX(-50%) translateY(-40%) rotateX(-20deg)";
+        targetBottomSheet.style.transform = `translateX(${
+          modalTranslate[0]
+        }%) translateY(${modalTranslate[1] + 10}%) rotateX(-20deg)`;
         anime({
-          translateY: "-50%",
+          translateY: modalTranslate[1],
           targets: targetBottomSheet,
           opacity: 1,
-          rotateX: "1deg",
+          // rotateX: "1deg",
           easing: springConfig,
           duration: 0.1,
         });
@@ -181,7 +187,7 @@ function BottomSheet(props) {
       opacity: 0,
       easing: springConfig,
       duration: 0.1,
-      translateY: "-40%",
+      translateY: "0%",
     });
 
     setTimeout(() => {
@@ -225,7 +231,7 @@ function BottomSheet(props) {
             ? differenceOfWindowHt(checkType(snapPoints[0]))
             : convertToPx(120)
         }px`,
-        easing: `spring(1,250,20,8)`,
+        easing: `spring(1, 250, 20, 8)`,
         duration: 1,
       });
       let bottomInd;
@@ -261,7 +267,7 @@ function BottomSheet(props) {
     // document.body.style.overscrollBehavior = "auto";
     lastSetSnapPoint = convertToPx(120);
     setTimeout(() => {
-      if (lastSetSnapPoint >= window.innerHeight) {
+      if (lastSetSnapPoint >= innerHt) {
         if (cleanUpOnClose) {
           cleanUp(targetBottomSheet, overlay);
         }
@@ -406,6 +412,7 @@ function BottomSheet(props) {
         minSnapPoint = convertToPx(elem);
       }
     });
+
     if (vy > velocityThreshold || dy > distanceThreshold) {
       let value;
       if (!dismissible) {
@@ -417,7 +424,17 @@ function BottomSheet(props) {
       } else {
         value = differenceOfWindowHt(minSnapPoint);
       }
-      moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
+      if (value >= innerHt) {
+        if (displayOverlay && overlay) {
+          hideOverlay(overlay);
+        }
+        value = innerHt + 300;
+      }
+      moveBottomSheet(
+        newBottomSheet,
+        `${value}px`,
+        value >= innerHt ? `spring(1,250,20,2)` : springConfig,
+      );
       lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
       return lastSetSnapPoint;
     }
@@ -442,23 +459,33 @@ function BottomSheet(props) {
     offset,
     dy,
   ) {
-    const actualOffset = offset[1];
+    console.log("snap");
+    let actualOffset = offset[1];
     if (maxSnapPoint === null) {
       let value;
-      if (actualOffset > window.innerHeight) {
-        value = window.innerHeight;
-      } else if (actualOffset < convertToPx(100 - lastSnapPoint)) {
+      if (actualOffset > innerHt) {
+        value = innerHt;
+      } else if (
+        actualOffset < convertToPx(100 - lastSnapPoint) &&
+        scrollableSheet
+      ) {
         value = convertToPx(100 - lastSnapPoint);
       } else {
         value = actualOffset;
       }
       if (active) {
-        moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
+        // moveBottomSheet(newBottomSheet, `${value}px`, );
+        anime({
+          targets: newBottomSheet,
+          translateY: `${value}px`,
+          easing: springConfig,
+          // duration: 0,
+        });
       }
       if (!active) {
         if (
           translateToPreviousSnapPoint(
-            offset[1],
+            value,
             newBottomSheet,
             vy,
             lastSnapPoint,
@@ -467,8 +494,8 @@ function BottomSheet(props) {
             overlay,
           ) !== undefined
         ) {
-          value = translateToPreviousSnapPoint(
-            offset[1],
+          actualOffset = translateToPreviousSnapPoint(
+            value,
             newBottomSheet,
             vy,
             lastSnapPoint,
@@ -480,20 +507,28 @@ function BottomSheet(props) {
       }
     } else {
       let value;
-      if (actualOffset > window.innerHeight) {
-        value = window.innerHeight;
-      } else if (actualOffset < convertToPx(100 - lastSnapPoint)) {
+      if (actualOffset > innerHt) {
+        value = innerHt;
+      } else if (
+        actualOffset < convertToPx(100 - lastSnapPoint) &&
+        scrollableSheet
+      ) {
         value = convertToPx(100 - lastSnapPoint);
       } else {
         value = actualOffset;
       }
       if (active) {
-        moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
+        anime({
+          targets: newBottomSheet,
+          translateY: `${value}px`,
+          easing: springConfig,
+          // duration: 0,
+        });
       }
       if (!active) {
         if (
           translateToNextSnapPoint(
-            offset[1],
+            value,
             newBottomSheet,
             vy,
             lastSnapPoint,
@@ -502,8 +537,8 @@ function BottomSheet(props) {
             overlay,
           ) !== undefined
         ) {
-          value = translateToNextSnapPoint(
-            offset[1],
+          actualOffset = translateToNextSnapPoint(
+            value,
             newBottomSheet,
             vy,
             lastSnapPoint,
@@ -539,16 +574,18 @@ function BottomSheet(props) {
             const minSnapPoint = 0;
             const maxSnapPoint = Infinity;
             currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
-
-            if (direction[1] > 0) {
+            if (direction[1] >= 0) {
               if (
                 draggableId &&
                 target === document.querySelector(`#${draggableId}`)
               ) {
                 targetBottomSheet.style.overflow = "hidden";
                 targetBottomSheet.style.touchAction = "none";
+                // if (lastSetSnapPoint >= innerHt)
+                //   close(dismissible, bottomsheetArray);
+                // else
                 handleSnapPoints(
-                  newBottomSheet,
+                  targetBottomSheet,
                   minSnapPoint,
                   null,
                   active,
@@ -556,26 +593,21 @@ function BottomSheet(props) {
                   vy,
                   offset,
                   dy,
-                  overlay,
-                  isWeb,
                 );
-                if (lastSetSnapPoint >= window.innerHeight)
-                  close(dismissible, bottomsheetArray);
 
-                if (lastSetSnapPoint >= window.innerHeight) {
+                if (lastSetSnapPoint >= innerHt) {
                   hideOverlay(overlay);
                 }
               } else if (
                 targetBottomSheet.scrollTop >= 1 &&
                 currentSnapPoint <= convertToPx(100 - lastSnapPoint) &&
                 (!draggableId ||
-                  target !== document.querySelector(`#${draggableId}`))
+                  target !== document.querySelector(`#${draggableId}`)) &&
+                scrollableSheet
               ) {
-                if (scrollableSheet) {
-                  targetBottomSheet.style.overflow = "scroll";
-                  targetBottomSheet.style.touchAction = "auto";
-                  targetBottomSheet.click();
-                }
+                targetBottomSheet.style.overflow = "scroll";
+                targetBottomSheet.style.touchAction = "auto";
+                targetBottomSheet.click();
               } else {
                 targetBottomSheet.style.overflow = "hidden";
                 targetBottomSheet.style.touchAction = "none";
@@ -588,26 +620,21 @@ function BottomSheet(props) {
                   vy,
                   offset,
                   dy,
-                  overlay,
-                  isWeb,
                 );
-                if (lastSetSnapPoint >= window.innerHeight)
-                  close(dismissible, bottomsheetArray);
               }
             } else if (
               getCurrentSnapPoint(targetBottomSheet) <=
-              convertToPx(100 - lastSnapPoint)
+                convertToPx(100 - lastSnapPoint) &&
+              scrollableSheet
             ) {
-              if (scrollableSheet) {
-                targetBottomSheet.click();
-                targetBottomSheet.style.overflow = "scroll";
-                if (convertToPx(100 - lastSnapPoint) > 0)
-                  targetBottomSheet.style.minHeight = "unset";
-                targetBottomSheet.style.height = `${convertToPx(
-                  lastSnapPoint,
-                )}px`;
-                targetBottomSheet.style.touchAction = "auto";
-              }
+              targetBottomSheet.click();
+              targetBottomSheet.style.overflow = "scroll";
+              if (convertToPx(100 - lastSnapPoint) > 0)
+                targetBottomSheet.style.minHeight = "unset";
+              targetBottomSheet.style.height = `${convertToPx(
+                lastSnapPoint,
+              )}px`;
+              targetBottomSheet.style.touchAction = "auto";
             } else {
               targetBottomSheet.style.overflow = "hidden";
               targetBottomSheet.style.touchAction = "none";
@@ -620,11 +647,7 @@ function BottomSheet(props) {
                 vy,
                 offset,
                 dy,
-                overlay,
-                isWeb,
               );
-              if (lastSetSnapPoint >= window.innerHeight)
-                close(dismissible, bottomsheetArray);
             }
           },
           onDragStart: ({ direction }) => {
@@ -637,13 +660,12 @@ function BottomSheet(props) {
               (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
                 lastSetSnapPoint === 0) &&
               direction[1] < 0 &&
-              targetBottomSheet.scrollTop >= 0
+              targetBottomSheet.scrollTop >= 0 &&
+              scrollableSheet
             ) {
-              if (scrollableSheet) {
-                targetBottomSheet.style.overflow = "scroll";
-                targetBottomSheet.click();
-                targetBottomSheet.style.touchAction = "auto";
-              }
+              targetBottomSheet.style.overflow = "scroll";
+              targetBottomSheet.click();
+              targetBottomSheet.style.touchAction = "auto";
             }
             if (
               (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
@@ -659,7 +681,12 @@ function BottomSheet(props) {
         {
           drag: {
             filterTaps: false,
-            rubberband: true,
+            bounds: {
+              top: !scrollableSheet
+                ? convertToPx(100 - lastSnapPoint) + 10
+                : -innerHt,
+            },
+            rubberband: !scrollableSheet && rubberband,
             axis: "y",
             preventDefault: false,
             from: () => [0, getCurrentSnapPoint(targetBottomSheet)],
@@ -842,18 +869,23 @@ function BottomSheet(props) {
     }, 300);
     if (
       lastSetSnapPoint &&
-      lastSetSnapPoint < window.innerHeight &&
+      lastSetSnapPoint < innerHt &&
       window.innerWidth < minWidthForModal
     ) {
       close(dismissible, bottomsheetArray);
     } else {
       open(bottomsheetArray, openOnLoad);
     }
-    if (scrollableSheet) {
+    console.log(lastSetSnapPoint, convertToPx(lastSnapPoint), "tghem");
+    if (
+      scrollableSheet &&
+      lastSetSnapPoint === innerHt - convertToPx(lastSnapPoint)
+    ) {
       targetBottomSheet.click();
       targetBottomSheet.style.overflow = "scroll";
       targetBottomSheet.style.touchAction = "auto";
     }
+    targetBottomSheet.style.height = `${convertToPx(lastSnapPoint)}px`;
     setTimeout(() => {
       handleDragGesture(
         targetBottomSheet,
@@ -863,7 +895,7 @@ function BottomSheet(props) {
         bottomsheetArray,
         resizableDiv,
       );
-    }, 400);
+    }, 200);
 
     if (document.querySelector(`.bottomsheet #${targetBottomSheet.id}`)) {
       document.querySelector(
@@ -889,7 +921,7 @@ function BottomSheet(props) {
   //         targets: `#${bottomsheetArray[index - 1]}`,
   //         scale:
   //           scaleValue +
-  //           ((1 - scaleValue) / window.innerHeight) *
+  //           ((1 - scaleValue) / innerHt) *
   //             getCurrentSnapPoint(targetBottomSheet),
   //         easing: `linear`,
   //         duration: 0.1,
@@ -939,14 +971,14 @@ function BottomSheet(props) {
   //   //       document.getElementById(i) &&
   //   //       scaledValue !==
   //   //         scaleValues[index] +
-  //   //           ((1 - scaleValues[index]) / window.innerHeight) *
+  //   //           ((1 - scaleValues[index]) / innerHt) *
   //   //             getCurrentSnapPoint(targetBottomSheet).toFixed(1)
   //   //     ) {
   //   //       anime({
   //   //         targets: `#${i}`,
   //   //         scale:
   //   //           scaleValues[index] +
-  //   //           ((1 - scaleValues[index]) / window.innerHeight) *
+  //   //           ((1 - scaleValues[index]) / innerHt) *
   //   //             getCurrentSnapPoint(targetBottomSheet),
   //   //         easing: `linear`,
   //   //         duration: 0.1,
@@ -954,7 +986,7 @@ function BottomSheet(props) {
 
   //   //       scaledValue =
   //   //         scaleValues[index] +
-  //   //         ((1 - scaleValues[index]) / window.innerHeight) *
+  //   //         ((1 - scaleValues[index]) / innerHt) *
   //   //           getCurrentSnapPoint(targetBottomSheet).toFixed(1);
   //   //     }
   //   //   });
@@ -964,7 +996,7 @@ function BottomSheet(props) {
   //   //       i.style.display &&
   //   //       i.style.transform &&
   //   //       getCurrentSnapPoint(i) &&
-  //   //       getCurrentSnapPoint(i) < window.innerHeight
+  //   //       getCurrentSnapPoint(i) < innerHt
   //   //     ) {
   //   //       actualIndex = index;
   //   //       if (index === 0) {
@@ -982,7 +1014,7 @@ function BottomSheet(props) {
   //   //       targets: `#${bottomSheets[scaleIndex].id}`,
   //   //       scale:
   //   //         scaleValue +
-  //   //         ((1 - scaleValue) / window.innerHeight) *
+  //   //         ((1 - scaleValue) / innerHt) *
   //   //           getCurrentSnapPoint(bottomSheets[actualIndex]),
   //   //       easing: `spring(1, 95, 25, 23)`,
   //   //       duration: 1,
@@ -1091,7 +1123,7 @@ function BottomSheet(props) {
           }),
         );
       }
-    }, 350);
+    }, 300);
   }
 
   function destroy() {
