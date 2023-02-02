@@ -131,10 +131,10 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
 
   const showsBottomsheet = BottomSheet({
     trigger: `target-${index}`,
-    snapPoints: ["70%"],
+    snapPoints: ["100%"],
     minWidthForModal: 600,
     webLayout: "modal",
-    scrollableSheet: false,
+    scrollableSheet: true,
     modalTranslate: [-50, 0],
     content: content
       ? `<div id="bottomsheet-${index}" data-bottomsheet> ${content} </div>`

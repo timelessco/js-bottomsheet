@@ -4,13 +4,16 @@ import anime from "animejs/lib/anime.es";
 import {
   checkType,
   convertToPx,
+  convertToPxWidth,
   differenceOfWindowHt,
+  getCurrentSnapPoint,
   snapPointConversion,
 } from "./helpers/convertionHelpers";
 import { addOverlay, hideOverlay } from "./helpers/overlayHelpers";
 import { moveBottomSheet } from "./helpers/translationHelpers";
 
 import "./bottomsheet.css";
+import { resizeHover } from "./helpers/eventListeners";
 
 function BottomSheet(props) {
   const {
@@ -57,6 +60,7 @@ function BottomSheet(props) {
   document.addEventListener("resize", () => {
     innerHt = window.innerHeight;
   });
+
   content =
     typeof content !== "string"
       ? Promise.resolve(content).then(value => value)
@@ -70,16 +74,6 @@ function BottomSheet(props) {
     ? document?.querySelector(`#${targetid}`)
     : "";
 
-  function getCurrentSnapPoint(newBottomSheet) {
-    const transformValue = newBottomSheet?.style?.transform
-      .slice(11)
-      .replace("px)", "");
-    if (transformValue) {
-      return +transformValue;
-    }
-    return null;
-  }
-
   let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
   let isWeb = !(window.innerWidth < minWidthForModal);
   const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
@@ -87,9 +81,6 @@ function BottomSheet(props) {
     : document.createElement("div");
   overlay.id = `${targetBottomSheet?.id}-overlay`;
   const springConfig = `spring(1,200,20,13)`;
-  // const  = `easeInOutSine`;
-  // const scaleValue = 0.93;
-
   function open(bottomsheetArray, openOnLoading, withoutAnimation = false) {
     if (displayOverlay) {
       addOverlay(overlay);
@@ -128,7 +119,6 @@ function BottomSheet(props) {
         }, 100);
       } else {
         targetBottomSheet.style.top = "50%";
-        // targetBottomSheet.style.opacity = 0;
         targetBottomSheet.style.transform = `translateX(${
           modalTranslate[0]
         }%) translateY(${modalTranslate[1] + 10}%) rotateX(-20deg)`;
@@ -136,7 +126,6 @@ function BottomSheet(props) {
           translateY: modalTranslate[1],
           targets: targetBottomSheet,
           opacity: 1,
-          // rotateX: "1deg",
           easing: springConfig,
           duration: 0.1,
         });
@@ -484,7 +473,7 @@ function BottomSheet(props) {
           targets: newBottomSheet,
           translateY: `${value}px`,
           easing: springConfig,
-          // duration: 0,
+          duration: 0,
         });
       }
       if (!active) {
@@ -527,7 +516,7 @@ function BottomSheet(props) {
           targets: newBottomSheet,
           translateY: `${value}px`,
           easing: springConfig,
-          // duration: 0,
+          duration: 0,
         });
       }
       if (!active) {
@@ -702,46 +691,63 @@ function BottomSheet(props) {
       Gesture(
         resizableDiv,
         {
-          onDrag: ({ offset, direction }) => {
+          onDrag: ({ offset, direction, movement, xy, active }) => {
             let translateX;
+            let width;
             if (webLayout === "sideSheetLeft") {
               if (
                 Math.round(
                   (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
-                ) < sideSheetMinValue &&
-                dismissible
+                ) <
+                sideSheetMinValue - 15
+                // dismissible
 
                 // velocity[0] > 0.5
               ) {
-                translateX = "-105%";
+                width = sideSheetMinValue - 15;
+              } else
+                width = Math.round(
+                  (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
+                );
+
+              if (
+                Math.round(
+                  (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
+                ) < sideSheetMinValue &&
+                !active
+                // dismissible
+
+                // velocity[0] > 0.5
+              ) {
+                if (xy[0] < convertToPxWidth(sideSheetMinValue) - 100)
+                  translateX = "-105%";
+                else width = sideSheetMinValue;
               }
-            } else if (
-              100 -
+            } else {
+              width =
+                100 -
                 Math.round(
                   (offset[0] / window.innerWidth) * 100 +
                     (100 - sideSheetMinValue),
-                ) <
-                sideSheetMinValue &&
-              direction[0] >= 0 &&
-              dismissible
-            ) {
-              translateX = "105%";
+                );
+              if (
+                100 -
+                  Math.round(
+                    (offset[0] / window.innerWidth) * 100 +
+                      (100 - sideSheetMinValue),
+                  ) <
+                  sideSheetMinValue &&
+                direction[0] >= 0
+                // dismissible
+              ) {
+                translateX = "105%";
+              }
             }
 
             anime({
               targets: targetBottomSheet,
-              width: `${
-                webLayout === "sideSheetLeft"
-                  ? Math.round(
-                      (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
-                    )
-                  : 100 -
-                    Math.round(
-                      (offset[0] / window.innerWidth) * 100 +
-                        (100 - sideSheetMinValue),
-                    )
-              }%`,
-              easing: springConfig,
+              width: `${width}%`,
+              easing: `spring(1,250, 20, 30)`,
               duration: 0,
               translateX,
               // opacity: `${width === 0 ? 0 : 1}`,
@@ -782,6 +788,7 @@ function BottomSheet(props) {
               top: -50,
               bottom: 50,
             },
+            rubberband: true,
           },
         },
       );
@@ -825,7 +832,7 @@ function BottomSheet(props) {
     // resizableDiv.innerHTML = "hello";
     resizableDiv.id = "resizable";
     let draggableId = "";
-
+    resizeHover(targetBottomSheet, isWeb, resizableDiv, webLayout);
     targetBottomSheet.style.display = "block";
     modalClose.id = "modal-close";
     modalClose.classList.add("close-modal");

@@ -7,7 +7,9 @@ export function snapPointConversion(snapPoint) {
 export function convertToPx(percentage) {
   return Math.round((window.innerHeight * percentage) / 100);
 }
-
+export function convertToPxWidth(percentage) {
+  return Math.round((percentage * window.innerWidth) / 100);
+}
 export function checkType(value) {
   return typeof value === "string"
     ? convertToPx(+value.replace("%", ""))
@@ -40,4 +42,14 @@ export function getMobileOperatingSystem() {
   }
 
   return "unknown";
+}
+
+export function getCurrentSnapPoint(newBottomSheet) {
+  const transformValue = newBottomSheet?.style?.transform
+    .slice(11)
+    .replace("px)", "");
+  if (transformValue) {
+    return +transformValue;
+  }
+  return null;
 }
