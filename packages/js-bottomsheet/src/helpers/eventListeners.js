@@ -1,7 +1,5 @@
 import anime from "animejs";
 
-import { convertToPxWidth } from "./convertionHelpers";
-
 export function resizeHover(targetBottomSheet, isWeb, resizableDiv, webLayout) {
   document.body.addEventListener("mousemove", e => {
     if (
@@ -9,16 +7,25 @@ export function resizeHover(targetBottomSheet, isWeb, resizableDiv, webLayout) {
       resizableDiv &&
       (webLayout === "sideSheetLeft" || webLayout === "sideSheetRight")
     ) {
-      if (
-        e.clientX > resizableDiv.offsetLeft - 60 &&
-        e.clientX < resizableDiv.offsetLeft + 60
-      ) {
-        console.log(resizableDiv.offsetLeft - e.clientX);
+      const compareValue =
+        webLayout === "sideSheetLeft"
+          ? resizableDiv.offsetLeft
+          : resizableDiv.getBoundingClientRect().right;
+      if (e.clientX > compareValue - 160 && e.clientX < compareValue + 160) {
         anime({
           targets: targetBottomSheet,
-          borderRight: `1px solid rgba(81, 203, 238, ${
-            1 - Math.abs(resizableDiv.offsetLeft - e.clientX) / 100
-          })`,
+          borderLeft:
+            webLayout === "sideSheetLeft"
+              ? "unset"
+              : `1px solid rgba(81, 203, 238, ${
+                  1 - Math.abs(compareValue - e.clientX) / 100
+                })`,
+          borderRight:
+            webLayout === "sideSheetLeft"
+              ? `1px solid rgba(81, 203, 238, ${
+                  1 - Math.abs(compareValue - e.clientX) / 100
+                })`
+              : "unset",
           easing: `spring(1, 200, 20, 3)`,
           duration: 2,
         });

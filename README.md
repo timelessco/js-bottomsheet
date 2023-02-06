@@ -6,12 +6,13 @@ A pure Js snappable, scrollable, customisable bottomsheet!
 
 ## Features
 
-- Works as a modal in web and as a bottomsheet in mobile.
+- Works as a bottomsheet in mobile and as a modal or sidesheet in web.
 - Supports multiple snap points.
-- Spring animations.
+- Uses spring animations.
 - Supports stacking of bottomsheets.
 - Is scrollable at the last snappoint.
 - Supports dynamic content.
+- Sidesheets are resizable.
 
 ## Dependencies:
 
@@ -121,6 +122,25 @@ BottomSheet({
 });
 ```
 
+### webLayout:
+
+Defines how the sheet should look in web view - it could either be a modal or a
+sidesheet. Sidesheets could be ones that open from the left or the right.
+
+> Type: 'modal || sideSheetLeft || sideSheetRight'
+
+> Default: 'modal'
+
+eg:
+
+```
+BottomSheet({
+ trigger: 'trigger-1',
+ content: <div id="bottomsheet-1" data-bottomsheet>The Bottomsheet</div>,
+ webLayout: 'sideSheetLeft'
+});
+```
+
 ### minWidthForModal:
 
 The minimum width at which you'd like a modal to appear.
@@ -171,7 +191,8 @@ Removing the Bottomsheet from the DOM on closing it can be done with this prop.
 
 ### dismissible
 
-Determines whether the bottomsheet is dismissible or not.
+Determines whether the bottomsheet is dismissible or not, applies to modal and
+sidesheet as well.
 
 > Type: boolean
 
@@ -197,7 +218,7 @@ snappoint, otherwise it would snap back to the old one.
 
 ### closeOnOverlayClick
 
-An option to keep the bottomsheet open or close it on overlay click.
+An option to keep the bottomsheet open, or close it on overlay click.
 
 > Type: boolean
 
@@ -267,6 +288,8 @@ callback function.
 
 > Type: function
 
+eg:
+
 ```
 BottomSheet({
       trigger: `target-1`,
@@ -283,6 +306,8 @@ callback function.
 
 > Type: function
 
+eg:
+
 ```
 BottomSheet({
       trigger: `target-1`,
@@ -291,6 +316,44 @@ BottomSheet({
       }
     });
 ```
+
+### sideSheetMinValue
+
+The minimum snap point percentage at which the sidesheet would open, resizing
+below it would close the sheet.
+
+> Type: number - 0 to 100
+
+### sideSheetMaxValue
+
+The maximum snap point percentage upto which the sidesheet can be resized.
+
+> Type: number - 0 to 100
+
+### scrollableSheet
+
+Defines whether the sheet is scrollable or not at the last snap point.
+
+> Type: booelean
+
+> Default: true
+
+### rubberband
+
+The rubberband effect works at the last snappoint only, also works only if
+`scrollableSheet` is false, it makes the bottomsheet snappy or bouncy.
+
+> Type: booelean
+
+> Default: false
+
+### modalPosition
+
+It's an array of x and y positions in numbers as percentage for the modal.
+
+> Type: Array of numbers
+
+> Default: [50, 50]
 
 ## Methods
 

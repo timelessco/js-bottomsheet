@@ -2,6 +2,12 @@ import { Gesture } from "@use-gesture/vanilla";
 import anime from "animejs/lib/anime.es";
 
 import {
+  makeDraggable,
+  makeScrollable,
+  moveBottomSheet,
+  translateResizableDiv,
+} from "./helpers/bottomsheetHelpers";
+import {
   checkType,
   convertToPx,
   convertToPxWidth,
@@ -10,7 +16,6 @@ import {
   snapPointConversion,
 } from "./helpers/convertionHelpers";
 import { addOverlay, hideOverlay } from "./helpers/overlayHelpers";
-import { moveBottomSheet } from "./helpers/translationHelpers";
 
 import "./bottomsheet.css";
 import { resizeHover } from "./helpers/eventListeners";
@@ -50,7 +55,7 @@ function BottomSheet(props) {
     scrollableSheet = true,
     // resizableSheet = true,
     resizablePosition = "left",
-    modalTranslate = [50, 50],
+    modalPosition = [50, 50],
   } = props;
 
   let { content = "", draggableArea = `` } = props;
@@ -120,10 +125,10 @@ function BottomSheet(props) {
       } else {
         targetBottomSheet.style.top = "50%";
         targetBottomSheet.style.transform = `translateX(${
-          modalTranslate[0]
-        }%) translateY(${modalTranslate[1] + 10}%) rotateX(-20deg)`;
+          modalPosition[0]
+        }%) translateY(${modalPosition[1] + 10}%) rotateX(-20deg)`;
         anime({
-          translateY: modalTranslate[1],
+          translateY: modalPosition[1],
           targets: targetBottomSheet,
           opacity: 1,
           easing: springConfig,
@@ -174,7 +179,7 @@ function BottomSheet(props) {
       targets: targetBottomSheet,
       easing: springConfig,
       duration: 0.1,
-      translateY: `${modalTranslate[1] + 10}%`,
+      translateY: `${modalPosition[1] + 10}%`,
     });
 
     setTimeout(() => {
@@ -573,8 +578,7 @@ function BottomSheet(props) {
                 draggableId &&
                 target === document.querySelector(`#${draggableId}`)
               ) {
-                targetBottomSheet.style.overflow = "hidden";
-                targetBottomSheet.style.touchAction = "none";
+                makeDraggable(targetBottomSheet);
                 // if (lastSetSnapPoint >= innerHt)
                 //   close(dismissible, bottomsheetArray);
                 // else
@@ -599,12 +603,9 @@ function BottomSheet(props) {
                   target !== document.querySelector(`#${draggableId}`)) &&
                 scrollableSheet
               ) {
-                targetBottomSheet.style.overflow = "scroll";
-                targetBottomSheet.style.touchAction = "auto";
-                targetBottomSheet.click();
+                makeScrollable(targetBottomSheet);
               } else {
-                targetBottomSheet.style.overflow = "hidden";
-                targetBottomSheet.style.touchAction = "none";
+                makeDraggable(targetBottomSheet);
                 handleSnapPoints(
                   targetBottomSheet,
                   minSnapPoint,
@@ -621,17 +622,14 @@ function BottomSheet(props) {
                 convertToPx(100 - lastSnapPoint) &&
               scrollableSheet
             ) {
-              targetBottomSheet.click();
-              targetBottomSheet.style.overflow = "scroll";
+              makeScrollable(targetBottomSheet);
               if (convertToPx(100 - lastSnapPoint) > 0)
                 targetBottomSheet.style.minHeight = "unset";
               targetBottomSheet.style.height = `${convertToPx(
                 lastSnapPoint,
               )}px`;
-              targetBottomSheet.style.touchAction = "auto";
             } else {
-              targetBottomSheet.style.overflow = "hidden";
-              targetBottomSheet.style.touchAction = "none";
+              makeDraggable(targetBottomSheet);
               handleSnapPoints(
                 targetBottomSheet,
                 null,
@@ -657,9 +655,7 @@ function BottomSheet(props) {
               targetBottomSheet.scrollTop >= 0 &&
               scrollableSheet
             ) {
-              targetBottomSheet.style.overflow = "scroll";
-              targetBottomSheet.click();
-              targetBottomSheet.style.touchAction = "auto";
+              makeScrollable(targetBottomSheet);
             }
             if (
               (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
@@ -691,67 +687,15 @@ function BottomSheet(props) {
       Gesture(
         resizableDiv,
         {
-          onDrag: ({ offset, direction, movement, xy, active }) => {
-            let translateX;
-            let width;
-            if (webLayout === "sideSheetLeft") {
-              if (
-                Math.round(
-                  (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
-                ) <
-                sideSheetMinValue - 15
-                // dismissible
-
-                // velocity[0] > 0.5
-              ) {
-                width = sideSheetMinValue - 15;
-              } else
-                width = Math.round(
-                  (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
-                );
-
-              if (
-                Math.round(
-                  (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
-                ) < sideSheetMinValue &&
-                !active
-                // dismissible
-
-                // velocity[0] > 0.5
-              ) {
-                if (xy[0] < convertToPxWidth(sideSheetMinValue) - 100)
-                  translateX = "-105%";
-                else width = sideSheetMinValue;
-              }
-            } else {
-              width =
-                100 -
-                Math.round(
-                  (offset[0] / window.innerWidth) * 100 +
-                    (100 - sideSheetMinValue),
-                );
-              if (
-                100 -
-                  Math.round(
-                    (offset[0] / window.innerWidth) * 100 +
-                      (100 - sideSheetMinValue),
-                  ) <
-                  sideSheetMinValue &&
-                direction[0] >= 0
-                // dismissible
-              ) {
-                translateX = "105%";
-              }
-            }
-
-            anime({
-              targets: targetBottomSheet,
-              width: `${width}%`,
-              easing: `spring(1,250, 20, 30)`,
-              duration: 0,
-              translateX,
-              // opacity: `${width === 0 ? 0 : 1}`,
-            });
+          onDrag: ({ offset, xy, active }) => {
+            translateResizableDiv(
+              webLayout,
+              offset,
+              sideSheetMinValue,
+              active,
+              xy,
+              targetBottomSheet,
+            );
           },
         },
         {
@@ -761,32 +705,22 @@ function BottomSheet(props) {
               left:
                 webLayout === "sideSheetRight"
                   ? -(
-                      Math.round(
-                        (window.innerWidth * sideSheetMaxValue) / 100,
-                      ) -
-                      Math.round(
-                        (window.innerWidth *
-                          +targetBottomSheet.style.width.replace("%", "")) /
-                          100,
+                      convertToPxWidth(sideSheetMaxValue) -
+                      convertToPxWidth(
+                        +targetBottomSheet.style.width.replace("%", ""),
                       )
                     )
-                  : Math.round((window.innerWidth * sideSheetMinValue) / 100) -
-                    Math.round(
-                      (window.innerWidth *
-                        +targetBottomSheet.style.width.replace("%", "")) /
-                        100,
+                  : convertToPxWidth(sideSheetMinValue) -
+                    convertToPxWidth(
+                      +targetBottomSheet.style.width.replace("%", ""),
                     ),
               right:
                 webLayout === "sideSheetLeft"
-                  ? Math.round((window.innerWidth * sideSheetMaxValue) / 100) -
-                    Math.round(
-                      (window.innerWidth *
-                        +targetBottomSheet.style.width.replace("%", "")) /
-                        100,
+                  ? convertToPxWidth(sideSheetMaxValue) -
+                    convertToPxWidth(
+                      +targetBottomSheet.style.width.replace("%", ""),
                     )
                   : window.innerWidth,
-              top: -50,
-              bottom: 50,
             },
             rubberband: true,
           },
@@ -822,15 +756,13 @@ function BottomSheet(props) {
     const modalClose = document.createElement("div");
     const sideSheetIconWrapper = document.createElement("div");
     const resizableDiv = document.createElement("div");
-    // resizableDiv.innerHTML =
-    //   '<svg width="18" height="47" viewBox="0 0 8 27" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 0V26.5" stroke="black"/><path d="M7 0V26.5" stroke="black"/><path d="M1 0V26.5" stroke="black"/></svg>';
-    if (resizablePosition === "left") {
+    if (webLayout === "sideSheetRight") {
       resizableDiv.style.left = "0";
     } else {
       resizableDiv.style.right = "0";
     }
-    // resizableDiv.innerHTML = "hello";
     resizableDiv.id = "resizable";
+    resizableDiv.classList.add("resizable-div");
     let draggableId = "";
     resizeHover(targetBottomSheet, isWeb, resizableDiv, webLayout);
     targetBottomSheet.style.display = "block";
@@ -892,9 +824,7 @@ function BottomSheet(props) {
       scrollableSheet &&
       lastSetSnapPoint === innerHt - convertToPx(lastSnapPoint)
     ) {
-      targetBottomSheet.click();
-      targetBottomSheet.style.overflow = "scroll";
-      targetBottomSheet.style.touchAction = "auto";
+      makeScrollable(targetBottomSheet);
     }
     if (scrollableSheet)
       targetBottomSheet.style.height = `${convertToPx(lastSnapPoint)}px`;

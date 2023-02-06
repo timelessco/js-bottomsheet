@@ -29,25 +29,25 @@ BottomSheet({
   scaleOnDrag: false,
 });
 
-const bottomsheet2 = BottomSheet({
-  trigger: `map-target`,
-  snapPoints: ["100%"],
-  webLayout: "sideSheetRight",
-  scaleOnDrag: false,
-});
+// const bottomsheet2 = BottomSheet({
+//   trigger: `map-target`,
+//   snapPoints: ["100%"],
+//   webLayout: "sideSheetRight",
+//   scaleOnDrag: false,
+// });
 
-document.getElementById("done").addEventListener("click", () => {
-  bottomsheet2.close();
-});
+// document.getElementById("done").addEventListener("click", () => {
+//   bottomsheet2.close();
+// });
 
-const bottomsheet3 = BottomSheet({
-  trigger: `target-map-3`,
-  displayOverlay: true,
-  snapPoints: ["35%"],
-});
-document.querySelector(".cancel").addEventListener("click", () => {
-  bottomsheet3.close();
-});
+// const bottomsheet3 = BottomSheet({
+//   trigger: `target-map-3`,
+//   displayOverlay: true,
+//   snapPoints: ["35%"],
+// });
+// document.querySelector(".cancel").addEventListener("click", () => {
+//   bottomsheet3.close();
+// });
 
 BottomSheet({
   trigger: `target-map-4`,

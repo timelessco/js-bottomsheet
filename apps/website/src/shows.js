@@ -135,7 +135,7 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
     minWidthForModal: 600,
     webLayout: "modal",
     scrollableSheet: true,
-    modalTranslate: [-50, 0],
+    modalPosition: [-50, 0],
     content: content
       ? `<div id="bottomsheet-${index}" data-bottomsheet> ${content} </div>`
       : `<div id="bottomsheet-${index}" data-bottomsheet><img src="assets/banner-blur.png"> </div>`,
