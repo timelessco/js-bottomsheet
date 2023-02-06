@@ -60,14 +60,14 @@ importers:
       js-bottomsheet: workspace:*
       scroll-snap-slider: SamrithaS/scroll-snap-slider
       vite: ^4.1.1
-      vite-plugin-top-level-await: ^1.2.3
+      vite-plugin-top-level-await: ^1.2.4
     dependencies:
       js-bottomsheet: link:../../packages/js-bottomsheet
       scroll-snap-slider: github.com/SamrithaS/scroll-snap-slider/8b5ba9db9b8d4920f6c131861035ff07fefdf91e
     devDependencies:
       browserslist-to-esbuild: 1.2.0
       vite: 4.1.1
-      vite-plugin-top-level-await: 1.2.3_vite@4.1.1
+      vite-plugin-top-level-await: 1.2.4_vite@4.1.1
 
   packages/js-bottomsheet:
     specifiers:
@@ -6067,8 +6067,8 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite-plugin-top-level-await/1.2.3_vite@4.1.1:
-    resolution: {integrity: sha512-Hc4W7R+Hw4413lzv+kuVdXLrgNU+Pb07853Q15n/4JytEtyLykpN2rmtlG7J5uWij2btDXEEiv+DcrCiRZo/zA==}
+  /vite-plugin-top-level-await/1.2.4_vite@4.1.1:
+    resolution: {integrity: sha512-ABHJipy/R31F/3bWnPBYIFUKVXr+Ox6EVax5jos67QhuzZ4aQyp/F3qZhF2Qi/9pgi9vpIftTZ++wfkRn0c4gA==}
     peerDependencies:
       vite: '>=2.8'
     dependencies:
