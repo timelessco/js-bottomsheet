@@ -574,13 +574,11 @@ function BottomSheet(props) {
             const minSnapPoint = 0;
             const maxSnapPoint = Infinity;
             currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
-            console.log(currentSnapPoint, "cs");
             if (direction[1] >= 0) {
               if (
                 draggableId &&
                 target === document.querySelector(`#${draggableId}`)
               ) {
-                console.log("drag 1");
                 makeDraggable(targetBottomSheet);
                 // if (lastSetSnapPoint >= innerHt)
                 //   close(dismissible, bottomsheetArray);
@@ -606,12 +604,8 @@ function BottomSheet(props) {
                   target !== document.querySelector(`#${draggableId}`)) &&
                 scrollableSheet
               ) {
-                console.log("scroll 1");
-
                 makeScrollable(targetBottomSheet);
               } else {
-                console.log("drag 2");
-
                 makeDraggable(targetBottomSheet);
                 handleSnapPoints(
                   targetBottomSheet,
@@ -629,8 +623,6 @@ function BottomSheet(props) {
                 convertToPx(100 - lastSnapPoint) &&
               scrollableSheet
             ) {
-              console.log("scroll 2");
-
               makeScrollable(targetBottomSheet);
               if (convertToPx(100 - lastSnapPoint) > 0)
                 targetBottomSheet.style.minHeight = "unset";
@@ -638,7 +630,6 @@ function BottomSheet(props) {
                 lastSnapPoint,
               )}px`;
             } else {
-              console.log("drag 3");
               if (targetBottomSheet.scrollTop === 0)
                 makeDraggable(targetBottomSheet);
               handleSnapPoints(
@@ -666,7 +657,6 @@ function BottomSheet(props) {
               targetBottomSheet.scrollTop >= 0 &&
               scrollableSheet
             ) {
-              console.log("scroll 3");
               makeScrollable(targetBottomSheet);
             }
             if (
@@ -675,7 +665,6 @@ function BottomSheet(props) {
               direction[1] > 0 &&
               targetBottomSheet.scrollTop === 0
             ) {
-              console.log("here");
               targetBottomSheet.style.overflow = "hidden";
             }
             onDragEnd(direction);
@@ -837,8 +826,6 @@ function BottomSheet(props) {
       scrollableSheet &&
       lastSetSnapPoint === innerHt - convertToPx(lastSnapPoint)
     ) {
-      console.log("scroll 4");
-
       makeScrollable(targetBottomSheet);
     }
     if (scrollableSheet)
@@ -869,7 +856,6 @@ function BottomSheet(props) {
         i === targetBottomSheet.id &&
         bottomsheetArray?.indexOf(targetBottomSheet.id) > 0
       ) {
-        console.log("if");
         anime({
           targets: `#${bottomsheetArray[index - 1]}`,
           scale:
