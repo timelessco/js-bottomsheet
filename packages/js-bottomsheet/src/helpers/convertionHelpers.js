@@ -45,9 +45,12 @@ export function getMobileOperatingSystem() {
 }
 
 export function getCurrentSnapPoint(newBottomSheet) {
-  const transformValue = newBottomSheet?.style?.transform
-    .slice(11)
-    .replace("px)", "");
+  let scalePos = newBottomSheet?.style?.transform.indexOf("scale");
+  const transformValue =
+    scalePos > 0
+      ? newBottomSheet?.style?.transform.slice(11, scalePos).replace("px)", "")
+      : newBottomSheet?.style?.transform.slice(11).replace("px)", "");
+
   if (transformValue) {
     return +transformValue;
   }

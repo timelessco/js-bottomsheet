@@ -19,22 +19,23 @@ BottomSheet({
 <img src="./assets/train.svg" /><div><p class="sm">Transit</p><p class="xs">Nearby</p></div> </div><div class="fav-box" id="map-target"><img src="./assets/pin.svg" /><p class="sm">Add</p></div></div><div class="flex"><p class="fav">Recents</p><p class="more fav">More</p></div><div class="cont-box flex-col"><div class="flex-start" id="map-target" > <img src="./assets/beach.svg" /><div><p class="md" >Palavakkam Beach</p> <p class="xs">Anna Salai, Chennai</p></div></div><div class="flex-start" id="map-target" ><img src="./assets/furniture.svg" /><div><p class="md">Amutha Furniture</p><p class="xs">Keelkattalai, Chennai</p>
 </div> </div><div class="flex-start" id="map-target" > <img src="./assets/beach.svg" /><div><p class="md"> ECR Beach</p> <p class="xs">Rajaji Avenue, Chennai</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/park.svg" /><div><p class="md" >Kamakoti Nagar Park</p> <p class="xs">Kamakoti Nagar, Pallikaranai</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/timeless.svg" /><div><p class="md" >Timeless</p> <p class="xs"> Kamakoti Nagar, Pallikaranai</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/beach.svg" /><div><p class="md" >Rippon Building</p> <p class="xs">Anna Salai, Chennai</p></div></div></div><div class="flex"><p class="fav">My Guides</p></div>
 <div class="cont-box flex-col"><div class="flex-start" id="map-target" > <img src="./assets/place.svg" /><div><p class="md" >My Places</p> <p class="xs">6 places</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/frequently.svg" /><div><p class="md" >Frequently</p> <p class="xs">14 places</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/new.svg" /><div><p class="md more" >New Guide</p> </div></div></div>
-<button class="dismiss md">Dismiss</button>
+<button class="dismiss md" id="map-2-target" data-bottomsheet-id="maps-2">Dismiss</button>
 </div>`,
   openOnLoad: true,
   sideSheetMinValue: 20,
   sideSheetMaxValue: 30,
   sideSheetIconPosition: "right",
   resizablePosition: "right",
-  scaleOnDrag: false,
+  scaleOnDrag: true,
+  footerContent: `<button class="dismiss md" id="map-2-target" data-bottomsheet-id="maps-2">Dismiss</button>`,
 });
 
-// const bottomsheet2 = BottomSheet({
-//   trigger: `map-target`,
-//   snapPoints: ["100%"],
-//   webLayout: "sideSheetRight",
-//   scaleOnDrag: false,
-// });
+const bottomsheet2 = BottomSheet({
+  trigger: `map-2-target`,
+  snapPoints: ["100%"],
+  webLayout: "sideSheetRight",
+  scaleOnDrag: true,
+});
 
 // document.getElementById("done").addEventListener("click", () => {
 //   bottomsheet2.close();

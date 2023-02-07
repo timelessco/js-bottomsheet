@@ -694,7 +694,8 @@ input {
 
   text-align: center;
 
-  background-color: transparent;
+  background-color: inherit;
+  
 }
 
 .search {
@@ -1145,6 +1146,7 @@ iframe {
 .seasons-text p{
   display: none;
 }
+
 
 @media screen and (min-width: 700px) {
   .flex-input {
