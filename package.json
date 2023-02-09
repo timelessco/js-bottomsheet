@@ -59,7 +59,7 @@
     "stylelint": "^15.0.0",
     "stylelint-config-clean-order": "^2.3.1",
     "stylelint-config-prettier": "^9.0.4",
-    "stylelint-config-standard": "^29.0.0",
+    "stylelint-config-standard": "^30.0.1",
     "turbo": "^1.7.4"
   },
   "browserslist": {
