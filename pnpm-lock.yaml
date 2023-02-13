@@ -24,7 +24,7 @@ importers:
       prettier: ^2.8.4
       prettier-plugin-pkg: ^0.17.1
       stylelint: ^15.1.0
-      stylelint-config-clean-order: ^4.0.0
+      stylelint-config-clean-order: ^5.0.0
       stylelint-config-prettier: ^9.0.5
       stylelint-config-standard: ^30.0.1
       turbo: ^1.7.4
@@ -49,7 +49,7 @@ importers:
       prettier: 2.8.4
       prettier-plugin-pkg: 0.17.1_prettier@2.8.4
       stylelint: 15.1.0
-      stylelint-config-clean-order: 4.0.0_stylelint@15.1.0
+      stylelint-config-clean-order: 5.0.0_stylelint@15.1.0
       stylelint-config-prettier: 9.0.5_stylelint@15.1.0
       stylelint-config-standard: 30.0.1_stylelint@15.1.0
       turbo: 1.7.4
@@ -5623,8 +5623,8 @@ packages:
     resolution: {integrity: sha512-Dj1Okke1C3uKKwQcetra4jSuk0DqbzbYtXipzFlFMZtowbF1x7BKJwB9AayVMyFARvU8EDrZdcax4At/452cAg==}
     dev: true
 
-  /stylelint-config-clean-order/4.0.0_stylelint@15.1.0:
-    resolution: {integrity: sha512-c+bNVJHfGk4c1ZteHFUkQU9wzEmXE6luFGseXFL0gwMylR1/CvPZgF/gG3X5cTKwaT6fMelmqL5gWA5PBTr8BA==}
+  /stylelint-config-clean-order/5.0.0_stylelint@15.1.0:
+    resolution: {integrity: sha512-X4k3relU0KmkNE7Q+K7WslN8Xk1nJBCT30OMeEwF0MAKqV8C9uh3vGbCcrR3/6Oxcv+83m1AxNsQAkrBDtV2sw==}
     peerDependencies:
       stylelint: '>=14'
     dependencies:
