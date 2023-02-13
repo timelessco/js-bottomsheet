@@ -56,15 +56,16 @@ function BottomSheet(props) {
     // resizableSheet = true,
     resizablePosition = "left",
     modalPosition = [50, 50],
+    headerContent = ``,
   } = props;
 
-  let { content = "", draggableArea = `` } = props;
+  let { content = "", draggableArea = ``, footerContent = `` } = props;
   let lastSetSnapPoint;
   let innerHt = window.innerHeight;
   const scaleValue = 0.96;
-
   document.addEventListener("resize", () => {
     innerHt = window.innerHeight;
+    if (window.innerWidth === minWidthForModal) init();
   });
 
   content =
@@ -82,10 +83,10 @@ function BottomSheet(props) {
 
   let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
   let isWeb = !(window.innerWidth < minWidthForModal);
-  const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
+  let overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
-  overlay.id = `${targetBottomSheet?.id}-overlay`;
+  if (targetBottomSheet?.id) overlay.id = `${targetBottomSheet?.id}-overlay`;
   const springConfig = `spring(1,200,20,13)`;
   function open(bottomsheetArray, openOnLoading, withoutAnimation = false) {
     if (displayOverlay) {
@@ -127,7 +128,7 @@ function BottomSheet(props) {
         targetBottomSheet.style.top = "50%";
         targetBottomSheet.style.transform = `translateX(${
           modalPosition[0]
-        }%) translateY(${modalPosition[1] + 10}%) rotateX(-20deg)`;
+        }%) translateY(${modalPosition[1] + 10}%)`;
         anime({
           translateY: modalPosition[1],
           targets: targetBottomSheet,
@@ -317,9 +318,13 @@ function BottomSheet(props) {
         draggableId &&
         !document.querySelector(`#${targetBottomSheet?.id} #${draggableId}`)
       ) {
-        targetBottomSheet.prepend(draggableArea);
+        console.log("dg", draggableArea);
+        targetBottomSheet.insertAdjacentHTML("afterbegin", draggableArea);
       }
-      if (document.querySelector(`#${targetBottomSheet.id} #modal-close`)) {
+      if (
+        document.querySelector(`#${targetBottomSheet.id} #modal-close`) &&
+        modalClose
+      ) {
         targetBottomSheet.removeChild(modalClose);
       }
       if (
@@ -784,19 +789,26 @@ function BottomSheet(props) {
     modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
     if (sideSheetIconWrapper.children.length === 0)
       sideSheetIconWrapper.insertAdjacentHTML("afterbegin", sideSheetIcon);
+    if (footerContent) {
+      if (typeof footerContent === "string") {
+        targetBottomSheet.insertAdjacentHTML("beforeend", footerContent);
+      }
+    }
+
     if (draggableArea) {
       if (typeof draggableArea === "string") {
-        draggableArea = new DOMParser().parseFromString(
-          draggableArea,
-          "text/xml",
-        );
-        draggableId = draggableArea.childNodes[0].id;
-        [draggableArea] = draggableArea.childNodes;
+        // draggableArea = new DOMParser().parseFromString(
+        //   draggableArea,
+        //   "text/xml",
+        // );
+        // draggableId = draggableArea.childNodes[0].id;
+        // [draggableArea] = draggableArea.childNodes;
+        draggableId = "drag";
       } else {
         draggableId = draggableArea?.id;
       }
-      draggableArea.setAttribute("data-draggable", "1");
-      draggableArea.classList.add("draggable");
+      // draggableArea.setAttribute("data-draggable", "1");
+      // draggableArea.classList.add("draggable");
     }
     handleCloseIcons(
       sideSheetIconWrapper,
@@ -1019,12 +1031,17 @@ function BottomSheet(props) {
         obj[i] = false;
       });
     }
-
     if (
       targetBottomSheet &&
-      !document.getElementById(`#${targetBottomSheet.id}`)
+      !document.getElementById(`${targetBottomSheet.id}`)
     ) {
       document.body.append(targetBottomSheet);
+      overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
+        ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
+        : document.createElement("div");
+
+      if (targetBottomSheet?.id)
+        overlay.id = `${targetBottomSheet?.id}-overlay`;
     }
     if (
       bottomsheetArray.length > 1 &&
