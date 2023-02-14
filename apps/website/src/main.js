@@ -30,6 +30,7 @@ BottomSheet({
   sideSheetIconPosition: "right",
   resizablePosition: "right",
   scaleOnDrag: true,
+  resizeHoverEffect: false,
   footerContent: `<button class="dismiss md footer" id="map-2-target" data-bottomsheet-id="maps-2">Dismiss</button>`,
 });
 

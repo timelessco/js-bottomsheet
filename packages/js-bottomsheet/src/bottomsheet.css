@@ -142,3 +142,8 @@ textarea {
   position: sticky;
   bottom: 0
 }
+
+.header{
+  position: sticky;
+  top: 0
+}

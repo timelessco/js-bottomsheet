@@ -50,7 +50,7 @@ async function getBottomsheet1content(key, ind) {
 </svg>
 
        <div class="gradient"></div>
-       <button class="watch-now md" id=watch-now-${ind}> <svg class="watch-svg" width="8" height="13" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <button class="watch-now md" id=watch-now-${ind} data-bottomsheet-id = second-stack-${ind}> <svg class="watch-svg" width="8" height="13" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
        <path fill-rule="evenodd" clip-rule="evenodd" d="M0.121352 0.744663C-2.85542e-07 0.907787 0 1.19998 0 1.78437V9.21563C0 9.80002 -2.85542e-07 10.0922 0.121352 10.2553C0.227105 10.3975 0.388983 10.4864 0.564992 10.4991C0.766962 10.5136 1.01119 10.3556 1.49965 10.0396L7.24303 6.32395C7.6669 6.04973 7.87883 5.91262 7.95203 5.73828C8.01599 5.58595 8.01599 5.41405 7.95203 5.26172C7.87883 5.08738 7.6669 4.95027 7.24303 4.67605L1.49966 0.960416C1.0112 0.644405 0.766963 0.4864 0.564992 0.500917C0.388983 0.513568 0.227105 0.602508 0.121352 0.744663Z" fill="black"/>
        </svg>
         watch now</button>
@@ -96,7 +96,7 @@ async function getBottomsheet1content(key, ind) {
          .join("")}
        </div>
        </div>
-       <button class="watch-now" id=watch-now-${ind}> watch now</button>
+       <button class="watch-now" id=watch-now-${ind} data-bottomsheet-id = second-stack-${ind}> watch now</button>
 
     </div>
 `;
@@ -132,44 +132,49 @@ document.querySelector(".linear-grad").style.display = "block";
 
 document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
   const content = await getBottomsheet1content(i.getAttribute("key"), index);
-  const showsBottomsheet = BottomSheet({
-    trigger: `target-${index}`,
-    snapPoints: ["100%"],
-    minWidthForModal: 600,
-    webLayout: "modal",
-    scrollableSheet: true,
-    modalPosition: [-50, 0],
-    content: content
-      ? `<div id="bottomsheet-${index}" data-bottomsheet> ${content} </div>`
-      : `<div id="bottomsheet-${index}" data-bottomsheet><img src="assets/banner-blur.png"> </div>`,
-    displayOverlay: true,
-    onOpen: () => {
-      document.querySelectorAll(".close-icon").forEach(icon =>
-        icon.addEventListener("click", () => {
-          showsBottomsheet.close();
-        }),
-      );
-      const stack = BottomSheet({
-        trigger: `watch-now-${index}`,
-        snapPoints: ["100%"],
-        displayOverlay: true,
-        minWidthForModal: 600,
-        content: getBottomsheet2Content(
-          document?.querySelector(`#target-2`)?.getAttribute("key") ||
-            "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
-          document?.querySelector(`#target-2`)?.getAttribute("data-key"),
-          index,
-          true,
-        ),
-        webLayout: "modal",
-        modalPosition: [-50, 0],
-        sideSheetSnapPoints: ["50%", "100%"],
-        onOpen: () => {
-          document.querySelector("#x-icon").addEventListener("click", () => {
-            stack.close();
-          });
-        },
-        modalCloseIcon: `<figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  let showsBottomsheet;
+  if (index < 10) {
+    showsBottomsheet = BottomSheet({
+      trigger: `target-${index}`,
+      snapPoints: ["100%"],
+      minWidthForModal: 600,
+      webLayout: "modal",
+      scrollableSheet: true,
+      modalPosition: [-50, 0],
+      content: content
+        ? `<div id="bottomsheet-${index}" data-bottomsheet> ${content} </div>`
+        : `<div id="bottomsheet-${index}" data-bottomsheet><img src="assets/banner-blur.png"> </div>`,
+      displayOverlay: true,
+      onOpen: () => {
+        document.querySelectorAll(".close-icon").forEach(icon =>
+          icon.addEventListener("click", () => {
+            showsBottomsheet.close();
+          }),
+        );
+        // window.addEventListener("resize", () => {
+        //   if (showsBottomsheet) showsBottomsheet.init();
+        // });
+        const stack = BottomSheet({
+          trigger: `watch-now-${index}`,
+          snapPoints: ["100%"],
+          displayOverlay: true,
+          minWidthForModal: 600,
+          content: getBottomsheet2Content(
+            document?.querySelector(`#target-2`)?.getAttribute("key") ||
+              "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
+            document?.querySelector(`#target-2`)?.getAttribute("data-key"),
+            index,
+            true,
+          ),
+          webLayout: "modal",
+          modalPosition: [-50, 0],
+          sideSheetSnapPoints: ["50%", "100%"],
+          onOpen: () => {
+            document.querySelector("#x-icon").addEventListener("click", () => {
+              stack.close();
+            });
+          },
+          modalCloseIcon: `<figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_b_1_250)">
             <circle cx="20" cy="20" r="20" fill="black" fill-opacity="0.58" />
         </g>
@@ -185,9 +190,9 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
             </filter>
         </defs>
     </svg></figure>`,
-      });
-    },
-    modalCloseIcon: `<figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        });
+      },
+      modalCloseIcon: `<figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_b_1_250)">
         <circle cx="20" cy="20" r="20" fill="black" fill-opacity="0.58" />
     </g>
@@ -203,10 +208,8 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
         </filter>
     </defs>
 </svg></figure>`,
-  });
-  // window.addEventListener("resize", () => {
-  //   showsBottomsheet.open();
-  // });
+    });
+  }
 });
 if (window.innerWidth < 700) {
   document.querySelector(".banner-im").src =

@@ -1239,7 +1239,7 @@ iframe {
   .maps-cont{
     padding: 0;
   }
-  
+
   .second.blur{
     -webkit-backdrop-filter: blur(28px);
     backdrop-filter: blur(28px);
@@ -1451,7 +1451,7 @@ iframe {
     background: rgb(255 255 255 / 90%);
     -webkit-backdrop-filter: blur(20.5px);
     backdrop-filter: blur(20.5px);
-    border-right: 1px solid rgb(0 0 0 / 2%);
+    border-right: 1px solid rgba(0, 0, 0, 2%);
     border-radius: 0;
     box-shadow: none;
   }

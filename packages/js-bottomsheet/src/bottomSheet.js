@@ -57,14 +57,18 @@ function BottomSheet(props) {
     resizablePosition = "left",
     modalPosition = [50, 50],
     headerContent = ``,
+    draggableArea = ``,
+    footerContent = ``,
+    resizeHoverEffect = false,
   } = props;
 
-  let { content = "", draggableArea = ``, footerContent = `` } = props;
+  let { content = "" } = props;
   let lastSetSnapPoint;
   let innerHt = window.innerHeight;
   const scaleValue = 0.96;
   document.addEventListener("resize", () => {
     innerHt = window.innerHeight;
+
     if (window.innerWidth === minWidthForModal) init();
   });
 
@@ -72,21 +76,24 @@ function BottomSheet(props) {
     typeof content !== "string"
       ? Promise.resolve(content).then(value => value)
       : content;
-  const targetid = trigger
+  let targetid = trigger
     ? document
         ?.querySelector(`#${trigger}`)
         ?.getAttribute("data-bottomsheet-id")
     : "";
+
   let targetBottomSheet = targetid
     ? document?.querySelector(`#${targetid}`)
     : "";
 
   let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
   let isWeb = !(window.innerWidth < minWidthForModal);
-  let overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
+  const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
+
   if (targetBottomSheet?.id) overlay.id = `${targetBottomSheet?.id}-overlay`;
+
   const springConfig = `spring(1,200,20,13)`;
   function open(bottomsheetArray, openOnLoading, withoutAnimation = false) {
     if (displayOverlay) {
@@ -129,6 +136,7 @@ function BottomSheet(props) {
         targetBottomSheet.style.transform = `translateX(${
           modalPosition[0]
         }%) translateY(${modalPosition[1] + 10}%)`;
+
         anime({
           translateY: modalPosition[1],
           targets: targetBottomSheet,
@@ -151,6 +159,7 @@ function BottomSheet(props) {
           checkType(snapPoints[0]),
         )}px)`;
       } else {
+        targetBottomSheet.style.transform = `unset`;
         document.body.style.overflow = "hidden";
         anime({
           targets: targetBottomSheet,
@@ -248,17 +257,17 @@ function BottomSheet(props) {
         localStorage.setItem("array", JSON.stringify(bottomsheetArray));
       else localStorage.removeItem("array");
 
-      // if (scaleOnDrag) {
-      //   bottomsheetArray?.forEach((item, index) => {
-      //     if (index !== targetBottomSheet.id)
-      //       anime({
-      //         targets: `#${item}`,
-      //         top: "0px",
-      //         easing: `linear`,
-      //         duration: 1,
-      //       });
-      //   });
-      // }
+      if (scaleOnDrag) {
+        bottomsheetArray?.forEach((item, index) => {
+          if (index !== targetBottomSheet.id)
+            anime({
+              targets: `#${item}`,
+              top: "0px",
+              easing: `linear`,
+              duration: 1,
+            });
+        });
+      }
     } else if (webLayout === "modal") {
       closeModal(targetBottomSheet, overlay);
     } else if (webLayout === "sideSheetLeft") {
@@ -318,14 +327,13 @@ function BottomSheet(props) {
         draggableId &&
         !document.querySelector(`#${targetBottomSheet?.id} #${draggableId}`)
       ) {
-        console.log("dg", draggableArea);
         targetBottomSheet.insertAdjacentHTML("afterbegin", draggableArea);
       }
       if (
         document.querySelector(`#${targetBottomSheet.id} #modal-close`) &&
         modalClose
       ) {
-        targetBottomSheet.removeChild(modalClose);
+        targetBottomSheet?.removeChild(modalClose);
       }
       if (
         document.querySelector(`#${targetBottomSheet.id} #side-left`) ||
@@ -771,7 +779,8 @@ function BottomSheet(props) {
     resizableDiv.id = "resizable";
     resizableDiv.classList.add("resizable-div");
     let draggableId = "";
-    resizeHover(targetBottomSheet, isWeb, resizableDiv, webLayout);
+    if (resizeHoverEffect)
+      resizeHover(targetBottomSheet, isWeb, resizableDiv, webLayout);
     targetBottomSheet.style.display = "block";
     modalClose.id = "modal-close";
     modalClose.classList.add("close-modal");
@@ -794,7 +803,11 @@ function BottomSheet(props) {
         targetBottomSheet.insertAdjacentHTML("beforeend", footerContent);
       }
     }
-
+    if (headerContent) {
+      if (typeof headerContent === "string") {
+        targetBottomSheet.insertAdjacentHTML("beforeend", headerContent);
+      }
+    }
     if (draggableArea) {
       if (typeof draggableArea === "string") {
         // draggableArea = new DOMParser().parseFromString(
@@ -862,7 +875,7 @@ function BottomSheet(props) {
   function stackAnimation(bottomsheetArray) {
     // let actualIndex;
     // let scaleIndex;
-
+    console.log("stack animation");
     bottomsheetArray.forEach((i, index) => {
       if (
         i === targetBottomSheet.id &&
@@ -997,8 +1010,14 @@ function BottomSheet(props) {
     observer.observe(targetBottomSheet, config);
   }
   function init() {
+    targetid = trigger
+      ? document
+          ?.querySelector(`#${trigger}`)
+          ?.getAttribute("data-bottomsheet-id")
+      : "";
     document.body.style.overscrollBehavior = "contain";
 
+    targetBottomSheet = targetid ? document?.querySelector(`#${targetid}`) : "";
     if (onInit) {
       onInit();
     }
@@ -1036,12 +1055,6 @@ function BottomSheet(props) {
       !document.getElementById(`${targetBottomSheet.id}`)
     ) {
       document.body.append(targetBottomSheet);
-      overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
-        ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
-        : document.createElement("div");
-
-      if (targetBottomSheet?.id)
-        overlay.id = `${targetBottomSheet?.id}-overlay`;
     }
     if (
       bottomsheetArray.length > 1 &&
