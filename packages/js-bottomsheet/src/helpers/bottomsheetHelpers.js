@@ -30,14 +30,15 @@ export function translateResizableDiv(
   active,
   xy,
   targetBottomSheet,
+  dismissible,
 ) {
   let translateX;
   let width;
   if (webLayout === "sideSheetLeft") {
     if (
       Math.round((offset[0] / window.innerWidth) * 100 + sideSheetMinValue) <
-      sideSheetMinValue - 5
-      // dismissible
+        sideSheetMinValue - 5 &&
+      dismissible
 
       // velocity[0] > 0.5
     ) {
@@ -50,8 +51,8 @@ export function translateResizableDiv(
     if (
       Math.round((offset[0] / window.innerWidth) * 100 + sideSheetMinValue) <
         sideSheetMinValue &&
-      !active
-      // dismissible
+      !active &&
+      dismissible
 
       // velocity[0] > 0.5
     ) {
@@ -60,29 +61,18 @@ export function translateResizableDiv(
       else width = sideSheetMinValue;
     }
   } else {
-    console.log(
-      100 -
-        Math.round(
-          (offset[0] / window.innerWidth) * 100 + (100 - sideSheetMinValue),
-        ),
-      sideSheetMinValue,
-      "them",
-    );
     if (
       100 -
         Math.round(
           (offset[0] / window.innerWidth) * 100 + (100 - sideSheetMinValue),
         ) <
-      sideSheetMinValue - 5
-      // dismissible
+        sideSheetMinValue - 5 &&
+      dismissible
 
       // velocity[0] > 0.5
     ) {
-      console.log("if");
       width = sideSheetMinValue - 5;
     } else {
-      console.log("else");
-
       width =
         100 -
         Math.round(
@@ -95,12 +85,11 @@ export function translateResizableDiv(
           (offset[0] / window.innerWidth) * 100 + (100 - sideSheetMinValue),
         ) <
         sideSheetMinValue &&
-      !active
-      // dismissible
+      !active &&
+      dismissible
 
       // velocity[0] > 0.5
     ) {
-      console.log("if2");
       if (
         xy[0] >
         window.innerWidth - (convertToPxWidth(sideSheetMinValue) - 100)
@@ -120,3 +109,13 @@ export function translateResizableDiv(
     // opacity: `${width === 0 ? 0 : 1}`,
   });
 }
+
+export const findIndexOfSheet = (bottomsheetArray, targetBottomSheet) => {
+  let bottomInd;
+  if (bottomsheetArray && bottomsheetArray.includes(targetBottomSheet.id))
+    bottomInd = bottomsheetArray.findIndex(
+      i => document.getElementById(i) === targetBottomSheet,
+    );
+
+  return bottomInd;
+};

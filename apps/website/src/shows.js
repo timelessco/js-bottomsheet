@@ -141,6 +141,7 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
       webLayout: "modal",
       scrollableSheet: true,
       modalPosition: [-50, 0],
+      scaleOnDrag: true,
       content: content
         ? `<div id="bottomsheet-${index}" data-bottomsheet> ${content} </div>`
         : `<div id="bottomsheet-${index}" data-bottomsheet><img src="assets/banner-blur.png"> </div>`,
@@ -166,6 +167,8 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
             index,
             true,
           ),
+          scrollableSheet: false,
+          scaleOnDrag: true,
           webLayout: "modal",
           modalPosition: [-50, 0],
           sideSheetSnapPoints: ["50%", "100%"],
