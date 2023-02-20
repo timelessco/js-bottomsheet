@@ -59,26 +59,26 @@ importers:
       browserslist-to-esbuild: ^1.2.0
       js-bottomsheet: workspace:*
       scroll-snap-slider: SamrithaS/scroll-snap-slider
-      vite: ^4.1.2
+      vite: ^4.1.3
       vite-plugin-top-level-await: ^1.2.4
     dependencies:
       js-bottomsheet: link:../../packages/js-bottomsheet
       scroll-snap-slider: github.com/SamrithaS/scroll-snap-slider/8b5ba9db9b8d4920f6c131861035ff07fefdf91e
     devDependencies:
       browserslist-to-esbuild: 1.2.0
-      vite: 4.1.2
-      vite-plugin-top-level-await: 1.2.4_vite@4.1.2
+      vite: 4.1.3
+      vite-plugin-top-level-await: 1.2.4_vite@4.1.3
 
   packages/js-bottomsheet:
     specifiers:
       '@use-gesture/vanilla': ^10.2.24
       animejs: ^3.2.1
-      vite: ^4.1.2
+      vite: ^4.1.3
     dependencies:
       '@use-gesture/vanilla': 10.2.24
       animejs: 3.2.1
     devDependencies:
-      vite: 4.1.2
+      vite: 4.1.3
 
 packages:
 
@@ -6108,18 +6108,18 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite-plugin-top-level-await/1.2.4_vite@4.1.2:
+  /vite-plugin-top-level-await/1.2.4_vite@4.1.3:
     resolution: {integrity: sha512-ABHJipy/R31F/3bWnPBYIFUKVXr+Ox6EVax5jos67QhuzZ4aQyp/F3qZhF2Qi/9pgi9vpIftTZ++wfkRn0c4gA==}
     peerDependencies:
       vite: '>=2.8'
     dependencies:
       '@swc/core': 1.3.35
       uuid: 9.0.0
-      vite: 4.1.2
+      vite: 4.1.3
     dev: true
 
-  /vite/4.1.2:
-    resolution: {integrity: sha512-MWDb9Rfy3DI8omDQySbMK93nQqStwbsQWejXRY2EBzEWKmLAXWb1mkI9Yw2IJrc+oCvPCI1Os5xSSIBYY6DEAw==}
+  /vite/4.1.3:
+    resolution: {integrity: sha512-0Zqo4/Fr/swSOBmbl+HAAhOjrqNwju+yTtoe4hQX9UsARdcuc9njyOdr6xU0DDnV7YP0RT6mgTTOiRtZgxfCxA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
