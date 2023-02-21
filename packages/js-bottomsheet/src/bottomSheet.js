@@ -463,7 +463,7 @@ function BottomSheet(props) {
         anime({
           targets: newBottomSheet,
           translateY: `${value}px`,
-          easing: `spring(1,250,24,18)`,
+          easing: springConfig,
           duration: 0,
         });
       }
@@ -502,7 +502,7 @@ function BottomSheet(props) {
         anime({
           targets: newBottomSheet,
           translateY: `${value}px`,
-          easing: `spring(1,250,24,18)`,
+          easing: springConfig,
           duration: 0,
         });
       }
@@ -550,6 +550,7 @@ function BottomSheet(props) {
             distance: [, dy],
             target,
             direction,
+            touches,
           }) => {
             const minSnapPoint = 0;
             const maxSnapPoint = Infinity;
