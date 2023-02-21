@@ -238,7 +238,7 @@ function getBottomsheet2Content(src, key, index, bottomsheet = false) {
       : ""
   }
   <div class="second blur"></div>
-  <img src="./public/assets/close-icon.svg" class="x-icon" id="x-icon"/>
+  <img src="/assets/close-icon.svg" class="x-icon" id="x-icon"/>
   <div class="universal">
   <input placeholder="enter access code" class="access-input"/>
     <button class="watch-now univ"> <svg class="watch-svg" width="8" height="13" viewBox="0 0 8 11" fill="none" xmlns="http://www.w3.org/2000/svg">
