@@ -132,52 +132,50 @@ document.querySelector(".linear-grad").style.display = "block";
 
 document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
   const content = await getBottomsheet1content(i.getAttribute("key"), index);
-  let showsBottomsheet;
-  if (index < 10) {
-    showsBottomsheet = BottomSheet({
-      trigger: `target-${index}`,
-      snapPoints: ["100%"],
-      minWidthForModal: 600,
-      webLayout: "modal",
-      scrollableSheet: true,
-      modalPosition: [-50, 0],
-      scaleOnDrag: true,
-      content: content
-        ? `<div id="bottomsheet-${index}" data-bottomsheet> ${content} </div>`
-        : `<div id="bottomsheet-${index}" data-bottomsheet><img src="assets/banner-blur.png"> </div>`,
-      displayOverlay: true,
-      onOpen: () => {
-        document.querySelectorAll(".close-icon").forEach(icon =>
-          icon.addEventListener("click", () => {
-            showsBottomsheet.close();
-          }),
-        );
-        // window.addEventListener("resize", () => {
-        //   if (showsBottomsheet) showsBottomsheet.init();
-        // });
-        const stack = BottomSheet({
-          trigger: `watch-now-${index}`,
-          snapPoints: ["100%"],
-          displayOverlay: true,
-          minWidthForModal: 600,
-          content: getBottomsheet2Content(
-            document?.querySelector(`#target-2`)?.getAttribute("key") ||
-              "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
-            document?.querySelector(`#target-2`)?.getAttribute("data-key"),
-            index,
-            true,
-          ),
-          scrollableSheet: false,
-          scaleOnDrag: true,
-          webLayout: "modal",
-          modalPosition: [-50, 0],
-          sideSheetSnapPoints: ["50%", "100%"],
-          onOpen: () => {
-            document.querySelector("#x-icon").addEventListener("click", () => {
-              stack.close();
-            });
-          },
-          modalCloseIcon: `<figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  const showsBottomsheet = BottomSheet({
+    trigger: `target-${index}`,
+    snapPoints: ["100%"],
+    minWidthForModal: 600,
+    webLayout: "modal",
+    scrollableSheet: true,
+    modalPosition: [-50, 0],
+    scaleOnDrag: true,
+    content: content
+      ? `<div id="bottomsheet-${index}" data-bottomsheet> ${content} </div>`
+      : `<div id="bottomsheet-${index}" data-bottomsheet><img src="assets/banner-blur.png"> </div>`,
+    displayOverlay: true,
+    onOpen: () => {
+      document.querySelectorAll(".close-icon").forEach(icon =>
+        icon.addEventListener("click", () => {
+          showsBottomsheet.close();
+        }),
+      );
+      // window.addEventListener("resize", () => {
+      //   if (showsBottomsheet) showsBottomsheet.init();
+      // });
+      const stack = BottomSheet({
+        trigger: `watch-now-${index}`,
+        snapPoints: ["100%"],
+        displayOverlay: true,
+        minWidthForModal: 600,
+        content: getBottomsheet2Content(
+          document?.querySelector(`#target-2`)?.getAttribute("key") ||
+            "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
+          document?.querySelector(`#target-2`)?.getAttribute("data-key"),
+          index,
+          true,
+        ),
+        scrollableSheet: false,
+        scaleOnDrag: true,
+        webLayout: "modal",
+        modalPosition: [-50, 0],
+        sideSheetSnapPoints: ["50%", "100%"],
+        onOpen: () => {
+          document.querySelector("#x-icon").addEventListener("click", () => {
+            stack.close();
+          });
+        },
+        modalCloseIcon: `<figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_b_1_250)">
             <circle cx="20" cy="20" r="20" fill="black" fill-opacity="0.58" />
         </g>
@@ -193,9 +191,9 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
             </filter>
         </defs>
     </svg></figure>`,
-        });
-      },
-      modalCloseIcon: `<figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      });
+    },
+    modalCloseIcon: `<figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_b_1_250)">
         <circle cx="20" cy="20" r="20" fill="black" fill-opacity="0.58" />
     </g>
@@ -211,8 +209,7 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
         </filter>
     </defs>
 </svg></figure>`,
-    });
-  }
+  });
 });
 if (window.innerWidth < 700) {
   document.querySelector(".banner-im").src =

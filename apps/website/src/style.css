@@ -650,13 +650,17 @@ input {
 .description {
   margin-top: 24px;
   margin-bottom: 24px;
-
   font-size: 16px;
   font-weight: 430;
   font-style: normal;
   line-height: 160%;
   color: #e8e8e8;
   letter-spacing: 0.025em;
+  -webkit-line-clamp: 4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  white-space: wrap;
+  overflow: hidden;
 }
 
 .cast-names {
