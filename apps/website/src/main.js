@@ -65,3 +65,13 @@ BottomSheet({
   displayOverlay: true,
   snapPoints: ["100%"],
 });
+
+document.getElementById(`maps-1`).addEventListener("scroll", () => {
+  if (document.getElementById(`maps-1`).scrollTop > 0) {
+    document.getElementById(
+      `drag`,
+    ).style.borderBottom = `1px solid rgb(0 0 0 / 15%)`;
+  } else {
+    document.getElementById(`drag`).style.borderBottom = ``;
+  }
+});
