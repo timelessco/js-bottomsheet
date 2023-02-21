@@ -1,5 +1,6 @@
 import { Gesture } from "@use-gesture/vanilla";
 import anime from "animejs/lib/anime.es";
+
 import {
   makeDraggable,
   makeScrollable,
@@ -459,17 +460,12 @@ function BottomSheet(props) {
         value = actualOffset;
       }
       if (active) {
-        // moveBottomSheet(newBottomSheet, `${value}px`, );
-        // anime({
-        //   targets: newBottomSheet,
-        //   translateY: `${value}px`,
-        //   easing: springConfig,
-        //   duration: 0,
-        // });
-
-        animate({
-
-        })
+        anime({
+          targets: newBottomSheet,
+          translateY: `${value}px`,
+          easing: `spring(1,250,24,18)`,
+          duration: 0,
+        });
       }
       if (!active) {
         if (
@@ -506,7 +502,7 @@ function BottomSheet(props) {
         anime({
           targets: newBottomSheet,
           translateY: `${value}px`,
-          easing: springConfig,
+          easing: `spring(1,250,24,18)`,
           duration: 0,
         });
       }

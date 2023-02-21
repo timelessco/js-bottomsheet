@@ -6,7 +6,7 @@ import "scroll-snap-slider";
 
 async function fetchAllShows() {
   const shows = await fetch(
-    "https://strapi.tmls.dev/api/genres?sort[0]=id&fields[0]=name&populate[shows][sort][0]=id&populate[shows][fields][0]=key&populate[shows][fields][1]=name&populate[shows]&populate[shows][populate][poster][fields][0]=hash&populate[shows][populate][poster][fields][1]=src&populate[shows][populate][banner][fields][0]=hash&populate[shows][populate][banner][fields][1]=src",
+    "https://strapi2.tmls.dev/api/genres?sort[0]=id&fields[0]=name&populate[shows][sort][0]=id&populate[shows][fields][0]=key&populate[shows][fields][1]=name&populate[shows]&populate[shows][populate][poster][fields][0]=hash&populate[shows][populate][poster][fields][1]=src&populate[shows][populate][banner][fields][0]=hash&populate[shows][populate][banner][fields][1]=src",
   )
     .then(res => res.json())
     .then(async json => {
@@ -19,7 +19,7 @@ async function fetchAllShows() {
 }
 async function getIndividualShows(key) {
   const products = await fetch(
-    `https://strapi.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`,
+    `https://strapi2.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`,
   )
     .then(res => res.json())
     .then(async json => {
@@ -251,55 +251,3 @@ function getBottomsheet2Content(src, key, index, bottomsheet = false) {
   ${bottomsheet ? `</div>` : ""}
 `;
 }
-
-// async function getBottomsheet3content(key) {
-//   let products;
-//   if (key !== undefined) {
-//     products = await fetch(
-//       `https://strapi.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`,
-//     )
-//       .then(res => res.json())
-//       .then(async json => {
-//         return json.data[0];
-//       });
-//   }
-//   let res = `<div id="bottomsheet-3" data-bottomsheet>
-//   <div
-//     class="see-all"
-//     id="target-3"
-//     key=${key}
-//     data-bottomsheet-id="bottomsheet-3"
-//     style="
-//       display: flex;
-//       flex-direction: column;
-//       align-items: center;
-//       justify-content: center;
-//     "
-//   >
-//     <div style="transform: rotate(270deg) translateZ(0px); width: max-content">
-//       <svg
-//         aria-hidden="true"
-//         focusable="false"
-//         viewBox="0 0 9 16"
-//         fill="none"
-//         style="width: 20px"
-//       >
-//         <path
-//           d="M8 15L0.999999 8.2L8 1"
-//           stroke="currentColor"
-//           stroke-width="2"
-//           stroke-linejoin="round"
-//         ></path>
-//       </svg>
-//     </div>
-//     <span class="uppercase">see all episodes</span>
-//   </div>
-//   <ul class="scroll-snap-slider">
-//   ${products?.videos.map((items, index) => {
-//     return `<li class="scroll-snap-slide">
-//     <img src=${items.poster} style="border-radius:20px"/>
-//     </li>`;
-//   })}
-// </ul></div>`;
-//   return res.replaceAll(",", "");
-// }
