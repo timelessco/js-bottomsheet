@@ -16,8 +16,8 @@ A pure Js snappable, scrollable, customisable bottomsheet!
 
 ## Dependencies:
 
-1. https://use-gesture.netlify.app/docs/#vanilla-javascript
-2. https://animejs.com/
+1. Use Gesture: https://use-gesture.netlify.app/docs/#vanilla-javascript
+2. Anime js: https://animejs.com/
 
 ## Installation
 
@@ -81,17 +81,45 @@ BottomSheet({
 
 ### content:
 
-Your content needn't always be a DOM element, it could be passed in dynamically
-too, as a string or as a promise.
+Content needn't always be a DOM element, it could be passed in dynamically
+too, as a string. 
 
-> Type: string | promise
+> Type: string
 
 eg:
 
 ```
 BottomSheet({
  trigger: 'trigger-1',
- content: <div id="bottomsheet-1" data-bottomsheet>The Bottomsheet</div>
+ content: `<div id="bottomsheet-1" data-bottomsheet>The Bottomsheet</div>`
+});
+```
+
+### headerContent:
+
+Content that would be sticky to the top of the bottomsheet, it should contain class 'header'
+
+> Type: string
+
+eg:
+```
+BottomSheet({
+ trigger: 'trigger-1',
+ headerContent: `<div class="header">...</div>`
+});
+```
+
+### footerContent:
+
+Content that would be sticky to the bottom of the bottomsheet, it should contain class 'footer'
+
+> Type: string
+
+eg:
+```
+BottomSheet({
+ trigger: 'trigger-1',
+ footerContent: `<div class="footer">...</div>`
 });
 ```
 
