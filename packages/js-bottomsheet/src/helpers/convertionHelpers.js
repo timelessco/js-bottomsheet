@@ -45,7 +45,7 @@ export function getMobileOperatingSystem() {
 }
 
 export function getCurrentSnapPoint(newBottomSheet) {
-  let scalePos = newBottomSheet?.style?.transform.indexOf("scale");
+  const scalePos = newBottomSheet?.style?.transform.indexOf("scale");
   const transformValue =
     scalePos > 0
       ? newBottomSheet?.style?.transform.slice(11, scalePos).replace("px)", "")

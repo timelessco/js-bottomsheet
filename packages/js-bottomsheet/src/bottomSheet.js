@@ -43,15 +43,12 @@ function BottomSheet(props) {
     cleanUpOnClose = false,
     dismissible = true,
     rubberband = false,
-    // sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
     velocityThreshold = 0.9,
     distanceThreshold = 150,
     closeOnOverlayClick = true,
     onDragStart = () => {},
     onDragEnd = () => {},
     scrollableSheet = true,
-    // resizableSheet = true,
-    resizablePosition = "left",
     modalPosition = [50, 50],
     headerContent = ``,
     draggableArea = ``,
@@ -172,7 +169,7 @@ function BottomSheet(props) {
             opacity: 1,
             duration: 1,
           });
-        }, 400);
+        }, 250);
       }
     }
     lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
@@ -550,7 +547,6 @@ function BottomSheet(props) {
             distance: [, dy],
             target,
             direction,
-            touches,
           }) => {
             const minSnapPoint = 0;
             const maxSnapPoint = Infinity;
