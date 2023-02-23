@@ -153,23 +153,15 @@ function BottomSheet(props) {
           checkType(snapPoints[0]),
         )}px)`;
       } else {
-        targetBottomSheet.style.transform = `unset`;
+        targetBottomSheet.style.transform = `translateY(${convertToPx(100)}px)`;
         document.body.style.overflow = "hidden";
         anime({
           targets: targetBottomSheet,
-          translateY: `${convertToPx(100)}px`,
-          easing: "linear",
+          translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
+          easing: springConfig,
+          opacity: 1,
           duration: 1,
         });
-        setTimeout(() => {
-          anime({
-            targets: targetBottomSheet,
-            translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
-            easing: springConfig,
-            opacity: 1,
-            duration: 1,
-          });
-        }, 250);
       }
     }
     lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
