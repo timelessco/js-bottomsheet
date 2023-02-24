@@ -64,9 +64,6 @@ function BottomSheet(props) {
 
     if (window.innerWidth === minWidthForModal) init();
   });
-  window.onbeforeunload = function () {
-    localStorage.removeItem("array");
-  };
 
   content =
     typeof content !== "string"
@@ -235,7 +232,6 @@ function BottomSheet(props) {
     } else {
       closeSideSheet();
     }
-    // document.body.style.overscrollBehavior = "auto";
     lastSetSnapPoint = convertToPx(120);
     setTimeout(() => {
       if (lastSetSnapPoint >= innerHt) {
@@ -764,18 +760,10 @@ function BottomSheet(props) {
     }
     if (draggableArea) {
       if (typeof draggableArea === "string") {
-        // draggableArea = new DOMParser().parseFromString(
-        //   draggableArea,
-        //   "text/xml",
-        // );
-        // draggableId = draggableArea.childNodes[0].id;
-        // [draggableArea] = draggableArea.childNodes;
         draggableId = "drag";
       } else {
         draggableId = draggableArea?.id;
       }
-      // draggableArea.setAttribute("data-draggable", "1");
-      // draggableArea.classList.add("draggable");
     }
     handleCloseIcons(
       sideSheetIconWrapper,
