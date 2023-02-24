@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "build": "vite build",
-    "dev": "vite --host --open",
+    "dev": "vite --host",
     "format": "prettier --ignore-path ../../.prettierignore -l --cache \"./**/*.{html,css,js,cjs,jsx,ts,cts,tsx,md,json}\"",
     "format:fix": "prettier --ignore-path ../../.prettierignore -l --write --cache --check \"./**/*.{html,css,js,cjs,jsx,ts,cts,tsx,md,json}\"",
     "lint": "eslint --cache --color --ext .js,.cjs,.jsx,.ts,.cts,.tsx .",
