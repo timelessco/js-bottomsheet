@@ -60,14 +60,14 @@ importers:
       js-bottomsheet: workspace:*
       scroll-snap-slider: SamrithaS/scroll-snap-slider
       vite: ^4.1.4
-      vite-plugin-top-level-await: ^1.2.4
+      vite-plugin-top-level-await: ^1.3.0
     dependencies:
       js-bottomsheet: link:../../packages/js-bottomsheet
       scroll-snap-slider: github.com/SamrithaS/scroll-snap-slider/8b5ba9db9b8d4920f6c131861035ff07fefdf91e
     devDependencies:
       browserslist-to-esbuild: 1.2.0
       vite: 4.1.4
-      vite-plugin-top-level-await: 1.2.4_vite@4.1.4
+      vite-plugin-top-level-await: 1.3.0_vite@4.1.4
 
   packages/js-bottomsheet:
     specifiers:
@@ -2079,6 +2079,16 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
+    dev: true
+
+  /@rollup/plugin-virtual/3.0.1:
+    resolution: {integrity: sha512-fK8O0IL5+q+GrsMLuACVNk2x21g3yaw+sG2qn16SnUd3IlBsQyvWxLMGHmCmXRMecPjGRSZ/1LmZB4rjQm68og==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
     dev: true
 
   /@sindresorhus/is/0.14.0:
@@ -6161,14 +6171,17 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite-plugin-top-level-await/1.2.4_vite@4.1.4:
-    resolution: {integrity: sha512-ABHJipy/R31F/3bWnPBYIFUKVXr+Ox6EVax5jos67QhuzZ4aQyp/F3qZhF2Qi/9pgi9vpIftTZ++wfkRn0c4gA==}
+  /vite-plugin-top-level-await/1.3.0_vite@4.1.4:
+    resolution: {integrity: sha512-owIfsgWudMlQODWJSwp0sQB3AZZu3qsMygeBjZy8CyjEk6OB9AGd8lHqmgwrcEqgvy9N58lYxSBLVk3/4ejEiA==}
     peerDependencies:
       vite: '>=2.8'
     dependencies:
+      '@rollup/plugin-virtual': 3.0.1
       '@swc/core': 1.3.35
       uuid: 9.0.0
       vite: 4.1.4
+    transitivePeerDependencies:
+      - rollup
     dev: true
 
   /vite/4.1.4:
