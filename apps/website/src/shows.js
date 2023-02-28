@@ -29,6 +29,7 @@ async function getIndividualShows(key) {
 }
 async function getBottomsheet1content(key, ind) {
   const shows = await getIndividualShows(key);
+
   const content = `
   <div class="list-items">
   <div class="img-wrapper">
@@ -92,7 +93,9 @@ async function getBottomsheet1content(key, ind) {
         .map((item, index) => {
           return `<div class="container-box">
         <img src='assets/white.png' class="white-play" />
+        <figure class="seasons-figure">
         <img src=${item.poster} class="seasons" />
+        </figure>
         <div class="seasons-text">
           <h4><span class="number">${index + 1}</span> ${item.name}</h4>
           <p>Just as Camille thinks she's in total control of her life, her ex shows up on her block making her question
@@ -240,8 +243,22 @@ function getBottomsheet2Content(src, key, index, bottomsheet = false) {
       : ""
   }
     <div class="second blur"></div>
-    <img src="/assets/close-icon.svg" class="x-icon" id="x-icon" />
-    div class="universal">input placeholder="enter access code" class="access-input"/>
+    <svg class="close-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g filter="url(#filter0_b_5593_50546)">
+    <circle cx="16" cy="16" r="16" fill="black" fill-opacity="0.58"/>
+    </g>
+    <path d="M20.8001 11.2001L11.2001 20.8001" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M11.2001 11.2001L20.8001 20.8001" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <defs>
+    <filter id="filter0_b_5593_50546" x="-19" y="-19" width="70" height="70" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+    <feGaussianBlur in="BackgroundImageFix" stdDeviation="9.5"/>
+    <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_5593_50546"/>
+    <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_5593_50546" result="shape"/>
+    </filter>
+    </defs>
+    </svg>
+    <div class="universal"><input placeholder="enter access code" class="access-input"/>
     <button class="watch-now univ"> <svg class="watch-svg" width="8" height="13" viewBox="0 0 8 11" fill="none"
         xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd"

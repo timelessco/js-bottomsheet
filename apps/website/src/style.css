@@ -101,9 +101,9 @@ p {
 
 body {
   overscroll-behavior: contain;
-
+  /* overflow: hidden; */
   min-width: 100%;
-  height: 100vh;
+  height: 100%;
   margin: 0;
 
   font-family: Pretendard, sans-serif;
@@ -159,7 +159,8 @@ h2 {
 
 .img-wrapper img {
   width: auto;
-  min-height: 225px;
+  /* min-height: 225px; */
+  object-fit: cover;
 }
 
 .close {
@@ -218,6 +219,10 @@ h2 {
 .seasons {
   width: auto;
   max-height: 183px;
+}
+
+.seasons-figure{
+  margin:0
 }
 
 .seasons p {
@@ -860,7 +865,7 @@ input {
 
 .img-wrapper {
   position: relative;
-  min-height: 225px;
+  /* min-height: 225px; */
 }
 
 .gradient {
@@ -987,33 +992,6 @@ input {
   text-align: center;
 }
 
-/* .nav-overlay {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  opacity: 0.2;
-  filter: blur(20px);
-  -webkit-filter: blur(20px);
-  height: 100%;
-} */
-
-.image-overlay {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-
-  height: 100%;
-
-  opacity: 0.2;
-  background: url("/assets/harlem.jpg");
-  background-size: contain;
-  -webkit-filter: blur(20px);
-  filter: blur(20px);
-}
 
 .li-overlay {
   position: absolute;
@@ -1372,8 +1350,8 @@ iframe {
 
   .container-box img {
     width: 100%;
-    max-width: 230px;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     border-radius: 0;
   }
 
