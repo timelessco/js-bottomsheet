@@ -35,51 +35,33 @@ export function translateResizableDiv(
 ) {
   let translateX;
   let width;
+  const minValueinPx = Math.round(
+    (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
+  );
+  const minValueDifference = Math.round(
+    (offset[0] / window.innerWidth) * 100 + (100 - sideSheetMinValue),
+  );
   if (webLayout === "sideSheetLeft") {
-    if (
-      Math.round((offset[0] / window.innerWidth) * 100 + sideSheetMinValue) <
-        sideSheetMinValue - 5 &&
-      dismissible
-    ) {
+    if (minValueinPx < sideSheetMinValue - 5 && dismissible) {
       width = sideSheetMinValue - 5;
     } else
       width = Math.round(
         (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
       );
 
-    if (
-      Math.round((offset[0] / window.innerWidth) * 100 + sideSheetMinValue) <
-        sideSheetMinValue &&
-      !active &&
-      dismissible
-    ) {
+    if (minValueinPx < sideSheetMinValue && !active && dismissible) {
       if (xy[0] < convertToPxWidth(sideSheetMinValue) - 100)
         translateX = "-105%";
       else width = sideSheetMinValue;
     }
   } else {
-    if (
-      100 -
-        Math.round(
-          (offset[0] / window.innerWidth) * 100 + (100 - sideSheetMinValue),
-        ) <
-        sideSheetMinValue - 5 &&
-      dismissible
-    ) {
+    if (100 - minValueDifference < sideSheetMinValue - 5 && dismissible) {
       width = sideSheetMinValue - 5;
     } else {
-      width =
-        100 -
-        Math.round(
-          (offset[0] / window.innerWidth) * 100 + (100 - sideSheetMinValue),
-        );
+      width = 100 - minValueDifference;
     }
     if (
-      100 -
-        Math.round(
-          (offset[0] / window.innerWidth) * 100 + (100 - sideSheetMinValue),
-        ) <
-        sideSheetMinValue &&
+      100 - minValueDifference < sideSheetMinValue &&
       !active &&
       dismissible
     ) {

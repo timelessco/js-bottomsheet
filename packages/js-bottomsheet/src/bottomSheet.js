@@ -99,32 +99,28 @@ function BottomSheet(props) {
       if (webLayout === "sideSheetLeft") {
         targetBottomSheet.style.top = 0;
         targetBottomSheet.style.left = `-100%`;
-        setTimeout(() => {
-          anime({
-            targets: targetBottomSheet,
-            left: "0",
-            width: `${sideSheetMinValue}%`,
-            opacity: 1,
-            easing: springConfig,
-            duration: 1,
-            translateX: 0,
-          });
-        }, 100);
+        anime({
+          targets: targetBottomSheet,
+          left: "0",
+          width: `${sideSheetMinValue}%`,
+          opacity: 1,
+          easing: springConfig,
+          duration: 1,
+          translateX: 0,
+        });
       } else if (webLayout === "sideSheetRight") {
         targetBottomSheet.style.top = 0;
         targetBottomSheet.style.right = `-100%`;
         targetBottomSheet.style.left = "unset";
-        setTimeout(() => {
-          anime({
-            targets: targetBottomSheet,
-            right: "0",
-            opacity: 1,
-            width: `${sideSheetMinValue}%`,
-            easing: springConfig,
-            duration: 1,
-            translateX: 0,
-          });
-        }, 100);
+        anime({
+          targets: targetBottomSheet,
+          right: "0",
+          opacity: 1,
+          width: `${sideSheetMinValue}%`,
+          easing: springConfig,
+          duration: 1,
+          translateX: 0,
+        });
       } else {
         targetBottomSheet.style.top = "50%";
         targetBottomSheet.style.transform = `translateX(${
@@ -812,8 +808,8 @@ function BottomSheet(props) {
           ?.getAttribute("data-bottomsheet-id")
       : "";
     document.body.style.overscrollBehavior = "contain";
-
     targetBottomSheet = targetid ? document?.querySelector(`#${targetid}`) : "";
+
     if (onInit) {
       onInit();
     }
@@ -839,7 +835,6 @@ function BottomSheet(props) {
     ) {
       document.body.append(targetBottomSheet);
     }
-
     if (displayOverlay) {
       overlay.classList.add("overlay");
       addOverlay(overlay);

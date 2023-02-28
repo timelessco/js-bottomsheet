@@ -34,26 +34,6 @@ BottomSheet({
   footerContent: `<button class="dismiss md footer" id="map-2-target" data-bottomsheet-id="maps-2">Dismiss</button>`,
 });
 
-// const bottomsheet2 = BottomSheet({
-//   trigger: `map-2-target`,
-//   snapPoints: ["100%"],
-//   webLayout: "sideSheetRight",
-//   scaleOnDrag: true,
-// });
-
-// document.getElementById("done").addEventListener("click", () => {
-//   bottomsheet2.close();
-// });
-
-// const bottomsheet3 = BottomSheet({
-//   trigger: `target-map-3`,
-//   displayOverlay: true,
-//   snapPoints: ["35%"],
-// });
-// document.querySelector(".cancel").addEventListener("click", () => {
-//   bottomsheet3.close();
-// });
-
 BottomSheet({
   trigger: `target-map-4`,
   displayOverlay: true,
