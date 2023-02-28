@@ -1,6 +1,7 @@
 import anime from "animejs/lib/anime.es";
 
 import { convertToPxWidth } from "./convertionHelpers";
+import { resizeHover } from "./eventListeners";
 
 export function moveBottomSheet(targetBottomSheet, top, ease, duration) {
   const result = {
@@ -39,8 +40,6 @@ export function translateResizableDiv(
       Math.round((offset[0] / window.innerWidth) * 100 + sideSheetMinValue) <
         sideSheetMinValue - 5 &&
       dismissible
-
-      // velocity[0] > 0.5
     ) {
       width = sideSheetMinValue - 5;
     } else
@@ -53,8 +52,6 @@ export function translateResizableDiv(
         sideSheetMinValue &&
       !active &&
       dismissible
-
-      // velocity[0] > 0.5
     ) {
       if (xy[0] < convertToPxWidth(sideSheetMinValue) - 100)
         translateX = "-105%";
@@ -68,8 +65,6 @@ export function translateResizableDiv(
         ) <
         sideSheetMinValue - 5 &&
       dismissible
-
-      // velocity[0] > 0.5
     ) {
       width = sideSheetMinValue - 5;
     } else {
@@ -87,8 +82,6 @@ export function translateResizableDiv(
         sideSheetMinValue &&
       !active &&
       dismissible
-
-      // velocity[0] > 0.5
     ) {
       if (
         xy[0] >
@@ -106,7 +99,6 @@ export function translateResizableDiv(
     easing: `spring(1,250, 30, 20)`,
     duration: 0,
     translateX,
-    // opacity: `${width === 0 ? 0 : 1}`,
   });
 }
 
@@ -118,4 +110,56 @@ export const findIndexOfSheet = (bottomsheetArray, targetBottomSheet) => {
     );
 
   return bottomInd;
+};
+
+export const resizableRequirements = (
+  webLayout,
+  resizableDiv,
+  resizeHoverEffect,
+  targetBottomSheet,
+  isWeb,
+) => {
+  if (webLayout === "sideSheetRight") {
+    resizableDiv.style.left = "0";
+  } else {
+    resizableDiv.style.right = "0";
+  }
+  resizableDiv.id = "resizable";
+  resizableDiv.classList.add("resizable-div");
+  if (resizeHoverEffect)
+    resizeHover(targetBottomSheet, isWeb, resizableDiv, webLayout);
+};
+
+export const getLeftBounds = (
+  webLayout,
+  sideSheetMaxValue,
+  targetBottomSheet,
+  sideSheetMinValue,
+) => {
+  let res;
+  if (webLayout === "sideSheetRight") {
+    res = -(
+      convertToPxWidth(sideSheetMaxValue) -
+      convertToPxWidth(+targetBottomSheet.style.width.replace("%", ""))
+    );
+  } else {
+    res =
+      convertToPxWidth(sideSheetMinValue) -
+      convertToPxWidth(+targetBottomSheet.style.width.replace("%", ""));
+  }
+  return res;
+};
+
+export const getRightBounds = (
+  webLayout,
+  sideSheetMaxValue,
+  targetBottomSheet,
+) => {
+  let res;
+  if (webLayout === "sideSheetLeft")
+    res =
+      convertToPxWidth(sideSheetMaxValue) -
+      convertToPxWidth(+targetBottomSheet.style.width.replace("%", ""));
+  else res = window.innerWidth;
+  return res;
 };

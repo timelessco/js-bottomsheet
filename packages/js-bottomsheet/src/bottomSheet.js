@@ -2,15 +2,17 @@ import { Gesture } from "@use-gesture/vanilla";
 import anime from "animejs/lib/anime.es";
 
 import {
+  getLeftBounds,
+  getRightBounds,
   makeDraggable,
   makeScrollable,
   moveBottomSheet,
+  resizableRequirements,
   translateResizableDiv,
 } from "./helpers/bottomsheetHelpers";
 import {
   checkType,
   convertToPx,
-  convertToPxWidth,
   differenceOfWindowHt,
   getCurrentSnapPoint,
   snapPointConversion,
@@ -18,7 +20,6 @@ import {
 import { addOverlay, hideOverlay } from "./helpers/overlayHelpers";
 
 import "./bottomsheet.css";
-import { resizeHover } from "./helpers/eventListeners";
 
 function BottomSheet(props) {
   const {
@@ -59,16 +60,6 @@ function BottomSheet(props) {
   let { content = "" } = props;
   let lastSetSnapPoint;
   let innerHt = window.innerHeight;
-  document.addEventListener("resize", () => {
-    innerHt = window.innerHeight;
-
-    if (window.innerWidth === minWidthForModal) init();
-  });
-
-  content =
-    typeof content !== "string"
-      ? Promise.resolve(content).then(value => value)
-      : content;
   let targetid = trigger
     ? document
         ?.querySelector(`#${trigger}`)
@@ -80,14 +71,24 @@ function BottomSheet(props) {
     : "";
 
   let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
+  const springConfig = `spring(1,250,20,13)`;
   let isWeb = !(window.innerWidth < minWidthForModal);
   const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
 
+  content =
+    typeof content !== "string"
+      ? Promise.resolve(content).then(value => value)
+      : content;
+
+  document.addEventListener("resize", () => {
+    innerHt = window.innerHeight;
+
+    if (window.innerWidth === minWidthForModal) init();
+  });
   if (targetBottomSheet?.id) overlay.id = `${targetBottomSheet?.id}-overlay`;
 
-  const springConfig = `spring(1,250,20,13)`;
   function open(openOnLoading, withoutAnimation = false) {
     if (displayOverlay) {
       addOverlay(overlay);
@@ -667,25 +668,17 @@ function BottomSheet(props) {
           drag: {
             axis: "x",
             bounds: {
-              left:
-                webLayout === "sideSheetRight"
-                  ? -(
-                      convertToPxWidth(sideSheetMaxValue) -
-                      convertToPxWidth(
-                        +targetBottomSheet.style.width.replace("%", ""),
-                      )
-                    )
-                  : convertToPxWidth(sideSheetMinValue) -
-                    convertToPxWidth(
-                      +targetBottomSheet.style.width.replace("%", ""),
-                    ),
-              right:
-                webLayout === "sideSheetLeft"
-                  ? convertToPxWidth(sideSheetMaxValue) -
-                    convertToPxWidth(
-                      +targetBottomSheet.style.width.replace("%", ""),
-                    )
-                  : window.innerWidth,
+              left: getLeftBounds(
+                webLayout,
+                sideSheetMaxValue,
+                targetBottomSheet,
+                sideSheetMinValue,
+              ),
+              right: getRightBounds(
+                webLayout,
+                sideSheetMaxValue,
+                targetBottomSheet,
+              ),
             },
             rubberband: true,
           },
@@ -721,16 +714,15 @@ function BottomSheet(props) {
     const modalClose = document.createElement("div");
     const sideSheetIconWrapper = document.createElement("div");
     const resizableDiv = document.createElement("div");
-    if (webLayout === "sideSheetRight") {
-      resizableDiv.style.left = "0";
-    } else {
-      resizableDiv.style.right = "0";
-    }
-    resizableDiv.id = "resizable";
-    resizableDiv.classList.add("resizable-div");
     let draggableId = "";
-    if (resizeHoverEffect)
-      resizeHover(targetBottomSheet, isWeb, resizableDiv, webLayout);
+
+    resizableRequirements(
+      webLayout,
+      resizableDiv,
+      resizeHoverEffect,
+      targetBottomSheet,
+      isWeb,
+    );
     targetBottomSheet.style.display = "block";
     modalClose.id = "modal-close";
     modalClose.classList.add("close-modal");
