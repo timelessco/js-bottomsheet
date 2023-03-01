@@ -3,6 +3,7 @@ import BottomSheet from "js-bottomsheet";
 // eslint-disable-next-line import/no-unresolved
 import "js-bottomsheet/bottomsheet.css";
 
+document.body.style.overflow = "hidden";
 BottomSheet({
   snapPoints: ["10%", "40%", "100%"],
   draggableArea: `<div id="drag">
