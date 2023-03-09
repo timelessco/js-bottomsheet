@@ -539,7 +539,7 @@ function BottomSheet(props) {
             if (direction[1] >= 0) {
               if (
                 draggableId &&
-                target === document.querySelector(`#${draggableId}`)
+                document.querySelector(`#${draggableId}`).contains(target)
               ) {
                 makeDraggable(targetBottomSheet);
                 handleSnapPoints(
