@@ -33,6 +33,7 @@
 
   background: rgba(0 0 0/60%);
   backdrop-filter: blur(35px);
+  -webkit-backdrop-filter: blur(35px);
   border: none;
   border-radius: 8px;
   outline: none;
@@ -418,12 +419,32 @@ img.play-svg {
   width: 100%;
 }
 
-#maps-1 img {
+#maps-1 img, #recents-sheet img{
   width: unset;
 }
 
 button:hover {
   border-color: #646cff;
+}
+
+.recents-flex{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.recents{
+  display: flex;
+  align-items: center;
+  
+  font-size: 24px;
+  font-feature-settings: 'case' on;
+  font-weight: 600;
+  line-height: 160%;
+  color: #171717;
+  letter-spacing: -0.02em;
+
+
 }
 
 button:focus,
@@ -697,6 +718,15 @@ input {
   letter-spacing: 0.08em;
 }
 
+#recents-sheet{
+  z-index: 1000 !important;
+}
+
+#recents-sheet-overlay{
+  z-index:999 !important;
+
+}
+
 .crew {
   font-size: 16px;
   font-weight: 430;
@@ -734,19 +764,18 @@ input {
   margin: 0 16px;
 }
 
-#maps-1 {
+#maps-1, #recents-sheet {
   width: 100%;
   max-width: -webkit-fill-available;
 
-  font-family: Pretendard, sans-serif;
+  font-family: "Inter V", sans-serif;
 
-  background: rgb(255 255 255 / 70%);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(255 255 255/ 80%);
   backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-radius: 12px 12px 0 0;
+  box-shadow: 0 0 39px rgba(0 0 0/ 80%);
 
-  /* background: transparent; */
-  box-shadow: 0 0 7px rgb(0 0 0 / 25%);
 }
 
 .maps-cont {
@@ -769,8 +798,10 @@ input {
 
   text-align: center;
   
-  background: white;
-  backdrop-filter: blur(24px);
+  background: rgba(255 255 255/ 80%);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px); 
+  
 }
 
 
@@ -928,8 +959,8 @@ input {
 
   width: 100%;
   max-width: -webkit-fill-available;
-  margin-left: 16px;
-  padding: 10px 0;
+  margin-left: 10px;
+  padding: 12px 0;
 
   border-bottom: 1px solid rgb(0 0 0 / 5%);
 }

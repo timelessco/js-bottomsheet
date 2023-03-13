@@ -737,12 +737,18 @@ function BottomSheet(props) {
     if (sideSheetIconWrapper.children.length === 0)
       sideSheetIconWrapper.insertAdjacentHTML("afterbegin", sideSheetIcon);
     if (footerContent) {
-      if (typeof footerContent === "string") {
+      if (
+        typeof footerContent === "string" &&
+        !document.querySelector(`#${targetBottomSheet.id} .footer`)
+      ) {
         targetBottomSheet.insertAdjacentHTML("beforeend", footerContent);
       }
     }
     if (headerContent) {
-      if (typeof headerContent === "string") {
+      if (
+        typeof headerContent === "string" &&
+        !document.querySelector(`#${targetBottomSheet.id} .header`)
+      ) {
         targetBottomSheet.insertAdjacentHTML("beforeend", headerContent);
       }
     }
