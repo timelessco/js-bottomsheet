@@ -68,3 +68,13 @@ document.getElementById(`maps-1`).addEventListener("scroll", () => {
     document.getElementById(`drag`).style.borderBottom = ``;
   }
 });
+
+document.getElementById(`recents-sheet`).addEventListener("scroll", () => {
+  if (document.getElementById(`recents-sheet`).scrollTop > 0) {
+    document.querySelector(
+      `#recents-sheet #drag`,
+    ).style.borderBottom = `1px solid rgb(0 0 0 / 15%)`;
+  } else {
+    document.getElementById(`drag`).style.borderBottom = ``;
+  }
+});
