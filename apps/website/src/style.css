@@ -774,7 +774,7 @@ input {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-radius: 12px 12px 0 0;
-  box-shadow: 0 0 39px rgba(0 0 0/ 80%);
+  box-shadow: 0 0 39px rgba(0 0 0/ 8%);
 
 }
 
