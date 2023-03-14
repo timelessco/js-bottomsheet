@@ -1281,10 +1281,12 @@ iframe {
   .maps-cont {
     padding: 0;
     overflow: scroll;
-  
-
   }
-
+  
+  .footer.dismiss {
+    bottom:0
+  }
+  
   #maps-1 .maps-cont{
     height: calc(100vh - 45px);
   }
