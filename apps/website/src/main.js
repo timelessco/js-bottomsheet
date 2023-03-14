@@ -55,8 +55,13 @@ const recentsSheet = BottomSheet({
     document.getElementById("close-recents").addEventListener("click", () => {
       recentsSheet.close();
     });
+    document
+      .querySelector(`#recents-sheet #dismiss`)
+      .addEventListener("click", () => {
+        recentsSheet.close();
+      });
   },
-  footerContent: `<button class="dismiss md footer" id="map-2-target" data-bottomsheet-id="maps-2">Dismiss</button>`,
+  footerContent: `<button class="dismiss md footer" id="dismiss" data-bottomsheet-id="maps-2" >Dismiss</button>`,
 });
 
 document.getElementById(`maps-1`).addEventListener("scroll", () => {

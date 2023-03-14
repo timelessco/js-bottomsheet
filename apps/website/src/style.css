@@ -21,7 +21,7 @@
   width: -webkit-fill-available;
   margin: 0 0 17px;
   padding: 14px 20px;
-  
+
   font-family: "Inter V", sans-serif;
   font-size: 13px;
   font-weight: 600;
@@ -103,7 +103,6 @@ p {
 body {
   overscroll-behavior: contain;
   min-width: 100%;
-  /* overflow: hidden; */
 
   margin: 0;
 
@@ -112,8 +111,8 @@ body {
   background: white;
 }
 
-.iframe-wrapper{
-  height:100%;
+.iframe-wrapper {
+  height: 100%;
   overflow: hidden;
 }
 
@@ -165,7 +164,6 @@ h2 {
 
 .img-wrapper img {
   width: auto;
-  /* min-height: 225px; */
   object-fit: cover;
 }
 
@@ -227,8 +225,8 @@ h2 {
   max-height: 183px;
 }
 
-.seasons-figure{
-  margin:0
+.seasons-figure {
+  margin: 0;
 }
 
 .seasons p {
@@ -419,7 +417,8 @@ img.play-svg {
   width: 100%;
 }
 
-#maps-1 img, #recents-sheet img{
+#maps-1 img,
+#recents-sheet img {
   width: unset;
 }
 
@@ -427,24 +426,26 @@ button:hover {
   border-color: #646cff;
 }
 
-.recents-flex{
+.recents-flex {
+  display:none
+}
+
+#drag .recents-flex{
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.recents{
+.recents {
   display: flex;
   align-items: center;
-  
+
   font-size: 24px;
-  font-feature-settings: 'case' on;
+  font-feature-settings: "case" on;
   font-weight: 600;
   line-height: 160%;
   color: #171717;
   letter-spacing: -0.02em;
-
-
 }
 
 button:focus,
@@ -597,6 +598,12 @@ input {
     margin: auto;
   }
 
+  .recents-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .details {
     display: flex;
     justify-content: space-between;
@@ -681,7 +688,7 @@ input {
 
   margin-top: 24px;
   margin-bottom: 24px;
-  
+
   font-size: 16px;
   font-weight: 430;
   font-style: normal;
@@ -689,7 +696,7 @@ input {
   color: #e8e8e8;
   letter-spacing: 0.025em;
   white-space: wrap;
-  
+
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
 }
@@ -718,13 +725,12 @@ input {
   letter-spacing: 0.08em;
 }
 
-#recents-sheet{
+#recents-sheet {
   z-index: 1000 !important;
 }
 
-#recents-sheet-overlay{
-  z-index:999 !important;
-
+#recents-sheet-overlay {
+  z-index: 999 !important;
 }
 
 .crew {
@@ -762,9 +768,11 @@ input {
 .footer.dismiss {
   width: -webkit-fill-available;
   margin: 0 16px;
+  bottom: 58px
 }
 
-#maps-1, #recents-sheet {
+#maps-1,
+#recents-sheet {
   width: 100%;
   max-width: -webkit-fill-available;
 
@@ -775,7 +783,6 @@ input {
   -webkit-backdrop-filter: blur(24px);
   border-radius: 12px 12px 0 0;
   box-shadow: 0 0 39px rgba(0 0 0/ 8%);
-
 }
 
 .maps-cont {
@@ -792,21 +799,18 @@ input {
 #drag {
   position: sticky;
   top: 0;
-  
+
   margin: 0;
   padding: 0 16px 17px;
 
   text-align: center;
-  
+
   background: rgba(255 255 255/ 80%);
   -webkit-backdrop-filter: blur(24px);
-  backdrop-filter: blur(24px); 
-  
+  backdrop-filter: blur(24px);
 }
 
-
-
-#drag .flex-input{
+#drag .flex-input {
   margin-bottom: 0;
 }
 
@@ -901,7 +905,6 @@ input {
 
 .img-wrapper {
   position: relative;
-  /* min-height: 225px; */
 }
 
 .gradient {
@@ -1028,7 +1031,6 @@ input {
   text-align: center;
 }
 
-
 .li-overlay {
   position: absolute;
   z-index: 10;
@@ -1093,10 +1095,10 @@ input {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
+
   max-width: 924px !important;
   margin: auto;
-  
+
   background: url("https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg");
 }
 
@@ -1105,7 +1107,7 @@ img.x-icon {
   z-index: 200;
   top: 15px;
   right: 16px;
-  
+
   width: 40px;
   height: 40px;
 }
@@ -1278,6 +1280,17 @@ iframe {
 
   .maps-cont {
     padding: 0;
+    overflow: scroll;
+  
+
+  }
+
+  #maps-1 .maps-cont{
+    height: calc(100vh - 45px);
+  }
+
+  #recents-sheet .maps-cont {
+    height: calc(100vh - 90px);
   }
 
   .overlay {
@@ -1455,7 +1468,23 @@ iframe {
     margin-left: 11px;
   }
 
+  .flex-cent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .more {
+    cursor: pointer;
+
+    display: block;
+
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 15px;
+  }
+
+  .more:first-of-type {
     display: none;
   }
 
@@ -1500,6 +1529,10 @@ iframe {
     border-right: 1px solid rgba(0 0 0/2%);
     border-radius: 0;
     box-shadow: none;
+  }
+
+  #recents-sheet {
+    padding: 0 12px;
   }
 
   .search {
