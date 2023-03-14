@@ -768,7 +768,7 @@ input {
 .footer.dismiss {
   width: -webkit-fill-available;
   margin: 0 16px;
-  bottom: 58px
+  bottom: 16px
 }
 
 #maps-1,
@@ -1286,7 +1286,7 @@ iframe {
   .footer.dismiss {
     bottom:0
   }
-  
+
   #maps-1 .maps-cont{
     height: calc(100vh - 45px);
   }
@@ -1520,7 +1520,7 @@ iframe {
     line-height: 22px;
   }
 
-  #maps-1 {
+  #maps-1, #recents-sheet{
     padding: 0 12px;
 
     font-family: Pretendard, sans-serif;

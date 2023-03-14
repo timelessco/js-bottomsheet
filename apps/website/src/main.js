@@ -5,7 +5,7 @@ import "js-bottomsheet/bottomsheet.css";
 
 document.body.style.overflow = "hidden";
 BottomSheet({
-  snapPoints: ["10%", "40%", "100%"],
+  snapPoints: ["10", "40", "100"],
   draggableArea: `<div id="drag">
   <svg width="36" height="4" viewBox="0 0 36 4" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="36" height="4" rx="2" fill="black" fill-opacity="0.22"/>
@@ -52,14 +52,16 @@ const recentsSheet = BottomSheet({
   </div>
   `,
   onOpen: () => {
-    document.getElementById("close-recents").addEventListener("click", () => {
-      recentsSheet.close();
-    });
-    document
-      .querySelector(`#recents-sheet #dismiss`)
-      .addEventListener("click", () => {
+    document.querySelectorAll(`#recents-sheet #dismiss`).forEach(i => {
+      i.addEventListener("click", () => {
         recentsSheet.close();
       });
+    });
+    if (document.getElementById("close-recents")) {
+      document.getElementById("close-recents").addEventListener("click", () => {
+        recentsSheet.close();
+      });
+    }
   },
   footerContent: `<button class="dismiss md footer" id="dismiss" data-bottomsheet-id="maps-2" >Dismiss</button>`,
 });

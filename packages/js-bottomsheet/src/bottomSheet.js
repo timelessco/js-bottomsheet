@@ -191,16 +191,16 @@ function BottomSheet(props) {
     if (targetBottomSheet.style.width === 0) {
       anime({
         targets: targetBottomSheet,
-        width: "0",
         easing: springConfig,
         duration: 0.1,
+        translateX: "-120%",
       });
     } else {
       anime({
         targets: targetBottomSheet,
-        width: "0",
         easing: springConfig,
         duration: 0.1,
+        translateX: "-120%",
       });
     }
   }
