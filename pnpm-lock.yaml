@@ -5,7 +5,7 @@ importers:
   .:
     specifiers:
       '@babel/core': ^7.21.3
-      '@babel/eslint-parser': ^7.19.1
+      '@babel/eslint-parser': ^7.21.3
       '@babel/preset-env': ^7.20.2
       '@changesets/cli': ^2.26.0
       '@commitlint/cli': ^17.4.4
@@ -30,7 +30,7 @@ importers:
       turbo: ^1.8.3
     devDependencies:
       '@babel/core': 7.21.3
-      '@babel/eslint-parser': 7.19.1_pxuto7xgangxlusvzceggvrmde
+      '@babel/eslint-parser': 7.21.3_pxuto7xgangxlusvzceggvrmde
       '@babel/preset-env': 7.20.2_@babel+core@7.21.3
       '@changesets/cli': 2.26.0
       '@commitlint/cli': 17.4.4
@@ -125,8 +125,8 @@ packages:
       - supports-color
     dev: true
 
-  /@babel/eslint-parser/7.19.1_pxuto7xgangxlusvzceggvrmde:
-    resolution: {integrity: sha512-AqNf2QWt1rtu2/1rLswy6CDP7H9Oh3mMhk177Y67Rg8d7RD9WfOLLv8CGn6tisFvS2htm86yIe1yLF6I1UDaGQ==}
+  /@babel/eslint-parser/7.21.3_pxuto7xgangxlusvzceggvrmde:
+    resolution: {integrity: sha512-kfhmPimwo6k4P8zxNs8+T7yR44q1LdpsZdE1NkCsVlfiuTPRfnGgjaF8Qgug9q9Pou17u6wneYF0lDCZJATMFg==}
     engines: {node: ^10.13.0 || ^12.13.0 || >=14.0.0}
     peerDependencies:
       '@babel/core': '>=7.11.0'
