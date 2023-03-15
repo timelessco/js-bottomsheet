@@ -145,7 +145,7 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
   const showsBottomsheet = BottomSheet({
     trigger: `target-${index}`,
     snapPoints: ["100%"],
-    minWidthForModal: 600,
+    minWidthForModal: 700,
     webLayout: "modal",
     scrollableSheet: true,
     modalPosition: [-50, 0],
@@ -155,16 +155,21 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
       : `<div id="bottomsheet-${index}" data-bottomsheet><img src="assets/banner-blur.png"> </div>`,
     displayOverlay: true,
     onOpen: () => {
+      // document
+      //   .querySelector(".nav")
+      //   .setAttribute("style", "backdrop-filter:none");
+
       document.querySelectorAll(".close-icon").forEach(icon =>
         icon.addEventListener("click", () => {
           showsBottomsheet.close();
         }),
       );
+
       const stack = BottomSheet({
         trigger: `watch-now-${index}`,
         snapPoints: ["100%"],
         displayOverlay: true,
-        minWidthForModal: 600,
+        minWidthForModal: 700,
         content: getBottomsheet2Content(
           document?.querySelector(`#target-2`)?.getAttribute("key") ||
             "https://ntvb.tmsimg.com/assets/p19867874_b_h8_ae.jpg",
@@ -181,6 +186,9 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
           document.querySelector("#x-icon").addEventListener("click", () => {
             stack.close();
           });
+          // document
+          //   .querySelector(".overlay")
+          //   .setAttribute("style", "backdrop-filter:none");
         },
         modalCloseIcon: `<figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_b_1_250)">
@@ -199,6 +207,11 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
         </defs>
     </svg></figure>`,
       });
+    },
+    onClose: () => {
+      // document
+      //   .querySelector(".nav")
+      //   .setAttribute("style", "backdrop-filter:none");
     },
     modalCloseIcon: ` <figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none"
     xmlns="http://www.w3.org/2000/svg">

@@ -1,6 +1,6 @@
 import anime from "animejs/lib/anime.es";
 
-import { convertToPxWidth } from "./convertionHelpers";
+import { convertToPxWidth, getNumber } from "./convertionHelpers";
 import { resizeHover } from "./eventListeners";
 
 export function moveBottomSheet(targetBottomSheet, top, ease, duration) {
@@ -32,9 +32,12 @@ export function translateResizableDiv(
   xy,
   targetBottomSheet,
   dismissible,
+  sideSheetMaxValue,
 ) {
   let translateX;
   let width;
+  let stringValueCalc;
+
   const minValueinPx = Math.round(
     (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
   );
@@ -53,6 +56,16 @@ export function translateResizableDiv(
       if (xy[0] < convertToPxWidth(sideSheetMinValue) - 100)
         translateX = "-105%";
       else width = sideSheetMinValue;
+    }
+    if (typeof sideSheetMinValue === "string") {
+      if (offset[0] < getNumber(sideSheetMinValue)) {
+        if (dismissible && !active) {
+          stringValueCalc = 0;
+          translateX = "-105%";
+        } else stringValueCalc = sideSheetMinValue;
+      } else if (offset[0] > getNumber(sideSheetMaxValue)) {
+        stringValueCalc = sideSheetMaxValue;
+      } else stringValueCalc = offset[0];
     }
   } else {
     if (100 - minValueDifference < sideSheetMinValue - 5 && dismissible) {
@@ -73,11 +86,31 @@ export function translateResizableDiv(
         width = sideSheetMinValue;
       } else width = sideSheetMinValue;
     }
+    if (typeof sideSheetMinValue === "string") {
+      stringValueCalc = -offset[0] + getNumber(sideSheetMinValue);
+      if (stringValueCalc < getNumber(sideSheetMinValue)) {
+        if (!active && dismissible) {
+          stringValueCalc = 0;
+          translateX = "105%";
+        } else stringValueCalc = sideSheetMinValue;
+      } else if (stringValueCalc > getNumber(sideSheetMaxValue)) {
+        stringValueCalc = sideSheetMaxValue;
+      }
+    }
+
+    //   if (-offset[0] < getNumber(sideSheetMinValue))
+    //     stringValueCalc = sideSheetMinValue;
+    //   else if (-offset[0] > getNumber(sideSheetMaxValue))
+    //     stringValueCalc = sideSheetMaxValue;
+    //   else stringValueCalc = offset[0];
   }
 
+  // console.log(stringValueCalc, "stringValueCalc");
   anime({
     targets: targetBottomSheet,
-    width: `${width}%`,
+    width: `${
+      typeof sideSheetMinValue === "string" ? stringValueCalc : `${width}%`
+    }`,
     easing: `spring(1,250, 30, 20)`,
     duration: 0,
     translateX,
@@ -119,15 +152,21 @@ export const getLeftBounds = (
   sideSheetMinValue,
 ) => {
   let res;
-  if (webLayout === "sideSheetRight") {
+  if (typeof sideSheetMaxValue === "string") {
+    res =
+      getNumber(sideSheetMaxValue) -
+      +targetBottomSheet.style.width.replace("%", "");
+  } else if (webLayout === "sideSheetRight") {
     res = -(
       convertToPxWidth(sideSheetMaxValue) -
       convertToPxWidth(+targetBottomSheet.style.width.replace("%", ""))
     );
   } else {
     res =
-      convertToPxWidth(sideSheetMinValue) -
-      convertToPxWidth(+targetBottomSheet.style.width.replace("%", ""));
+      typeof sideSheetMinValue === "string"
+        ? sideSheetMinValue
+        : convertToPxWidth(sideSheetMinValue) -
+          convertToPxWidth(+targetBottomSheet.style.width.replace("%", ""));
   }
   return res;
 };
@@ -138,10 +177,15 @@ export const getRightBounds = (
   targetBottomSheet,
 ) => {
   let res;
-  if (webLayout === "sideSheetLeft")
+  if (typeof sideSheetMaxValue === "string") {
+    res =
+      getNumber(sideSheetMaxValue) -
+      +targetBottomSheet.style.width.replace("%", "");
+  } else if (webLayout === "sideSheetLeft") {
     res =
       convertToPxWidth(sideSheetMaxValue) -
       convertToPxWidth(+targetBottomSheet.style.width.replace("%", ""));
-  else res = window.innerWidth;
+  } else res = window.innerWidth;
+
   return res;
 };

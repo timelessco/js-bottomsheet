@@ -5,7 +5,7 @@ import "js-bottomsheet/bottomsheet.css";
 
 document.body.style.overflow = "hidden";
 BottomSheet({
-  snapPoints: [10, 40, 100],
+  snapPoints: [100],
   draggableArea: `<div id="drag">
   <svg width="36" height="4" viewBox="0 0 36 4" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="36" height="4" rx="2" fill="black" fill-opacity="0.22"/>
@@ -26,8 +26,8 @@ BottomSheet({
 <div class="cont-box flex-col"><div class="flex-start" id="map-target" > <img src="./assets/place.svg" /><div><p class="md" >My Places</p> <p class="xs">6 places</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/frequently.svg" /><div><p class="md" >Frequently</p> <p class="xs">14 places</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/new.svg" /><div><p class="md more" >New Guide</p> </div></div></div>
 </div></div>`,
   openOnLoad: true,
-  sideSheetMinValue: 20,
-  sideSheetMaxValue: 30,
+  sideSheetMinValue: "200px",
+  sideSheetMaxValue: "400px",
   sideSheetIconPosition: "right",
   resizablePosition: "right",
   resizeHoverEffect: false,
@@ -38,8 +38,8 @@ const recentsSheet = BottomSheet({
   trigger: `target-more`,
   displayOverlay: false,
   webLayout: "sideSheetLeft",
-  sideSheetMinValue: 20,
-  sideSheetMaxValue: 30,
+  sideSheetMinValue: "200px",
+  sideSheetMaxValue: "500px",
   sideSheetIconPosition: "right",
   resizablePosition: "right",
   resizeHoverEffect: false,

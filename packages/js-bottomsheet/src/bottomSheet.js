@@ -115,10 +115,10 @@ function BottomSheet(props) {
           translateX: 0,
         });
       } else if (webLayout === "sideSheetRight") {
-        // const widthValue =
-        //   typeof sideSheetMinValue === "string"
-        //     ? sideSheetMinValue
-        //     : `${sideSheetMinValue}%`;
+        const widthValue =
+          typeof sideSheetMinValue === "string"
+            ? sideSheetMinValue
+            : `${sideSheetMinValue}%`;
         targetBottomSheet.style.top = 0;
         targetBottomSheet.style.right = `-100%`;
         targetBottomSheet.style.left = "unset";
@@ -126,7 +126,7 @@ function BottomSheet(props) {
           targets: targetBottomSheet,
           right: "0",
           opacity: 1,
-          width: `${sideSheetMinValue}%`,
+          width: widthValue,
           easing: sideSheetSpringConfig,
           duration: 1,
           translateX: 0,
@@ -665,6 +665,7 @@ function BottomSheet(props) {
               xy,
               targetBottomSheet,
               dismissible,
+              sideSheetMaxValue,
             );
           },
         },
@@ -672,17 +673,23 @@ function BottomSheet(props) {
           drag: {
             axis: "x",
             bounds: {
-              left: getLeftBounds(
-                webLayout,
-                sideSheetMaxValue,
-                targetBottomSheet,
-                sideSheetMinValue,
-              ),
-              right: getRightBounds(
-                webLayout,
-                sideSheetMaxValue,
-                targetBottomSheet,
-              ),
+              left:
+                typeof sideSheetMinValue === "string"
+                  ? undefined
+                  : getLeftBounds(
+                      webLayout,
+                      sideSheetMaxValue,
+                      targetBottomSheet,
+                      sideSheetMinValue,
+                    ),
+              right:
+                typeof sideSheetMinValue === "string"
+                  ? undefined
+                  : getRightBounds(
+                      webLayout,
+                      sideSheetMaxValue,
+                      targetBottomSheet,
+                    ),
             },
             rubberband: true,
           },

@@ -13,9 +13,25 @@
   font-synthesis: none;
 }
 
+img{
+  object-fit: cover;
+  aspect-ratio: auto 1628 / 1000;
+}
+
 .watch-svg {
   margin-right: 8px;
 }
+
+.play-svg{
+  object-fit: unset;
+}
+
+.awards-div img{
+  object-fit: unset;
+
+}
+
+
 
 .access-input {
   width: -webkit-fill-available;
@@ -179,7 +195,7 @@ h2 {
 
 .watch-now {
   position: sticky;
-  bottom: 32px;
+  bottom: 20px;
 
   width: -webkit-fill-available;
 
@@ -223,7 +239,7 @@ h2 {
 
 .seasons {
   width: auto;
-  max-height: 183px;
+  /* max-height: 183px; */
 }
 
 .seasons-figure {
@@ -242,7 +258,7 @@ h2 {
 }
 
 .container {
-  padding: 0 20px;
+  padding: 0 16px;
 }
 
 .card {
@@ -591,61 +607,7 @@ input {
   margin: 0 40px;
 }
 
-@media screen and (min-width: 600px) {
-  .universal {
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    max-width: 275px;
-    margin: auto;
-  }
-
-  .recents-flex {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .details {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .poster-img {
-    display: block;
-  }
-
-  .container {
-    padding: 0 56px;
-  }
-
-  .flex-order {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
-
-  .poster-img img {
-    position: relative;
-
-    width: auto;
-    max-height: 360px;
-    margin-top: -32px;
-
-    filter: drop-shadow(0 1px 5px rgba(0 0 0 15%));
-    box-shadow: 0 34px 64px -29px rgba(0 0 0 25%);
-  }
-
-  .mid {
-    top: 0;
-  }
-
-  .universal img {
-    width: 40%;
-    margin-top: 20% !important;
-    margin-left: 30% !important;
-  }
-}
+/* @media screen and (min-width: 600px) {} */
 
 .see-all {
   z-index: 10;
@@ -1271,6 +1233,67 @@ iframe {
 }
 
 @media screen and (min-width: 700px) {
+
+  .universal {
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    max-width: 275px;
+    margin: auto;
+  }
+
+  .seasons-figure{
+    flex:1
+  }
+
+  .recents-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .details {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .poster-img {
+    display: block;
+  }
+
+  .container {
+    padding: 0 56px;
+  }
+
+  .flex-order {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-right: 48px;
+    margin-bottom: 64px;
+  }
+
+  .poster-img img {
+    position: relative;
+
+    width: auto;
+    max-height: 360px;
+    margin-top: -32px;
+
+    filter: drop-shadow(0 1px 5px rgba(0 0 0 15%));
+    box-shadow: 0 34px 64px -29px rgba(0 0 0 25%);
+  }
+
+  .mid {
+    top: 0;
+  }
+
+  .universal img {
+    width: 40%;
+    margin-top: 20% !important;
+    margin-left: 30% !important;
+  }
+
   .flex-input {
     margin-bottom: 16px;
     padding-top: 12px;
@@ -1278,6 +1301,12 @@ iframe {
 
   .responsive {
     display: flex;
+  }
+
+  .seasons-text{
+    flex: 3;
+    margin-left: 24px;
+
   }
 
   .maps-cont {
@@ -1322,7 +1351,7 @@ iframe {
   }
 
   .banner-img img.banner-im {
-    min-height: 670px;
+    /* min-height: 670px; */
     border-radius: 0;
   }
 
@@ -1341,10 +1370,6 @@ iframe {
     line-height: 22px;
     color: #c2c2c2;
     letter-spacing: 0.025em;
-  }
-
-  .seasons-text {
-    margin-left: 24px;
   }
 
   .watch-now.md {
@@ -1406,7 +1431,7 @@ iframe {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 0;
+    /* border-radius: 0; */
   }
 
   .container-box:hover {
@@ -1439,11 +1464,6 @@ iframe {
   .cast-names {
     order: 4;
     padding-bottom: 0;
-  }
-
-  .flex-order {
-    margin-right: 48px;
-    margin-bottom: 64px;
   }
 
   .white-play {
