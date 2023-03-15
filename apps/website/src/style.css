@@ -109,6 +109,7 @@ body {
   font-family: Pretendard, sans-serif;
 
   background: white;
+  height:100vh
 }
 
 .iframe-wrapper {
@@ -1236,6 +1237,7 @@ textarea {
 
 iframe {
   position: absolute;
+  pointer-events: true;
 }
 
 .dismiss {
@@ -1284,7 +1286,8 @@ iframe {
   }
   
   .footer.dismiss {
-    bottom:0
+    bottom:0;
+    margin:0
   }
 
   #maps-1 .maps-cont{

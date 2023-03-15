@@ -13,7 +13,7 @@ export function convertToPxWidth(percentage) {
 export function checkType(value) {
   return typeof value === "string"
     ? convertToPx(+value.replace("%", ""))
-    : +value;
+    : convertToPx(+value);
 }
 
 export function convertToPercentage(px) {

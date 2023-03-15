@@ -71,7 +71,9 @@ function BottomSheet(props) {
     : "";
 
   let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
-  const springConfig = `spring(1,250,20,13)`;
+  const springConfig = `spring(1,100,24,15)`;
+  const sideSheetSpringConfig = `spring(1,100,20,12)`;
+
   let isWeb = !(window.innerWidth < minWidthForModal);
   const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
@@ -99,16 +101,24 @@ function BottomSheet(props) {
       if (webLayout === "sideSheetLeft") {
         targetBottomSheet.style.top = 0;
         targetBottomSheet.style.left = `-100%`;
+        const widthValue =
+          typeof sideSheetMinValue === "string"
+            ? sideSheetMinValue
+            : `${sideSheetMinValue}%`;
         anime({
           targets: targetBottomSheet,
           left: "0",
-          width: `${sideSheetMinValue}%`,
+          width: widthValue,
           opacity: 1,
-          easing: springConfig,
+          easing: sideSheetSpringConfig,
           duration: 1,
           translateX: 0,
         });
       } else if (webLayout === "sideSheetRight") {
+        // const widthValue =
+        //   typeof sideSheetMinValue === "string"
+        //     ? sideSheetMinValue
+        //     : `${sideSheetMinValue}%`;
         targetBottomSheet.style.top = 0;
         targetBottomSheet.style.right = `-100%`;
         targetBottomSheet.style.left = "unset";
@@ -117,7 +127,7 @@ function BottomSheet(props) {
           right: "0",
           opacity: 1,
           width: `${sideSheetMinValue}%`,
-          easing: springConfig,
+          easing: sideSheetSpringConfig,
           duration: 1,
           translateX: 0,
         });
@@ -149,13 +159,15 @@ function BottomSheet(props) {
       } else {
         targetBottomSheet.style.transform = `translateY(${convertToPx(100)}px)`;
         document.body.style.overflow = "hidden";
-        anime({
-          targets: targetBottomSheet,
-          translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
-          easing: springConfig,
-          opacity: 1,
-          duration: 1,
-        });
+        setTimeout(() => {
+          anime({
+            targets: targetBottomSheet,
+            translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
+            easing: springConfig,
+            opacity: 1,
+            duration: 1,
+          });
+        }, 100);
       }
     }
     lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
@@ -191,14 +203,14 @@ function BottomSheet(props) {
     if (targetBottomSheet.style.width === 0) {
       anime({
         targets: targetBottomSheet,
-        easing: springConfig,
+        easing: sideSheetSpringConfig,
         duration: 0.1,
         translateX: "-120%",
       });
     } else {
       anime({
         targets: targetBottomSheet,
-        easing: springConfig,
+        easing: sideSheetSpringConfig,
         duration: 0.1,
         translateX: "-120%",
       });
@@ -219,7 +231,7 @@ function BottomSheet(props) {
             ? differenceOfWindowHt(checkType(snapPoints[0]))
             : convertToPx(120)
         }px`,
-        easing: `spring(1, 250, 20, 8)`,
+        easing: springConfig,
         duration: 1,
       });
     } else if (webLayout === "modal") {
@@ -399,11 +411,7 @@ function BottomSheet(props) {
 
         value = innerHt + 300;
       }
-      moveBottomSheet(
-        newBottomSheet,
-        `${value}px`,
-        value >= innerHt ? `spring(1,250,20,2)` : springConfig,
-      );
+      moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
       lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
       return lastSetSnapPoint;
     }
