@@ -7,7 +7,7 @@ import "scroll-snap-slider";
 document.body.style.overflow = "scroll";
 async function fetchAllShows() {
   const shows = await fetch(
-    "https://strapi.tmls.dev/api/genres?sort[0]=id&fields[0]=name&populate[shows][sort][0]=id&populate[shows][fields][0]=key&populate[shows][fields][1]=name&populate[shows]&populate[shows][populate][poster][fields][0]=hash&populate[shows][populate][poster][fields][1]=src&populate[shows][populate][banner][fields][0]=hash&populate[shows][populate][banner][fields][1]=src",
+    "https://strapi2.tmls.dev/api/genres?sort[0]=id&fields[0]=name&populate[shows][sort][0]=id&populate[shows][fields][0]=key&populate[shows][fields][1]=name&populate[shows]&populate[shows][populate][poster][fields][0]=hash&populate[shows][populate][poster][fields][1]=src&populate[shows][populate][banner][fields][0]=hash&populate[shows][populate][banner][fields][1]=src",
   )
     .then(res => res.json())
     .then(async json => {
@@ -19,7 +19,7 @@ async function fetchAllShows() {
 }
 async function getIndividualShows(key) {
   const products = await fetch(
-    `https://strapi.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`,
+    `https://strapi2.tmls.dev/api/shows?filters[key][$eq]=${key}&populate=%2A`,
   )
     .then(res => res.json())
     .then(async json => {
@@ -116,7 +116,6 @@ async function getBottomsheet1content(key, ind) {
 const showsContent = await fetchAllShows();
 
 const showsHTML = `${showsContent
-  .slice(4)
   .map((i, index) => {
     if (i.poster.src) {
       return `<li id="target-${index}" class="scroll-snap-slide" data-bottomsheet-id = bottomsheet-${index} key = ${i.key}><img src=${i.poster.src}>
