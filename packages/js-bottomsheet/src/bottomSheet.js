@@ -197,6 +197,7 @@ function BottomSheet(props) {
       cleanUp();
     }, 400);
     hideOverlay(overlay);
+    onClose();
   }
 
   function closeSideSheet() {
@@ -220,6 +221,7 @@ function BottomSheet(props) {
   function close(dismissable = true) {
     if (displayOverlay && overlay) {
       hideOverlay(overlay);
+      onClose();
     }
     document.body.style.overflow = "scroll";
 
@@ -235,6 +237,8 @@ function BottomSheet(props) {
         duration: 1,
       });
     } else if (webLayout === "modal") {
+      console.log("closijmbjh");
+
       closeModal(targetBottomSheet, overlay);
     } else if (webLayout === "sideSheetLeft") {
       closeSideSheet();
@@ -407,6 +411,7 @@ function BottomSheet(props) {
       if (value >= window.innerHeight) {
         if (displayOverlay && overlay) {
           hideOverlay(overlay);
+          onClose();
         }
 
         value = innerHt + 300;
@@ -563,6 +568,7 @@ function BottomSheet(props) {
 
                 if (lastSetSnapPoint >= innerHt) {
                   hideOverlay(overlay);
+                  onClose();
                 }
               } else if (
                 targetBottomSheet.scrollTop >= 1 &&

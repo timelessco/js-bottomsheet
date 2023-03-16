@@ -154,10 +154,21 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
       ? `<div id="bottomsheet-${index}" data-bottomsheet> ${content} </div>`
       : `<div id="bottomsheet-${index}" data-bottomsheet><img src="assets/banner-blur.png"> </div>`,
     displayOverlay: true,
+    onClose: () => {
+      if (window.innerWidth < 700) {
+        document
+          .querySelector(".nav")
+          .setAttribute("style", "backdrop-filter:blur(20px)");
+      } else {
+        document
+          .querySelector(".nav")
+          .setAttribute("style", "backdrop-filter:blur(30px)");
+      }
+    },
     onOpen: () => {
-      // document
-      //   .querySelector(".nav")
-      //   .setAttribute("style", "backdrop-filter:none");
+      document
+        .querySelector(".nav")
+        .setAttribute("style", "backdrop-filter:none");
 
       document.querySelectorAll(".close-icon").forEach(icon =>
         icon.addEventListener("click", () => {
@@ -177,18 +188,29 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
           index,
           true,
         ),
+
         scrollableSheet: false,
         scaleOnDrag: true,
         webLayout: "modal",
         modalPosition: [-50, 0],
         sideSheetSnapPoints: ["50%", "100%"],
         onOpen: () => {
-          document.querySelector("#x-icon").addEventListener("click", () => {
-            stack.close();
-          });
-          // document
-          //   .querySelector(".overlay")
-          //   .setAttribute("style", "backdrop-filter:none");
+          document.querySelector(
+            ".overlay",
+          ).style.cssText = `backdrop-filter:none;
+          filter:none`;
+          if (document.querySelector("#x-icon"))
+            document.querySelector("#x-icon").addEventListener("click", () => {
+              stack.close();
+            });
+        },
+        onClose: () => {
+          if (window.innerHeight > 700) {
+            document.querySelector(
+              ".overlay",
+            ).style.cssText = `backdrop-filter:blur(100px);
+            filter:blur(20px); opacity: 1`;
+          }
         },
         modalCloseIcon: `<figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_b_1_250)">
@@ -208,11 +230,7 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
     </svg></figure>`,
       });
     },
-    onClose: () => {
-      // document
-      //   .querySelector(".nav")
-      //   .setAttribute("style", "backdrop-filter:none");
-    },
+
     modalCloseIcon: ` <figure class="x-icon-figure"><svg width="100%" height="100%" viewBox="0 0 40 40" fill="none"
     xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_b_1_250)">
