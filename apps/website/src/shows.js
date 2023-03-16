@@ -158,7 +158,10 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
       if (window.innerWidth < 700) {
         document
           .querySelector(".nav")
-          .setAttribute("style", "backdrop-filter:blur(20px)");
+          .setAttribute(
+            "style",
+            "backdrop-filter:blur(20px), -webkit-backdrop-filter: blur(20px)",
+          );
       } else {
         document
           .querySelector(".nav")
@@ -166,10 +169,8 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
       }
     },
     onOpen: () => {
-      document
-        .querySelector(".nav")
-        .setAttribute("style", "backdrop-filter:none");
-
+      document.querySelector(".nav").style.cssText = `backdrop-filter:none;
+      filter:none; -webkit-backdrop-filter: none`;
       document.querySelectorAll(".close-icon").forEach(icon =>
         icon.addEventListener("click", () => {
           showsBottomsheet.close();
