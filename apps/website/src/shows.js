@@ -34,7 +34,7 @@ async function getBottomsheet1content(key, ind) {
   <div class="list-items">
   <div class="img-wrapper">
     <img src=${shows.banner.src}>
-    <svg class="close-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="close-icon" id="close-1" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g filter="url(#filter0_b_5593_50546)">
         <circle cx="16" cy="16" r="16" fill="black" fill-opacity="0.58" />
       </g>
@@ -176,7 +176,7 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
     onOpen: () => {
       document.querySelector(".nav").style.cssText = `backdrop-filter:none;
       filter:none; -webkit-backdrop-filter: none`;
-      document.querySelectorAll(".close-icon").forEach(icon =>
+      document.querySelectorAll("#close-1").forEach(icon =>
         icon.addEventListener("click", () => {
           showsBottomsheet.close();
         }),
@@ -206,9 +206,11 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
           ).style.cssText = `backdrop-filter:none;
           filter:none`;
           if (document.querySelector("#x-icon"))
-            document.querySelector("#x-icon").addEventListener("click", () => {
-              stack.close();
-            });
+            document.querySelectorAll("#x-icon").forEach(i =>
+              i.addEventListener("click", () => {
+                stack.close();
+              }),
+            );
         },
         onClose: () => {
           if (window.innerHeight > 700) {
@@ -280,7 +282,7 @@ function getBottomsheet2Content(src, key, index, bottomsheet = false) {
       : ""
   }
     <div class="second blur"></div>
-    <svg class="close-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="close-icon" id="x-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_b_5593_50546)">
     <circle cx="16" cy="16" r="16" fill="black" fill-opacity="0.58"/>
     </g>
@@ -296,7 +298,7 @@ function getBottomsheet2Content(src, key, index, bottomsheet = false) {
     </defs>
     </svg>
     <div class="universal"><input placeholder="enter access code" class="access-input"/>
-    <button class="watch-now univ"> <svg class="watch-svg" width="8" height="13" viewBox="0 0 8 11" fill="none"
+    <button class="watch-now univ"> <svg id="x-icon" width="8" height="13" viewBox="0 0 8 11" fill="none"
         xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd"
           d="M0.121352 0.744663C-2.85542e-07 0.907787 0 1.19998 0 1.78437V9.21563C0 9.80002 -2.85542e-07 10.0922 0.121352 10.2553C0.227105 10.3975 0.388983 10.4864 0.564992 10.4991C0.766962 10.5136 1.01119 10.3556 1.49965 10.0396L7.24303 6.32395C7.6669 6.04973 7.87883 5.91262 7.95203 5.73828C8.01599 5.58595 8.01599 5.41405 7.95203 5.26172C7.87883 5.08738 7.6669 4.95027 7.24303 4.67605L1.49966 0.960416C1.0112 0.644405 0.766963 0.4864 0.564992 0.500917C0.388983 0.513568 0.227105 0.602508 0.121352 0.744663Z"
