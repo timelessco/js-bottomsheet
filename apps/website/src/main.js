@@ -26,7 +26,7 @@ BottomSheet({
 <div class="cont-box flex-col"><div class="flex-start" id="map-target" > <img src="./assets/place.svg" /><div><p class="md" >My Places</p> <p class="xs">6 places</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/frequently.svg" /><div><p class="md" >Frequently</p> <p class="xs">14 places</p></div></div><div class="flex-start" id="map-target" > <img src="./assets/new.svg" /><div><p class="md more" >New Guide</p> </div></div></div>
 </div></div>`,
   openOnLoad: true,
-  sideSheetMinValue: "200px",
+  sideSheetMinValue: "276px",
   sideSheetMaxValue: "400px",
   sideSheetIconPosition: "right",
   resizablePosition: "right",
@@ -38,7 +38,7 @@ const recentsSheet = BottomSheet({
   trigger: `target-more`,
   displayOverlay: false,
   webLayout: "sideSheetLeft",
-  sideSheetMinValue: "200px",
+  sideSheetMinValue: "276px",
   sideSheetMaxValue: "500px",
   sideSheetIconPosition: "right",
   resizablePosition: "right",
