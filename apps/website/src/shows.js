@@ -144,7 +144,7 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
   const content = await getBottomsheet1content(i.getAttribute("key"), index);
   const showsBottomsheet = BottomSheet({
     trigger: `target-${index}`,
-    snapPoints: ["100%"],
+    snapPoints: [100],
     minWidthForModal: 700,
     webLayout: "modal",
     scrollableSheet: true,

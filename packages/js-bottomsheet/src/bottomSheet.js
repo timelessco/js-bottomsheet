@@ -163,7 +163,10 @@ function BottomSheet(props) {
           anime({
             targets: targetBottomSheet,
             translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
-            easing: springConfig,
+            easing:
+              snapPoints.length === 1 && `${snapPoints[0]}`.includes(100)
+                ? sideSheetSpringConfig
+                : springConfig,
             opacity: 1,
             duration: 1,
           });
