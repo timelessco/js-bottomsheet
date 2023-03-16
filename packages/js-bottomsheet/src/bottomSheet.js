@@ -73,6 +73,7 @@ function BottomSheet(props) {
   let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
   const springConfig = `spring(1,100,24,15)`;
   const sideSheetSpringConfig = `spring(1,100,20,12)`;
+  const quickSpringConfig = `spring(1, 100, 21, 13)`;
 
   let isWeb = !(window.innerWidth < minWidthForModal);
   const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
@@ -165,7 +166,7 @@ function BottomSheet(props) {
             translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
             easing:
               snapPoints.length === 1 && `${snapPoints[0]}`.includes(100)
-                ? sideSheetSpringConfig
+                ? quickSpringConfig
                 : springConfig,
             opacity: 1,
             duration: 1,

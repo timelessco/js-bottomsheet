@@ -1242,9 +1242,9 @@ iframe {
     max-width: 275px;
     margin: auto;
   }
-  
+
   .seasons-figure img{
-    max-height: unset;
+    max-height: 150px;
   }
 
   .seasons-figure{
