@@ -38,6 +38,5 @@ export function getCurrentSnapPoint(newBottomSheet) {
 }
 
 export function getNumber(string) {
-  console.log(string, "st");
   return string.match(/\d+/)[0];
 }

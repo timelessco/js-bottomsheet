@@ -230,7 +230,6 @@ function BottomSheet(props) {
     document.body.style.overflow = "scroll";
 
     if (window.innerWidth < minWidthForModal) {
-      console.log("in");
       anime({
         targets: targetBottomSheet,
         translateY: `${
@@ -242,8 +241,6 @@ function BottomSheet(props) {
         duration: 1,
       });
     } else if (webLayout === "modal") {
-      console.log("closijmbjh");
-
       closeModal(targetBottomSheet, overlay);
     } else if (webLayout === "sideSheetLeft") {
       closeSideSheet();
