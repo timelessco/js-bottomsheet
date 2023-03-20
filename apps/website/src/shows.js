@@ -114,7 +114,7 @@ async function getBottomsheet1content(key, ind) {
 }
 
 const showsContent = await fetchAllShows();
-let response = showsContent.slice(0, 1).concat(showsContent.slice(4));
+const response = showsContent.slice(0, 1).concat(showsContent.slice(4));
 const showsHTML = `${response
   .map((i, index) => {
     if (i.poster.src) {
@@ -205,14 +205,14 @@ document.querySelectorAll(`.scroll-snap-slide`).forEach(async (i, index) => {
           ).style.cssText = `backdrop-filter:none;
           filter:none`;
           if (document.querySelector("#x-icon"))
-            document.querySelectorAll("#x-icon").forEach(i =>
-              i.addEventListener("click", () => {
+            document.querySelectorAll("#x-icon").forEach(item =>
+              item.addEventListener("click", () => {
                 stack.close();
               }),
             );
         },
         onClose: () => {
-          if (window.innerHeight > 700) {
+          if (window.innerWidth > 700) {
             document.querySelector(
               ".overlay",
             ).style.cssText = `backdrop-filter:blur(100px);

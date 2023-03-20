@@ -196,19 +196,21 @@ snap point.
 
 ### snapPoints:
 
-An array of all the snappoints percentages you'd like the bottomsheet to snap
-at, from bottom to top.
+An array of all the snappoints you'd like the bottomsheet to snap at, from
+bottom to top. Works as percentage.
 
-> Type: Array of strings
+Note that mentioning 0 as the first snappoint will not open the sheet.
 
-> Default: ['100%']
+> Type: Array of numbers(from 1 to 100)
+
+> Default: [100]
 
 eg:
 
 ```
 BottomSheet({
  trigger: 'trigger-1',
- snappoints: ['20%', '60%', '100%']
+ snappoints: [20, 60, 100]
 });
 ```
 
