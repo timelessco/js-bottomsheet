@@ -7,7 +7,7 @@ importers:
       '@babel/core': ^7.21.3
       '@babel/eslint-parser': ^7.21.3
       '@babel/preset-env': ^7.20.2
-      '@changesets/cli': ^2.26.0
+      '@changesets/cli': ^2.26.1
       '@commitlint/cli': ^17.4.4
       '@commitlint/config-conventional': ^17.4.4
       '@ianvs/prettier-plugin-sort-imports': ^3.7.1
@@ -32,7 +32,7 @@ importers:
       '@babel/core': 7.21.3
       '@babel/eslint-parser': 7.21.3_pxuto7xgangxlusvzceggvrmde
       '@babel/preset-env': 7.20.2_@babel+core@7.21.3
-      '@changesets/cli': 2.26.0
+      '@changesets/cli': 2.26.1
       '@commitlint/cli': 17.4.4
       '@commitlint/config-conventional': 17.4.4
       '@ianvs/prettier-plugin-sort-imports': 3.7.1_prettier@2.8.6
@@ -1285,8 +1285,8 @@ packages:
       '@changesets/types': 5.2.1
     dev: true
 
-  /@changesets/cli/2.26.0:
-    resolution: {integrity: sha512-0cbTiDms+ICTVtEwAFLNW0jBNex9f5+fFv3I771nBvdnV/mOjd1QJ4+f8KtVSOrwD9SJkk9xbDkWFb0oXd8d1Q==}
+  /@changesets/cli/2.26.1:
+    resolution: {integrity: sha512-XnTa+b51vt057fyAudvDKGB0Sh72xutQZNAdXkCqPBKO2zvs2yYZx5hFZj1u9cbtpwM6Sxtcr02/FQJfZOzemQ==}
     hasBin: true
     dependencies:
       '@babel/runtime': 7.21.0
