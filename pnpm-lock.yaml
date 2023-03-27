@@ -71,11 +71,11 @@ importers:
 
   packages/js-bottomsheet:
     specifiers:
-      '@use-gesture/vanilla': ^10.2.24
+      '@use-gesture/vanilla': ^10.2.25
       animejs: ^3.2.1
       vite: ^4.2.1
     dependencies:
-      '@use-gesture/vanilla': 10.2.24
+      '@use-gesture/vanilla': 10.2.25
       animejs: 3.2.1
     devDependencies:
       vite: 4.2.1
@@ -2238,14 +2238,14 @@ packages:
     resolution: {integrity: sha512-KQf+QAMWKMrtBMsB8/24w53tEsxllMj6TuA80TT/5igJalLI/zm0L3oXRbIAl4Ohfc85gyHX/jhMwsVkmhLU4A==}
     dev: true
 
-  /@use-gesture/core/10.2.24:
-    resolution: {integrity: sha512-ZL7F9mgOn3Qlnp6QLI9jaOfcvqrx6JPE/BkdVSd8imveaFTm/a3udoO6f5Us/1XtqnL4347PsIiK6AtCvMHk2Q==}
+  /@use-gesture/core/10.2.25:
+    resolution: {integrity: sha512-tn01i1//mZrv+9VwyGB4KiuA6fQWvPfzwJNwcjxtMBeW0ELBukXOimvdm3hztxkpVwlz8dhQnXzkjtsxSpe9VA==}
     dev: false
 
-  /@use-gesture/vanilla/10.2.24:
-    resolution: {integrity: sha512-vJ0Upd2dhhiQj0Q/joBweJl+e38uf7hT+mCFkkPYtpk2yzaV8Rf9DSjzpPaEw3vgFvC60Kvfz/GlX2Tz2seDUQ==}
+  /@use-gesture/vanilla/10.2.25:
+    resolution: {integrity: sha512-4nTUfKinoj8gn3AeToMjT54bY7//0Yn8UGxTytWt2r1eQIwO+ED1ke1PTe3mjPr1M7q86BGet7i5cNIEnf/0Dg==}
     dependencies:
-      '@use-gesture/core': 10.2.24
+      '@use-gesture/core': 10.2.25
     dev: false
 
   /@vivaxy/git/4.2.1:
