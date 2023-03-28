@@ -41,7 +41,7 @@
     "@babel/eslint-parser": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
     "@changesets/cli": "^2.26.1",
-    "@commitlint/cli": "^17.5.0",
+    "@commitlint/cli": "^17.5.1",
     "@commitlint/config-conventional": "^17.4.4",
     "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
     "eslint": "^8.36.0",
