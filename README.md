@@ -6,17 +6,18 @@ A pure Js snappable, scrollable, customisable bottomsheet!
 
 ## Features
 
-- Works as a modal in web and as a bottomsheet in mobile.
+- Works as a bottomsheet in mobile and as a modal or sidesheet in web.
 - Supports multiple snap points.
-- Spring animations.
+- Uses spring animations.
 - Supports stacking of bottomsheets.
 - Is scrollable at the last snappoint.
 - Supports dynamic content.
+- Sidesheets are resizable.
 
 ## Dependencies:
 
-1. https://use-gesture.netlify.app/docs/#vanilla-javascript
-2. https://animejs.com/
+1. Use Gesture: https://use-gesture.netlify.app/docs/#vanilla-javascript
+2. Anime js: https://animejs.com/
 
 ## Installation
 
@@ -54,43 +55,59 @@ This would create a simple bottomsheet with the default props.
 
 ## Props:
 
+properties that are common for all layouts - bottomsheet, modal and sidesheet
+
 ### trigger:
 
 The Id of the trigger element.
 
 > Type: string
 
-### snapPoints:
+### content:
 
-An array of all the snappoints percentages you'd like the bottomsheet to snap
-at, from bottom to top.
+Content needn't always be a DOM element, it could be passed in dynamically too,
+as a string.
 
-> Type: Array of strings
-
-> Default: ['100%']
+> Type: string
 
 eg:
 
 ```
 BottomSheet({
  trigger: 'trigger-1',
- snappoints: ['20%', '60%', '100%']
+ content: `<div id="bottomsheet-1" data-bottomsheet>The Bottomsheet</div>`
 });
 ```
 
-### content:
+### headerContent:
 
-Your content needn't always be a DOM element, it could be passed in dynamically
-too, as a string or as a promise.
+The content that needs to remain fixed at the top of the sheet. It should have a
+class of 'header'.
 
-> Type: string | promise
+> Type: string
 
 eg:
 
 ```
 BottomSheet({
  trigger: 'trigger-1',
- content: <div id="bottomsheet-1" data-bottomsheet>The Bottomsheet</div>
+ headerContent: `<div class="header">...</div>`
+});
+```
+
+### footerContent:
+
+The content that needs to remain fixed at the bottom of the sheet. It should
+have a class of 'footer'.
+
+> Type: string
+
+eg:
+
+```
+BottomSheet({
+ trigger: 'trigger-1',
+ footerContent: `<div class="footer">...</div>`
 });
 ```
 
@@ -101,6 +118,101 @@ A boolean defining whether to display an overlay or not.
 > Type: boolean
 
 > Default: false
+
+### webLayout:
+
+This property determines the behavior of the sheet in web view, which can either
+be a modal or a sidesheet. Sidesheets can be configured to open from either the
+left or the right side of the screen.
+
+> Type: 'modal || sideSheetLeft || sideSheetRight'
+
+> Default: 'modal'
+
+eg:
+
+```
+BottomSheet({
+ trigger: 'trigger-1',
+ content: <div id="bottomsheet-1" data-bottomsheet>The Bottomsheet</div>,
+ webLayout: 'sideSheetLeft'
+});
+```
+
+### openOnLoad:
+
+This property enables the sheet to be automatically opened upon loading, without
+requiring a trigger. Since there is no trigger, the content needs to be
+dynamically passed in.
+
+> Type: boolean
+
+> Default: false
+
+eg:
+
+```
+ BottomSheet({
+  content: `<div id="maps-1" data-bottomsheet>The sheet</div>`,
+  openOnLoad: true,
+});
+```
+
+### cleanUpOnClose
+
+This prop can be used to remove the sheet from the DOM on closing the sheet.
+
+> Type: boolean
+
+> Default: false
+
+### dismissible
+
+This property determines whether the sheet can be closed by the user or not. If
+set to false, the sheet cannot be translated below it's minimum snap point.
+
+> Type: boolean
+
+> Default: true
+
+### closeOnOverlayClick
+
+A boolean to keep the sheet open or close it by clicking on the overlay.
+
+> Type: boolean
+
+> Default: true
+
+### scrollableSheet
+
+Defines whether the sheet is scrollable or not, when the sheet is at it's last
+snap point.
+
+> Type: booelean
+
+> Default: true
+
+## Bottomsheet specific props
+
+### snapPoints:
+
+An array of all the snappoints you'd like the bottomsheet to snap at, from
+bottom to top. Works as percentage.
+
+Note that mentioning 0 as the first snappoint will not open the sheet.
+
+> Type: Array of numbers(from 1 to 100)
+
+> Default: [100]
+
+eg:
+
+```
+BottomSheet({
+ trigger: 'trigger-1',
+ snappoints: [20, 60, 100]
+});
+```
 
 ### draggableArea:
 
@@ -121,31 +233,43 @@ BottomSheet({
 });
 ```
 
-### minWidthForModal:
+### rubberband
 
-The minimum width at which you'd like a modal to appear.
+The rubberband effect is only applicable if the sheet is at it's last snap point
+and is activated when scrollableSheet is set to false. It creates a snappy or
+bouncy behavior for the bottom sheet.
 
-> Type: number
-
-> Default: 700
-
-### openOnLoad:
-
-This property helps the bottomsheet to be open on load, without a trigger. Since
-there is no trigger, content is required to be passed in dynamically.
-
-> Type: boolean
+> Type: booelean
 
 > Default: false
 
-eg:
+### velocityThreshold
 
-```
- BottomSheet({
-  content: `<div id="maps-1" data-bottomsheet>The bottomsheet</div>`,
-  openOnLoad: true,
-});
-```
+The velocity greater than which the bottomsheet would be translated to the next
+snappoint, otherwise it would snap back to the old one.
+
+> Type: number
+
+> Default: 0.9
+
+### distanceThreshold
+
+The distance greater than which the bottomsheet would be translated to the next
+snappoint, otherwise it would snap back to the old one.
+
+> Type: number
+
+> Default: 150
+
+## Modal specific props
+
+### modalPosition
+
+It's an array of x and y positions in numbers as percentage for the modal.
+
+> Type: Array of numbers
+
+> Default: [50, 50]
 
 ### modalCloseIcon
 
@@ -161,54 +285,35 @@ Close icon for the modal in web.
  </svg>`
 ```
 
-### cleanUpOnClose
+### minWidthForModal:
 
-Removing the Bottomsheet from the DOM on closing it can be done with this prop.
-
-> Type: boolean
-
-> Default: false
-
-### dismissible
-
-Determines whether the bottomsheet is dismissible or not.
-
-> Type: boolean
-
-> Default: true
-
-### velocityThreshold
-
-The velocity greater than which the bottomsheet would be snappable to the next
-snappoint, otherwise it would snap back to the old one.
+The minimum width at which you'd like a modal to appear.
 
 > Type: number
 
-> Default: 0.9
+> Default: 700
 
-### distanceThreshold
+## Sidesheet specific props:
 
-The distance greater than which the bottomsheet would be snappable to the next
-snappoint, otherwise it would snap back to the old one.
+### sideSheetMinValue
 
-> Type: number
+The minimum snap point percentage at which the sidesheet would open, resizing
+below it would close the sheet.
 
-> Default: 150
+> Type: number - 0 to 100
 
-### closeOnOverlayClick
+### sideSheetMaxValue
 
-An option to keep the bottomsheet open or close it on overlay click.
+The maximum snap point percentage upto which the sidesheet can be resized.
 
-> Type: boolean
-
-> Default: true
+> Type: number - 0 to 100
 
 ## Lifecycle methods
 
 ### onInit
 
-Operations to be run on initialisation of the bottomsheet can be done using this
-callback function.
+This callback function can be used to perform operations during the
+initialization of the bottom sheet.
 
 > Type: function
 
@@ -225,8 +330,7 @@ BottomSheet({
 
 ### onOpen
 
-Operations to be run once the bottomsheet is open can be done using this
-callback function.
+This callback function can be used to perform operations once the sheet is open.
 
 > Type: function
 
@@ -244,8 +348,8 @@ BottomSheet({
 
 ### onClose
 
-Operations to be run while closing the bottomsheet can be done using this
-callback function.
+This callback function can be used to perform operations once the sheet is
+closed.
 
 > Type: function
 
@@ -262,10 +366,12 @@ BottomSheet({
 
 ### onDragStart
 
-Operations to be run dragging of the bottomsheet starts can be done using this
-callback function.
+This callback function allows you to perform operations when starting to drag
+the sheet.
 
 > Type: function
+
+eg:
 
 ```
 BottomSheet({
@@ -278,10 +384,12 @@ BottomSheet({
 
 ### onDragEnd
 
-Operations to be run dragging of the bottomsheet ends can be done using this
+Operations to be run when dragging of the sheet ends can be done using this
 callback function.
 
 > Type: function
+
+eg:
 
 ```
 BottomSheet({
@@ -326,8 +434,8 @@ let bottomsheet1 = BottomSheet({
 
 ### destroy
 
-Can be used to remove the event listeners on the triggers when it's no longer
-needed.
+"When no longer needed, the event listeners can be removed from the triggers
+using this method."
 
 eg:
 
@@ -337,6 +445,20 @@ let bottomsheet1 = BottomSheet({
   });
 
   bottomsheet1.destroy()
+```
+
+### init
+
+The sheet can be re-initialised if needed, using this function.
+
+eg:
+
+```
+let bottomsheet1 = BottomSheet({
+      trigger: `target-1`
+  });
+
+  bottomsheet1.init()
 ```
 
 ## Styling

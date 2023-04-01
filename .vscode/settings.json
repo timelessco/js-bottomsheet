@@ -15,7 +15,7 @@
   // Editor cursor
   "editor.cursorWidth": 5,
   "editor.cursorBlinking": "solid",
-  "editor.cursorSmoothCaretAnimation": true,
+  "editor.cursorSmoothCaretAnimation": "on",
 
   // Editor Indents
   "editor.renderWhitespace": "all",

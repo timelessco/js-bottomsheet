@@ -2,13 +2,22 @@ import { Gesture } from "@use-gesture/vanilla";
 import anime from "animejs/lib/anime.es";
 
 import {
+  getLeftBounds,
+  getRightBounds,
+  makeDraggable,
+  makeScrollable,
+  moveBottomSheet,
+  resizableRequirements,
+  translateResizableDiv,
+} from "./helpers/bottomsheetHelpers";
+import {
   checkType,
   convertToPx,
   differenceOfWindowHt,
+  getCurrentSnapPoint,
   snapPointConversion,
 } from "./helpers/convertionHelpers";
 import { addOverlay, hideOverlay } from "./helpers/overlayHelpers";
-import { moveBottomSheet } from "./helpers/translationHelpers";
 
 import "./bottomsheet.css";
 
@@ -31,62 +40,59 @@ function BottomSheet(props) {
     sideSheetIconPosition = `left`,
     sideSheetMinValue = 20,
     sideSheetMaxValue = 50,
-    scaleOnDrag = false,
-    // scaleItems = [],
-    // scaleValues = [],
     defaultSideSheetClose = true,
     cleanUpOnClose = false,
     dismissible = true,
-    // sideSheetSnapPoints = ["10%", "25%", "50%", "100%"],
+    rubberband = false,
     velocityThreshold = 0.9,
     distanceThreshold = 150,
     closeOnOverlayClick = true,
     onDragStart = () => {},
     onDragEnd = () => {},
     scrollableSheet = true,
-    // resizableSheet = true,
-    resizablePosition = "left",
+    modalPosition = [50, 50],
+    headerContent = ``,
+    draggableArea = ``,
+    footerContent = ``,
+    resizeHoverEffect = false,
   } = props;
 
-  let { content = "", draggableArea = `` } = props;
+  let { content = "" } = props;
   let lastSetSnapPoint;
-  // const bottomSheets = document.querySelectorAll(`[data-bottomsheet]`);
-  // window.onload = () => {
-  //   localStorage.removeItem("array");
-  // };
-  content =
-    typeof content !== "string"
-      ? Promise.resolve(content).then(value => value)
-      : content;
-  const targetid = trigger
+  let innerHt = window.innerHeight;
+  let targetid = trigger
     ? document
         ?.querySelector(`#${trigger}`)
         ?.getAttribute("data-bottomsheet-id")
     : "";
+
   let targetBottomSheet = targetid
     ? document?.querySelector(`#${targetid}`)
     : "";
 
-  function getCurrentSnapPoint(newBottomSheet) {
-    const transformValue = newBottomSheet?.style?.transform
-      .slice(11)
-      .replace("px)", "");
-    if (transformValue) {
-      return +transformValue;
-    }
-    return null;
-  }
-
   let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
+  const springConfig = `spring(1,100,24,15)`;
+  const sideSheetSpringConfig = `spring(1,100,20,12)`;
+  const quickSpringConfig = `spring(1, 100, 21, 13)`;
+
   let isWeb = !(window.innerWidth < minWidthForModal);
   const overlay = document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     ? document.querySelector(`#${targetBottomSheet?.id}-overlay`)
     : document.createElement("div");
-  overlay.id = `${targetBottomSheet?.id}-overlay`;
-  const springConfig = `spring(1,250,20,13)`;
-  // const scaleValue = 0.93;
 
-  function open(bottomsheetArray, openOnLoading, withoutAnimation = false) {
+  content =
+    typeof content !== "string"
+      ? Promise.resolve(content).then(value => value)
+      : content;
+
+  document.addEventListener("resize", () => {
+    innerHt = window.innerHeight;
+
+    if (window.innerWidth === minWidthForModal) init();
+  });
+  if (targetBottomSheet?.id) overlay.id = `${targetBottomSheet?.id}-overlay`;
+
+  function open(openOnLoading, withoutAnimation = false) {
     if (displayOverlay) {
       addOverlay(overlay);
     }
@@ -96,50 +102,52 @@ function BottomSheet(props) {
       if (webLayout === "sideSheetLeft") {
         targetBottomSheet.style.top = 0;
         targetBottomSheet.style.left = `-100%`;
-        setTimeout(() => {
-          anime({
-            targets: targetBottomSheet,
-            left: "0",
-            width: `${sideSheetMinValue}%`,
-            opacity: 1,
-            easing: springConfig,
-            duration: 1,
-            translateX: 0,
-          });
-        }, 100);
+        const widthValue =
+          typeof sideSheetMinValue === "string"
+            ? sideSheetMinValue
+            : `${sideSheetMinValue}%`;
+        anime({
+          targets: targetBottomSheet,
+          left: "0",
+          width: widthValue,
+          opacity: 1,
+          easing: sideSheetSpringConfig,
+          duration: 1,
+          translateX: 0,
+        });
       } else if (webLayout === "sideSheetRight") {
+        const widthValue =
+          typeof sideSheetMinValue === "string"
+            ? sideSheetMinValue
+            : `${sideSheetMinValue}%`;
         targetBottomSheet.style.top = 0;
         targetBottomSheet.style.right = `-100%`;
         targetBottomSheet.style.left = "unset";
-        setTimeout(() => {
-          anime({
-            targets: targetBottomSheet,
-            right: "0",
-            opacity: 1,
-            width: `${sideSheetMinValue}%`,
-            easing: springConfig,
-            duration: 1,
-            translateX: 0,
-          });
-        }, 100);
+        anime({
+          targets: targetBottomSheet,
+          right: "0",
+          opacity: 1,
+          width: widthValue,
+          easing: sideSheetSpringConfig,
+          duration: 1,
+          translateX: 0,
+        });
       } else {
         targetBottomSheet.style.top = "50%";
-        // targetBottomSheet.style.opacity = 0;
-        targetBottomSheet.style.transform =
-          "translateX(-50%) translateY(-40%) rotateX(-20deg)";
+        targetBottomSheet.style.transform = `translateX(${
+          modalPosition[0]
+        }%) translateY(${modalPosition[1] + 10}%)`;
+
         anime({
-          translateY: "-50%",
+          translateY: modalPosition[1],
           targets: targetBottomSheet,
           opacity: 1,
-          rotateX: "1deg",
           easing: springConfig,
           duration: 0.1,
         });
       }
     } else {
-      if (bottomsheetArray)
-        localStorage.setItem("array", JSON.stringify(bottomsheetArray));
-      else localStorage.setItem("array", []);
+      targetBottomSheet.style.opacity = 0;
       if (openOnLoading) {
         targetBottomSheet.style.opacity = 1;
         targetBottomSheet.style.transform = `translateY(${differenceOfWindowHt(
@@ -150,23 +158,20 @@ function BottomSheet(props) {
           checkType(snapPoints[0]),
         )}px)`;
       } else {
-        console.log("should be here");
+        targetBottomSheet.style.transform = `translateY(${convertToPx(100)}px)`;
         document.body.style.overflow = "hidden";
-        anime({
-          targets: targetBottomSheet,
-          translateY: `${convertToPx(100)}px`,
-          easing: "linear",
-          duration: 1,
-        });
         setTimeout(() => {
           anime({
             targets: targetBottomSheet,
             translateY: `${differenceOfWindowHt(checkType(snapPoints[0]))}px`,
-            easing: springConfig,
+            easing:
+              snapPoints.length === 1 && `${snapPoints[0]}`.includes(100)
+                ? quickSpringConfig
+                : springConfig,
             opacity: 1,
             duration: 1,
           });
-        }, 200);
+        }, 100);
       }
     }
     lastSetSnapPoint = differenceOfWindowHt(checkType(snapPoints[0]));
@@ -179,44 +184,48 @@ function BottomSheet(props) {
   function closeModal() {
     anime({
       targets: targetBottomSheet,
-      opacity: 0,
       easing: springConfig,
       duration: 0.1,
-      translateY: "-40%",
+      translateY: `${modalPosition[1] + 10}%`,
     });
 
     setTimeout(() => {
+      anime({
+        targets: targetBottomSheet,
+        easing: springConfig,
+        duration: 0,
+        opacity: 0,
+      });
+    }, 30);
+    setTimeout(() => {
       cleanUp();
-    }, 500);
+    }, 400);
     hideOverlay(overlay);
+    onClose();
   }
 
   function closeSideSheet() {
     if (targetBottomSheet.style.width === 0) {
       anime({
         targets: targetBottomSheet,
-        width: "0",
-        easing: springConfig,
+        easing: sideSheetSpringConfig,
         duration: 0.1,
+        translateX: "-120%",
       });
     } else {
       anime({
         targets: targetBottomSheet,
-        width: "0",
-        easing: springConfig,
+        easing: sideSheetSpringConfig,
         duration: 0.1,
+        translateX: "-120%",
       });
     }
   }
 
-  function close(
-    dismissable = true,
-    bottomsheetArray = JSON.parse(localStorage.getItem("array")),
-  ) {
-    console.log("in", targetBottomSheet);
-
+  function close(dismissable = true) {
     if (displayOverlay && overlay) {
       hideOverlay(overlay);
+      onClose();
     }
     document.body.style.overflow = "scroll";
 
@@ -228,44 +237,19 @@ function BottomSheet(props) {
             ? differenceOfWindowHt(checkType(snapPoints[0]))
             : convertToPx(120)
         }px`,
-        easing: springConfig,
+        easing: sideSheetSpringConfig,
         duration: 1,
       });
-      let bottomInd;
-      if (bottomsheetArray && bottomsheetArray.includes(targetBottomSheet))
-        bottomInd = bottomsheetArray.findIndex(
-          i => document.getElementById(i) === targetBottomSheet,
-        );
-      if (bottomInd > -1) {
-        bottomsheetArray.splice(bottomInd, 1);
-      }
-      if (bottomsheetArray)
-        localStorage.setItem("array", JSON.stringify(bottomsheetArray));
-      else localStorage.removeItem("array");
-
-      // if (scaleOnDrag) {
-      //   bottomsheetArray?.forEach((item, index) => {
-      //     if (index !== targetBottomSheet.id)
-      //       anime({
-      //         targets: `#${item}`,
-      //         top: "0px",
-      //         easing: `linear`,
-      //         duration: 1,
-      //       });
-      //   });
-      // }
     } else if (webLayout === "modal") {
-      console.log("in", targetBottomSheet);
       closeModal(targetBottomSheet, overlay);
     } else if (webLayout === "sideSheetLeft") {
       closeSideSheet();
     } else {
       closeSideSheet();
     }
-    // document.body.style.overscrollBehavior = "auto";
     lastSetSnapPoint = convertToPx(120);
     setTimeout(() => {
-      if (lastSetSnapPoint >= window.innerHeight) {
+      if (lastSetSnapPoint >= innerHt) {
         if (cleanUpOnClose) {
           cleanUp(targetBottomSheet, overlay);
         }
@@ -286,7 +270,7 @@ function BottomSheet(props) {
         draggableArea &&
         document.querySelector(`#${targetBottomSheet.id} #${draggableId}`)
       ) {
-        targetBottomSheet.removeChild(draggableArea);
+        targetBottomSheet?.removeChild(draggableArea);
       }
       if (webLayout === "modal") {
         targetBottomSheet.classList.add("modal");
@@ -314,17 +298,21 @@ function BottomSheet(props) {
         draggableId &&
         !document.querySelector(`#${targetBottomSheet?.id} #${draggableId}`)
       ) {
-        targetBottomSheet.prepend(draggableArea);
+        targetBottomSheet.insertAdjacentHTML("afterbegin", draggableArea);
       }
-      if (document.querySelector(`#${targetBottomSheet.id} #modal-close`)) {
-        targetBottomSheet.removeChild(modalClose);
+      if (
+        document.querySelector(`#${targetBottomSheet.id} #modal-close`) &&
+        modalClose &&
+        targetBottomSheet.children
+      ) {
+        targetBottomSheet?.removeChild(modalClose);
       }
       if (
         document.querySelector(`#${targetBottomSheet.id} #side-left`) ||
         document.querySelector(`#${targetBottomSheet.id} #side-right`)
       ) {
-        targetBottomSheet.removeChild(sideSheetIconWrapper);
-        targetBottomSheet.removeChild(resizableDiv);
+        targetBottomSheet?.removeChild(sideSheetIconWrapper);
+        targetBottomSheet?.removeChild(resizableDiv);
       }
       targetBottomSheet.classList.add("bottomsheet");
       targetBottomSheet.classList.remove("modal");
@@ -422,6 +410,14 @@ function BottomSheet(props) {
       } else {
         value = differenceOfWindowHt(minSnapPoint);
       }
+      if (value >= window.innerHeight) {
+        if (displayOverlay && overlay) {
+          hideOverlay(overlay);
+          onClose();
+        }
+
+        value = innerHt + 300;
+      }
       moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
       lastSetSnapPoint = differenceOfWindowHt(minSnapPoint);
       return lastSetSnapPoint;
@@ -448,20 +444,26 @@ function BottomSheet(props) {
     dy,
   ) {
     let actualOffset = offset[1];
-
     if (maxSnapPoint === null) {
       let value;
-      if (actualOffset > window.innerHeight) {
-        value = window.innerHeight;
-      } else if (actualOffset < convertToPx(100 - lastSnapPoint)) {
+      if (actualOffset > innerHt) {
+        value = innerHt;
+      } else if (
+        actualOffset < convertToPx(100 - lastSnapPoint) &&
+        scrollableSheet
+      ) {
         value = convertToPx(100 - lastSnapPoint);
       } else {
         value = actualOffset;
       }
       if (active) {
-        moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
+        anime({
+          targets: newBottomSheet,
+          translateY: `${value}px`,
+          easing: springConfig,
+          duration: 0,
+        });
       }
-
       if (!active) {
         if (
           translateToPreviousSnapPoint(
@@ -470,8 +472,6 @@ function BottomSheet(props) {
             vy,
             lastSnapPoint,
             dy,
-            false,
-            overlay,
           ) !== undefined
         ) {
           actualOffset = translateToPreviousSnapPoint(
@@ -480,22 +480,28 @@ function BottomSheet(props) {
             vy,
             lastSnapPoint,
             dy,
-            false,
-            overlay,
           );
         }
       }
     } else {
       let value;
-      if (actualOffset > window.innerHeight) {
-        value = window.innerHeight;
-      } else if (actualOffset < convertToPx(100 - lastSnapPoint)) {
+      if (actualOffset > innerHt) {
+        value = innerHt;
+      } else if (
+        actualOffset < convertToPx(100 - lastSnapPoint) &&
+        scrollableSheet
+      ) {
         value = convertToPx(100 - lastSnapPoint);
       } else {
         value = actualOffset;
       }
       if (active) {
-        moveBottomSheet(newBottomSheet, `${value}px`, springConfig);
+        anime({
+          targets: newBottomSheet,
+          translateY: `${value}px`,
+          easing: springConfig,
+          duration: 0,
+        });
       }
       if (!active) {
         if (
@@ -528,7 +534,6 @@ function BottomSheet(props) {
     lastSnapPoint,
     newBottomSheet,
     draggableId,
-    bottomsheetArray,
     resizableDiv,
   ) {
     if (window.innerWidth < minWidthForModal) {
@@ -546,46 +551,12 @@ function BottomSheet(props) {
             const minSnapPoint = 0;
             const maxSnapPoint = Infinity;
             currentSnapPoint = getCurrentSnapPoint(newBottomSheet);
-
-            if (direction[1] > 0) {
+            if (direction[1] >= 0) {
               if (
                 draggableId &&
-                target === document.querySelector(`#${draggableId}`)
+                document.querySelector(`#${draggableId}`).contains(target)
               ) {
-                targetBottomSheet.style.overflow = "hidden";
-                targetBottomSheet.style.touchAction = "none";
-                handleSnapPoints(
-                  newBottomSheet,
-                  minSnapPoint,
-                  null,
-                  active,
-                  lastSnapPoint,
-                  vy,
-                  offset,
-                  dy,
-                  overlay,
-                  isWeb,
-                );
-                if (lastSetSnapPoint >= window.innerHeight)
-                  close(dismissible, bottomsheetArray);
-
-                if (lastSetSnapPoint >= window.innerHeight) {
-                  hideOverlay(overlay);
-                }
-              } else if (
-                targetBottomSheet.scrollTop >= 1 &&
-                currentSnapPoint <= convertToPx(100 - lastSnapPoint) &&
-                (!draggableId ||
-                  target !== document.querySelector(`#${draggableId}`))
-              ) {
-                if (scrollableSheet) {
-                  targetBottomSheet.style.overflow = "scroll";
-                  targetBottomSheet.style.touchAction = "auto";
-                  targetBottomSheet.click();
-                }
-              } else {
-                targetBottomSheet.style.overflow = "hidden";
-                targetBottomSheet.style.touchAction = "none";
+                makeDraggable(targetBottomSheet);
                 handleSnapPoints(
                   targetBottomSheet,
                   minSnapPoint,
@@ -595,29 +566,47 @@ function BottomSheet(props) {
                   vy,
                   offset,
                   dy,
-                  overlay,
-                  isWeb,
                 );
-                if (lastSetSnapPoint >= window.innerHeight)
-                  close(dismissible, bottomsheetArray);
+
+                if (lastSetSnapPoint >= innerHt) {
+                  hideOverlay(overlay);
+                  onClose();
+                }
+              } else if (
+                targetBottomSheet.scrollTop >= 1 &&
+                currentSnapPoint <= convertToPx(100 - lastSnapPoint) &&
+                (!draggableId ||
+                  target !== document.querySelector(`#${draggableId}`)) &&
+                scrollableSheet
+              ) {
+                makeScrollable(targetBottomSheet);
+              } else {
+                makeDraggable(targetBottomSheet);
+                handleSnapPoints(
+                  targetBottomSheet,
+                  minSnapPoint,
+                  null,
+                  active,
+                  lastSnapPoint,
+                  vy,
+                  offset,
+                  dy,
+                );
               }
             } else if (
               getCurrentSnapPoint(targetBottomSheet) <=
-              convertToPx(100 - lastSnapPoint)
+                convertToPx(100 - lastSnapPoint) &&
+              scrollableSheet
             ) {
-              if (scrollableSheet) {
-                targetBottomSheet.click();
-                targetBottomSheet.style.overflow = "scroll";
-                if (convertToPx(100 - lastSnapPoint) > 0)
-                  targetBottomSheet.style.minHeight = "unset";
-                targetBottomSheet.style.height = `${convertToPx(
-                  lastSnapPoint,
-                )}px`;
-                targetBottomSheet.style.touchAction = "auto";
-              }
+              makeScrollable(targetBottomSheet);
+              if (convertToPx(100 - lastSnapPoint) > 0)
+                targetBottomSheet.style.minHeight = "unset";
+              targetBottomSheet.style.height = `${convertToPx(
+                lastSnapPoint,
+              )}px`;
             } else {
-              targetBottomSheet.style.overflow = "hidden";
-              targetBottomSheet.style.touchAction = "none";
+              if (targetBottomSheet.scrollTop === 0)
+                makeDraggable(targetBottomSheet);
               handleSnapPoints(
                 targetBottomSheet,
                 null,
@@ -627,11 +616,7 @@ function BottomSheet(props) {
                 vy,
                 offset,
                 dy,
-                overlay,
-                isWeb,
               );
-              if (lastSetSnapPoint >= window.innerHeight)
-                close(dismissible, bottomsheetArray);
             }
           },
           onDragStart: ({ direction }) => {
@@ -644,13 +629,10 @@ function BottomSheet(props) {
               (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
                 lastSetSnapPoint === 0) &&
               direction[1] < 0 &&
-              targetBottomSheet.scrollTop >= 0
+              targetBottomSheet.scrollTop >= 0 &&
+              scrollableSheet
             ) {
-              if (scrollableSheet) {
-                targetBottomSheet.style.overflow = "scroll";
-                targetBottomSheet.click();
-                targetBottomSheet.style.touchAction = "auto";
-              }
+              makeScrollable(targetBottomSheet);
             }
             if (
               (currentSnapPoint <= convertToPx(100 - lastSnapPoint) ||
@@ -666,7 +648,12 @@ function BottomSheet(props) {
         {
           drag: {
             filterTaps: false,
-            rubberband: true,
+            bounds: {
+              top: !scrollableSheet
+                ? convertToPx(100 - lastSnapPoint) + 10
+                : -innerHt,
+            },
+            rubberband: !scrollableSheet && rubberband,
             axis: "y",
             preventDefault: false,
             from: () => [0, getCurrentSnapPoint(targetBottomSheet)],
@@ -677,50 +664,17 @@ function BottomSheet(props) {
       Gesture(
         resizableDiv,
         {
-          onDrag: ({ offset, direction }) => {
-            let translateX;
-            if (webLayout === "sideSheetLeft") {
-              if (
-                Math.round(
-                  (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
-                ) < sideSheetMinValue &&
-                dismissible
-
-                // velocity[0] > 0.5
-              ) {
-                translateX = "-105%";
-              }
-            } else if (
-              100 -
-                Math.round(
-                  (offset[0] / window.innerWidth) * 100 +
-                    (100 - sideSheetMinValue),
-                ) <
-                sideSheetMinValue &&
-              direction[0] >= 0 &&
-              dismissible
-            ) {
-              translateX = "105%";
-            }
-
-            anime({
-              targets: targetBottomSheet,
-              width: `${
-                webLayout === "sideSheetLeft"
-                  ? Math.round(
-                      (offset[0] / window.innerWidth) * 100 + sideSheetMinValue,
-                    )
-                  : 100 -
-                    Math.round(
-                      (offset[0] / window.innerWidth) * 100 +
-                        (100 - sideSheetMinValue),
-                    )
-              }%`,
-              easing: springConfig,
-              duration: 0,
-              translateX,
-              // opacity: `${width === 0 ? 0 : 1}`,
-            });
+          onDrag: ({ offset, xy, active }) => {
+            translateResizableDiv(
+              webLayout,
+              offset,
+              sideSheetMinValue,
+              active,
+              xy,
+              targetBottomSheet,
+              dismissible,
+              sideSheetMaxValue,
+            );
           },
         },
         {
@@ -728,35 +682,24 @@ function BottomSheet(props) {
             axis: "x",
             bounds: {
               left:
-                webLayout === "sideSheetRight"
-                  ? -(
-                      Math.round(
-                        (window.innerWidth * sideSheetMaxValue) / 100,
-                      ) -
-                      Math.round(
-                        (window.innerWidth *
-                          +targetBottomSheet.style.width.replace("%", "")) /
-                          100,
-                      )
-                    )
-                  : Math.round((window.innerWidth * sideSheetMinValue) / 100) -
-                    Math.round(
-                      (window.innerWidth *
-                        +targetBottomSheet.style.width.replace("%", "")) /
-                        100,
+                typeof sideSheetMinValue === "string"
+                  ? undefined
+                  : getLeftBounds(
+                      webLayout,
+                      sideSheetMaxValue,
+                      targetBottomSheet,
+                      sideSheetMinValue,
                     ),
               right:
-                webLayout === "sideSheetLeft"
-                  ? Math.round((window.innerWidth * sideSheetMaxValue) / 100) -
-                    Math.round(
-                      (window.innerWidth *
-                        +targetBottomSheet.style.width.replace("%", "")) /
-                        100,
-                    )
-                  : window.innerWidth,
-              top: -50,
-              bottom: 50,
+                typeof sideSheetMinValue === "string"
+                  ? undefined
+                  : getRightBounds(
+                      webLayout,
+                      sideSheetMaxValue,
+                      targetBottomSheet,
+                    ),
             },
+            rubberband: true,
           },
         },
       );
@@ -783,24 +726,22 @@ function BottomSheet(props) {
     return isWeb;
   }
 
-  function createBottomSheet(bottomsheetArray) {
+  function createBottomSheet() {
     const lastSnapPoint = snapPointConversion(
       snapPoints[snapPoints.length - 1],
     );
     const modalClose = document.createElement("div");
     const sideSheetIconWrapper = document.createElement("div");
     const resizableDiv = document.createElement("div");
-    // resizableDiv.innerHTML =
-    //   '<svg width="18" height="47" viewBox="0 0 8 27" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 0V26.5" stroke="black"/><path d="M7 0V26.5" stroke="black"/><path d="M1 0V26.5" stroke="black"/></svg>';
-    if (resizablePosition === "left") {
-      resizableDiv.style.left = "0";
-    } else {
-      resizableDiv.style.right = "0";
-    }
-    // resizableDiv.innerHTML = "hello";
-    resizableDiv.id = "resizable";
     let draggableId = "";
 
+    resizableRequirements(
+      webLayout,
+      resizableDiv,
+      resizeHoverEffect,
+      targetBottomSheet,
+      isWeb,
+    );
     targetBottomSheet.style.display = "block";
     modalClose.id = "modal-close";
     modalClose.classList.add("close-modal");
@@ -818,19 +759,28 @@ function BottomSheet(props) {
     modalClose.insertAdjacentHTML("afterbegin", modalCloseIcon);
     if (sideSheetIconWrapper.children.length === 0)
       sideSheetIconWrapper.insertAdjacentHTML("afterbegin", sideSheetIcon);
+    if (footerContent) {
+      if (
+        typeof footerContent === "string" &&
+        !document.querySelector(`#${targetBottomSheet.id} .footer`)
+      ) {
+        targetBottomSheet.insertAdjacentHTML("beforeend", footerContent);
+      }
+    }
+    if (headerContent) {
+      if (
+        typeof headerContent === "string" &&
+        !document.querySelector(`#${targetBottomSheet.id} .header`)
+      ) {
+        targetBottomSheet.insertAdjacentHTML("beforeend", headerContent);
+      }
+    }
     if (draggableArea) {
       if (typeof draggableArea === "string") {
-        draggableArea = new DOMParser().parseFromString(
-          draggableArea,
-          "text/xml",
-        );
-        draggableId = draggableArea.childNodes[0].id;
-        [draggableArea] = draggableArea.childNodes;
+        draggableId = "drag";
       } else {
         draggableId = draggableArea?.id;
       }
-      draggableArea.setAttribute("data-draggable", "1");
-      draggableArea.classList.add("draggable");
     }
     handleCloseIcons(
       sideSheetIconWrapper,
@@ -849,28 +799,30 @@ function BottomSheet(props) {
     }, 300);
     if (
       lastSetSnapPoint &&
-      lastSetSnapPoint < window.innerHeight &&
+      lastSetSnapPoint < innerHt &&
       window.innerWidth < minWidthForModal
     ) {
-      close(dismissible, bottomsheetArray);
+      close(dismissible);
     } else {
-      open(bottomsheetArray, openOnLoad);
+      open(openOnLoad);
     }
-    if (scrollableSheet) {
-      targetBottomSheet.click();
-      targetBottomSheet.style.overflow = "scroll";
-      targetBottomSheet.style.touchAction = "auto";
+    if (
+      scrollableSheet &&
+      lastSetSnapPoint === innerHt - convertToPx(lastSnapPoint)
+    ) {
+      makeScrollable(targetBottomSheet);
     }
+    if (scrollableSheet && !isWeb)
+      targetBottomSheet.style.height = `${convertToPx(lastSnapPoint)}px`;
     setTimeout(() => {
       handleDragGesture(
         targetBottomSheet,
         lastSnapPoint,
         targetBottomSheet,
         draggableId,
-        bottomsheetArray,
         resizableDiv,
       );
-    }, 400);
+    }, 200);
 
     if (document.querySelector(`.bottomsheet #${targetBottomSheet.id}`)) {
       document.querySelector(
@@ -878,143 +830,14 @@ function BottomSheet(props) {
       ).style.display = "block";
     }
   }
-  // function stackAnimation(bottomsheetArray) {
-  //   // let actualIndex;
-  //   // let scaleIndex;
-
-  //   bottomsheetArray.forEach((i, index) => {
-  //     if (
-  //       i === targetBottomSheet.id
-  //       // bottomsheetArray[index - 1] &&
-  //       // document.getElementById(bottomsheetArray[index - 1]) &&
-  //       // getCurrentSnapPoint(
-  //       //   document.getElementById(bottomsheetArray[index - 1]),
-  //       // ) === 0 &&
-  //       // snapPoints[snapPoints.length - 1].includes("95")
-  //     ) {
-  //       anime({
-  //         targets: `#${bottomsheetArray[index - 1]}`,
-  //         scale:
-  //           scaleValue +
-  //           ((1 - scaleValue) / window.innerHeight) *
-  //             getCurrentSnapPoint(targetBottomSheet),
-  //         easing: `linear`,
-  //         duration: 0.1,
-  //         // translateY: "0%",
-  //       });
-  //       // anime({
-  //       //   targets: `#${i}`,
-  //       //   translateY: "10%",
-  //       // });
-  //       // bottomsheetArray.forEach((item, ind) => {
-  //       // if (ind !== index - 1)
-  //       // if (document.getElementById(item).style.top === "50px")
-  //       //   anime({
-  //       //     targets: `#${item}`,
-  //       //     top: "0px",
-  //       //     easing: `linear`,
-  //       //     duration: 1,
-  //       //   });
-  //       // });
-  //       if (
-  //         index - 1 > 0 &&
-  //         getCurrentSnapPoint(document.getElementById(bottomsheetArray[index]))
-  //       ) {
-  //         bottomsheetArray.slice(0, index - 1).forEach(item => {
-  //           anime({
-  //             targets: `#${item}`,
-  //             top: "50px",
-  //             easing: `linear`,
-  //             duration: 1,
-  //           });
-  //         });
-  //       } else {
-  //         bottomsheetArray.slice(0, index - 1).forEach(item => {
-  //           anime({
-  //             targets: `#${item}`,
-  //             // top: "0px",
-  //             easing: `linear`,
-  //             duration: 1,
-  //           });
-  //         });
-  //       }
-  //     }
-  //   });
-  //   // if (scaleItems.length) {
-  //   //   scaleItems.forEach((i, index) => {
-  //   //     if (
-  //   //       document.getElementById(i) &&
-  //   //       scaledValue !==
-  //   //         scaleValues[index] +
-  //   //           ((1 - scaleValues[index]) / window.innerHeight) *
-  //   //             getCurrentSnapPoint(targetBottomSheet).toFixed(1)
-  //   //     ) {
-  //   //       anime({
-  //   //         targets: `#${i}`,
-  //   //         scale:
-  //   //           scaleValues[index] +
-  //   //           ((1 - scaleValues[index]) / window.innerHeight) *
-  //   //             getCurrentSnapPoint(targetBottomSheet),
-  //   //         easing: `linear`,
-  //   //         duration: 0.1,
-  //   //       });
-
-  //   //       scaledValue =
-  //   //         scaleValues[index] +
-  //   //         ((1 - scaleValues[index]) / window.innerHeight) *
-  //   //           getCurrentSnapPoint(targetBottomSheet).toFixed(1);
-  //   //     }
-  //   //   });
-  //   // } else {
-  //   //   bottomSheets.forEach((i, index) => {
-  //   //     if (
-  //   //       i.style.display &&
-  //   //       i.style.transform &&
-  //   //       getCurrentSnapPoint(i) &&
-  //   //       getCurrentSnapPoint(i) < window.innerHeight
-  //   //     ) {
-  //   //       actualIndex = index;
-  //   //       if (index === 0) {
-  //   //         scaleIndex = bottomSheets.length - 1;
-  //   //       } else if (index === bottomSheets.length - 1) {
-  //   //         scaleIndex = 0;
-  //   //       } else {
-  //   //         scaleIndex = index - 1;
-  //   //       }
-  //   //     }
-  //   //   });
-  //   //   // }
-  //   //   if (scaleIndex && bottomSheets[scaleIndex]) {
-  //   //     anime({
-  //   //       targets: `#${bottomSheets[scaleIndex].id}`,
-  //   //       scale:
-  //   //         scaleValue +
-  //   //         ((1 - scaleValue) / window.innerHeight) *
-  //   //           getCurrentSnapPoint(bottomSheets[actualIndex]),
-  //   //       easing: `spring(1, 95, 25, 23)`,
-  //   //       duration: 1,
-  //   //     });
-  //   //   }
-  //   // }
-  // }
-  // function observeMutation(bottomsheetArray) {
-  //   const config = { attributes: true, childList: true };
-  //   const callback = mutationsList => {
-  //     mutationsList.forEach(mutation => {
-  //       if (
-  //         mutation.type === "attributes" &&
-  //         window.innerWidth < minWidthForModal &&
-  //         scaleOnDrag
-  //       ) {
-  //         stackAnimation(bottomsheetArray);
-  //       }
-  //     });
-  //   };
-  //   const observer = new MutationObserver(callback);
-  //   observer.observe(targetBottomSheet, config);
-  // }
   function init() {
+    targetid = trigger
+      ? document
+          ?.querySelector(`#${trigger}`)
+          ?.getAttribute("data-bottomsheet-id")
+      : "";
     document.body.style.overscrollBehavior = "contain";
+    targetBottomSheet = targetid ? document?.querySelector(`#${targetid}`) : "";
 
     if (onInit) {
       onInit();
@@ -1035,39 +858,12 @@ function BottomSheet(props) {
         "text/html",
       ).body.firstChild.innerHTML;
     }
-    const bottomsheetArray = JSON.parse(localStorage.getItem("array")) || [];
-    if (
-      !bottomsheetArray.length ||
-      (bottomsheetArray.length &&
-        bottomsheetArray?.indexOf(targetBottomSheet.id) === -1 &&
-        targetBottomSheet.id.length > 0)
-    ) {
-      bottomsheetArray?.push(targetBottomSheet.id);
-      const obj = {};
-      bottomsheetArray.forEach(i => {
-        obj[i] = false;
-      });
-    }
-
     if (
       targetBottomSheet &&
-      !document.getElementById(`#${targetBottomSheet.id}`)
+      !document.getElementById(`${targetBottomSheet.id}`)
     ) {
       document.body.append(targetBottomSheet);
     }
-    if (
-      bottomsheetArray.length > 1 &&
-      targetBottomSheet ===
-        document.getElementById(
-          bottomsheetArray[bottomsheetArray.length - 1],
-        ) &&
-      snapPoints[snapPoints.length - 1].includes("100") &&
-      scaleOnDrag
-    ) {
-      snapPoints[snapPoints.length - 1] = "95%";
-    }
-    // observeMutation(bottomsheetArray);
-
     if (displayOverlay) {
       overlay.classList.add("overlay");
       addOverlay(overlay);
@@ -1077,14 +873,14 @@ function BottomSheet(props) {
       }
       if (closeOnOverlayClick) {
         overlay.addEventListener("click", () => {
-          close(bottomsheetArray, isWeb, dismissible);
+          close(isWeb, dismissible);
         });
       }
     }
     if (document.querySelectorAll(`#${targetBottomSheet?.id}`).length < 2) {
-      createBottomSheet(bottomsheetArray);
+      createBottomSheet();
     } else {
-      open(bottomsheetArray, openOnLoad);
+      open(openOnLoad);
     }
   }
   if (openOnLoad) {
@@ -1098,7 +894,7 @@ function BottomSheet(props) {
           }),
         );
       }
-    }, 400);
+    }, 300);
   }
 
   function destroy() {
