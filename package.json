@@ -1,13 +1,12 @@
 {
-  "name": "js-bottomsheet-monorepo",
-  "version": "1.0.0",
+  "name": "js-bottomsheet",
+  "version": "1.2.6",
   "type": "module",
-  "description": "JS Bottomsheet Monorepo",
+  "description": "A pure Js snappable, scrollable, customisable bottomsheet!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/timelessco/js-bottomsheet"
   },
-  "private": true,
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -20,6 +19,7 @@
     "modal"
   ],
   "scripts": {
+    "postinstall": "husky install",
     "build": "turbo run build",
     "commit": "gacp",
     "dev": "turbo run dev",
@@ -29,7 +29,6 @@
     "lint:fix": "turbo run lint:fix",
     "lintstyles": "turbo run lintstyles",
     "lintstyles:fix": "turbo run lintstyles:fix",
-    "postinstall": "husky install",
     "postpublish": "pinst --enable",
     "preinstall": "npx only-allow pnpm",
     "prepublishOnly": "pinst --disable",

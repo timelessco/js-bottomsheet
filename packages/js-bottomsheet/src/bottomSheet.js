@@ -15,6 +15,7 @@ import {
   convertToPx,
   differenceOfWindowHt,
   getCurrentSnapPoint,
+  getNumber,
   snapPointConversion,
 } from "./helpers/convertionHelpers";
 import { addOverlay, hideOverlay } from "./helpers/overlayHelpers";
@@ -432,7 +433,7 @@ function BottomSheet(props) {
       overlay,
     );
   }
-
+  const fl = 0;
   function handleSnapPoints(
     newBottomSheet,
     minSnapPoint,
@@ -457,13 +458,15 @@ function BottomSheet(props) {
         value = actualOffset;
       }
       if (active) {
-        anime({
-          targets: newBottomSheet,
-          translateY: `${value}px`,
-          easing: springConfig,
-          duration: 0,
-        });
+        // anime({
+        //   targets: newBottomSheet,
+        //   translateY: `${value}px`,
+        //   easing: springConfig,
+        //   duration: 0,
+        // });
+        newBottomSheet.style.transform = `translateY(${value}px)`;
       }
+
       if (!active) {
         if (
           translateToPreviousSnapPoint(
@@ -496,12 +499,13 @@ function BottomSheet(props) {
         value = actualOffset;
       }
       if (active) {
-        anime({
-          targets: newBottomSheet,
-          translateY: `${value}px`,
-          easing: springConfig,
-          duration: 0,
-        });
+        // anime({
+        //   targets: newBottomSheet,
+        //   translateY: `${value}px`,
+        //   easing: springConfig,
+        //   duration: 0,
+        // });
+        newBottomSheet.style.transform = `translateY(${value}px)`;
       }
       if (!active) {
         if (
@@ -675,6 +679,10 @@ function BottomSheet(props) {
               dismissible,
               sideSheetMaxValue,
             );
+            console.log(
+              typeof getNumber(sideSheetMaxValue),
+              "sideSheetMaxValue",
+            );
           },
         },
         {
@@ -692,7 +700,7 @@ function BottomSheet(props) {
                     ),
               right:
                 typeof sideSheetMinValue === "string"
-                  ? undefined
+                  ? +getNumber(sideSheetMaxValue)
                   : getRightBounds(
                       webLayout,
                       sideSheetMaxValue,

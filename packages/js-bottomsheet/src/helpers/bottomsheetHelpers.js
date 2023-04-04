@@ -63,8 +63,6 @@ export function translateResizableDiv(
           stringValueCalc = 0;
           translateX = "-105%";
         } else stringValueCalc = sideSheetMinValue;
-      } else if (offset[0] > getNumber(sideSheetMaxValue)) {
-        stringValueCalc = sideSheetMaxValue;
         // eslint-disable-next-line prefer-destructuring
       } else stringValueCalc = offset[0];
     }
@@ -99,7 +97,10 @@ export function translateResizableDiv(
       }
     }
   }
-
+  console.log(
+    typeof sideSheetMinValue === "string" ? stringValueCalc : `${width}%`,
+    "skjbhmdjm",
+  );
   anime({
     targets: targetBottomSheet,
     width: `${
