@@ -679,15 +679,17 @@ function BottomSheet(props) {
               dismissible,
               sideSheetMaxValue,
             );
-            console.log(
-              typeof getNumber(sideSheetMaxValue),
-              "sideSheetMaxValue",
-            );
           },
         },
         {
           drag: {
             axis: "x",
+            from: () => [
+              typeof sideSheetMinValue === "string"
+                ? +getNumber(sideSheetMaxValue)
+                : sideSheetMaxValue,
+              0,
+            ],
             bounds: {
               left:
                 typeof sideSheetMinValue === "string"

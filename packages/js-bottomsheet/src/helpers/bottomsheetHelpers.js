@@ -92,15 +92,9 @@ export function translateResizableDiv(
           stringValueCalc = 0;
           translateX = "105%";
         } else stringValueCalc = sideSheetMinValue;
-      } else if (stringValueCalc > getNumber(sideSheetMaxValue)) {
-        stringValueCalc = sideSheetMaxValue;
       }
     }
   }
-  console.log(
-    typeof sideSheetMinValue === "string" ? stringValueCalc : `${width}%`,
-    "skjbhmdjm",
-  );
   anime({
     targets: targetBottomSheet,
     width: `${
