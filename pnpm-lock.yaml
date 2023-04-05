@@ -65,8 +65,8 @@ importers:
         specifier: ^15.4.0
         version: 15.4.0
       stylelint-config-clean-order:
-        specifier: ^5.0.0
-        version: 5.0.0(stylelint@15.4.0)
+        specifier: ^5.0.1
+        version: 5.0.1(stylelint@15.4.0)
       stylelint-config-prettier:
         specifier: ^9.0.5
         version: 9.0.5(stylelint@15.4.0)
@@ -5689,8 +5689,8 @@ packages:
     resolution: {integrity: sha512-Dj1Okke1C3uKKwQcetra4jSuk0DqbzbYtXipzFlFMZtowbF1x7BKJwB9AayVMyFARvU8EDrZdcax4At/452cAg==}
     dev: true
 
-  /stylelint-config-clean-order@5.0.0(stylelint@15.4.0):
-    resolution: {integrity: sha512-X4k3relU0KmkNE7Q+K7WslN8Xk1nJBCT30OMeEwF0MAKqV8C9uh3vGbCcrR3/6Oxcv+83m1AxNsQAkrBDtV2sw==}
+  /stylelint-config-clean-order@5.0.1(stylelint@15.4.0):
+    resolution: {integrity: sha512-zKLXjTgrkZqiml0VXv7Syl11XLpzRErW+1/qSEjIQ+aHAFjGuRq6Uwal9OzxtDHvpoIhlc4wCYjougWDuLN5aA==}
     peerDependencies:
       stylelint: '>=14'
     dependencies:
