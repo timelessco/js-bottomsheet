@@ -42,7 +42,7 @@
     "test": "echo \"no test specified\" && exit 0"
   },
   "dependencies": {
-    "@use-gesture/vanilla": "^10.2.25",
+    "@use-gesture/vanilla": "^10.2.26",
     "animejs": "^3.2.1"
   },
   "devDependencies": {
