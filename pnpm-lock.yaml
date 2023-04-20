@@ -90,11 +90,11 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       vite:
-        specifier: ^4.2.2
-        version: 4.2.2(@types/node@18.15.11)
+        specifier: ^4.3.1
+        version: 4.3.1(@types/node@18.15.11)
       vite-plugin-top-level-await:
         specifier: ^1.3.0
-        version: 1.3.0(vite@4.2.2)
+        version: 1.3.0(vite@4.3.1)
 
   packages/js-bottomsheet:
     dependencies:
@@ -106,8 +106,8 @@ importers:
         version: 3.2.1
     devDependencies:
       vite:
-        specifier: ^4.2.2
-        version: 4.2.2(@types/node@18.15.11)
+        specifier: ^4.3.1
+        version: 4.3.1(@types/node@18.15.11)
 
 packages:
 
@@ -6188,7 +6188,7 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vite-plugin-top-level-await@1.3.0(vite@4.2.2):
+  /vite-plugin-top-level-await@1.3.0(vite@4.3.1):
     resolution: {integrity: sha512-owIfsgWudMlQODWJSwp0sQB3AZZu3qsMygeBjZy8CyjEk6OB9AGd8lHqmgwrcEqgvy9N58lYxSBLVk3/4ejEiA==}
     peerDependencies:
       vite: '>=2.8'
@@ -6196,14 +6196,14 @@ packages:
       '@rollup/plugin-virtual': 3.0.1
       '@swc/core': 1.3.51
       uuid: 9.0.0
-      vite: 4.2.2(@types/node@18.15.11)
+      vite: 4.3.1(@types/node@18.15.11)
     transitivePeerDependencies:
       - '@swc/helpers'
       - rollup
     dev: true
 
-  /vite@4.2.2(@types/node@18.15.11):
-    resolution: {integrity: sha512-PcNtT5HeDxb3QaSqFYkEum8f5sCVe0R3WK20qxgIvNBZPXU/Obxs/+ubBMeE7nLWeCo2LDzv+8hRYSlcaSehig==}
+  /vite@4.3.1(@types/node@18.15.11):
+    resolution: {integrity: sha512-EPmfPLAI79Z/RofuMvkIS0Yr091T2ReUoXQqc5ppBX/sjFRhHKiPPF/R46cTdoci/XgeQpB23diiJxq5w30vdg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -6230,7 +6230,6 @@ packages:
       '@types/node': 18.15.11
       esbuild: 0.17.17
       postcss: 8.4.22
-      resolve: 1.22.3
       rollup: 3.20.3
     optionalDependencies:
       fsevents: 2.3.2
