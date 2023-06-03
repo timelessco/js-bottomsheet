@@ -66,17 +66,17 @@ importers:
         specifier: ^0.17.1
         version: 0.17.1(prettier@2.8.8)
       stylelint:
-        specifier: ^15.6.2
-        version: 15.6.2
+        specifier: ^15.6.3
+        version: 15.6.3
       stylelint-config-clean-order:
         specifier: ^5.0.1
-        version: 5.0.1(stylelint@15.6.2)
+        version: 5.0.1(stylelint@15.6.3)
       stylelint-config-prettier:
         specifier: ^9.0.5
-        version: 9.0.5(stylelint@15.6.2)
+        version: 9.0.5(stylelint@15.6.3)
       stylelint-config-standard:
         specifier: ^33.0.0
-        version: 33.0.0(stylelint@15.6.2)
+        version: 33.0.0(stylelint@15.6.3)
       turbo:
         specifier: ^1.10.1
         version: 1.10.1
@@ -1743,8 +1743,8 @@ packages:
       '@jridgewell/trace-mapping': 0.3.9
     dev: true
 
-  /@csstools/css-parser-algorithms@2.1.1(@csstools/css-tokenizer@2.1.1):
-    resolution: {integrity: sha512-viRnRh02AgO4mwIQb2xQNJju0i+Fh9roNgmbR5xEuG7J3TGgxjnE95HnBLgsFJOJOksvcfxOUCgODcft6Y07cA==}
+  /@csstools/css-parser-algorithms@2.2.0(@csstools/css-tokenizer@2.1.1):
+    resolution: {integrity: sha512-9BoQ/jSrPq4vv3b9jjLW+PNNv56KlDH5JMx5yASSNrCtvq70FCNZUjXRvbCeR9hYj9ZyhURtqpU/RFIgg6kiOw==}
     engines: {node: ^14 || ^16 || >=18}
     peerDependencies:
       '@csstools/css-tokenizer': ^2.1.1
@@ -1757,14 +1757,14 @@ packages:
     engines: {node: ^14 || ^16 || >=18}
     dev: true
 
-  /@csstools/media-query-list-parser@2.0.4(@csstools/css-parser-algorithms@2.1.1)(@csstools/css-tokenizer@2.1.1):
-    resolution: {integrity: sha512-GyYot6jHgcSDZZ+tLSnrzkR7aJhF2ZW6d+CXH66mjy5WpAQhZD4HDke2OQ36SivGRWlZJpAz7TzbW6OKlEpxAA==}
+  /@csstools/media-query-list-parser@2.1.0(@csstools/css-parser-algorithms@2.2.0)(@csstools/css-tokenizer@2.1.1):
+    resolution: {integrity: sha512-MXkR+TeaS2q9IkpyO6jVCdtA/bfpABJxIrfkLswThFN8EZZgI2RfAHhm6sDNDuYV25d5+b8Lj1fpTccIcSLPsQ==}
     engines: {node: ^14 || ^16 || >=18}
     peerDependencies:
       '@csstools/css-parser-algorithms': ^2.1.1
       '@csstools/css-tokenizer': ^2.1.1
     dependencies:
-      '@csstools/css-parser-algorithms': 2.1.1(@csstools/css-tokenizer@2.1.1)
+      '@csstools/css-parser-algorithms': 2.2.0(@csstools/css-tokenizer@2.1.1)
       '@csstools/css-tokenizer': 2.1.1
     dev: true
 
@@ -5764,60 +5764,60 @@ packages:
     resolution: {integrity: sha512-Dj1Okke1C3uKKwQcetra4jSuk0DqbzbYtXipzFlFMZtowbF1x7BKJwB9AayVMyFARvU8EDrZdcax4At/452cAg==}
     dev: true
 
-  /stylelint-config-clean-order@5.0.1(stylelint@15.6.2):
+  /stylelint-config-clean-order@5.0.1(stylelint@15.6.3):
     resolution: {integrity: sha512-zKLXjTgrkZqiml0VXv7Syl11XLpzRErW+1/qSEjIQ+aHAFjGuRq6Uwal9OzxtDHvpoIhlc4wCYjougWDuLN5aA==}
     peerDependencies:
       stylelint: '>=14'
     dependencies:
-      stylelint: 15.6.2
-      stylelint-order: 6.0.3(stylelint@15.6.2)
+      stylelint: 15.6.3
+      stylelint-order: 6.0.3(stylelint@15.6.3)
     dev: true
 
-  /stylelint-config-prettier@9.0.5(stylelint@15.6.2):
+  /stylelint-config-prettier@9.0.5(stylelint@15.6.3):
     resolution: {integrity: sha512-U44lELgLZhbAD/xy/vncZ2Pq8sh2TnpiPvo38Ifg9+zeioR+LAkHu0i6YORIOxFafZoVg0xqQwex6e6F25S5XA==}
     engines: {node: '>= 12'}
     hasBin: true
     peerDependencies:
       stylelint: '>= 11.x < 15'
     dependencies:
-      stylelint: 15.6.2
+      stylelint: 15.6.3
     dev: true
 
-  /stylelint-config-recommended@12.0.0(stylelint@15.6.2):
+  /stylelint-config-recommended@12.0.0(stylelint@15.6.3):
     resolution: {integrity: sha512-x6x8QNARrGO2sG6iURkzqL+Dp+4bJorPMMRNPScdvaUK8PsynriOcMW7AFDKqkWAS5wbue/u8fUT/4ynzcmqdQ==}
     peerDependencies:
       stylelint: ^15.5.0
     dependencies:
-      stylelint: 15.6.2
+      stylelint: 15.6.3
     dev: true
 
-  /stylelint-config-standard@33.0.0(stylelint@15.6.2):
+  /stylelint-config-standard@33.0.0(stylelint@15.6.3):
     resolution: {integrity: sha512-eyxnLWoXImUn77+ODIuW9qXBDNM+ALN68L3wT1lN2oNspZ7D9NVGlNHb2QCUn4xDug6VZLsh0tF8NyoYzkgTzg==}
     peerDependencies:
       stylelint: ^15.5.0
     dependencies:
-      stylelint: 15.6.2
-      stylelint-config-recommended: 12.0.0(stylelint@15.6.2)
+      stylelint: 15.6.3
+      stylelint-config-recommended: 12.0.0(stylelint@15.6.3)
     dev: true
 
-  /stylelint-order@6.0.3(stylelint@15.6.2):
+  /stylelint-order@6.0.3(stylelint@15.6.3):
     resolution: {integrity: sha512-1j1lOb4EU/6w49qZeT2SQVJXm0Ht+Qnq9GMfUa3pMwoyojIWfuA+JUDmoR97Bht1RLn4ei0xtLGy87M7d29B1w==}
     peerDependencies:
       stylelint: ^14.0.0 || ^15.0.0
     dependencies:
       postcss: 8.4.24
       postcss-sorting: 8.0.2(postcss@8.4.24)
-      stylelint: 15.6.2
+      stylelint: 15.6.3
     dev: true
 
-  /stylelint@15.6.2:
-    resolution: {integrity: sha512-fjQWwcdUye4DU+0oIxNGwawIPC5DvG5kdObY5Sg4rc87untze3gC/5g/ikePqVjrAsBUZjwMN+pZsAYbDO6ArQ==}
+  /stylelint@15.6.3:
+    resolution: {integrity: sha512-qWUfFsnPyrgK8NMFvGkjUrF1+DNrS5VMoN39meJbeQcOW8NE3pxIwTpA35m0MG6lmZobs7GVoQUdELmzqdO7XQ==}
     engines: {node: ^14.13.1 || >=16.0.0}
     hasBin: true
     dependencies:
-      '@csstools/css-parser-algorithms': 2.1.1(@csstools/css-tokenizer@2.1.1)
+      '@csstools/css-parser-algorithms': 2.2.0(@csstools/css-tokenizer@2.1.1)
       '@csstools/css-tokenizer': 2.1.1
-      '@csstools/media-query-list-parser': 2.0.4(@csstools/css-parser-algorithms@2.1.1)(@csstools/css-tokenizer@2.1.1)
+      '@csstools/media-query-list-parser': 2.1.0(@csstools/css-parser-algorithms@2.2.0)(@csstools/css-tokenizer@2.1.1)
       '@csstools/selector-specificity': 2.2.0(postcss-selector-parser@6.0.13)
       balanced-match: 2.0.0
       colord: 2.9.3
