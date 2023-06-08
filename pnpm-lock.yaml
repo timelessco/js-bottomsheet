@@ -12,8 +12,8 @@ importers:
         specifier: ^7.22.5
         version: 7.22.5
       '@babel/eslint-parser':
-        specifier: ^7.21.8
-        version: 7.21.8(@babel/core@7.22.5)(eslint@8.42.0)
+        specifier: ^7.22.5
+        version: 7.22.5(@babel/core@7.22.5)(eslint@8.42.0)
       '@babel/preset-env':
         specifier: ^7.22.5
         version: 7.22.5(@babel/core@7.22.5)
@@ -158,8 +158,8 @@ packages:
       - supports-color
     dev: true
 
-  /@babel/eslint-parser@7.21.8(@babel/core@7.22.5)(eslint@8.42.0):
-    resolution: {integrity: sha512-HLhI+2q+BP3sf78mFUZNCGc10KEmoUqtUT1OCdMZsN+qr4qFeLUod62/zAnF3jNQstwyasDkZnVXwfK2Bml7MQ==}
+  /@babel/eslint-parser@7.22.5(@babel/core@7.22.5)(eslint@8.42.0):
+    resolution: {integrity: sha512-C69RWYNYtrgIRE5CmTd77ZiLDXqgBipahJc/jHP3sLcAGj6AJzxNIuKNpVnICqbyK7X3pFUfEvL++rvtbQpZkQ==}
     engines: {node: ^10.13.0 || ^12.13.0 || >=14.0.0}
     peerDependencies:
       '@babel/core': '>=7.11.0'
