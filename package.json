@@ -41,8 +41,8 @@
     "@babel/eslint-parser": "^7.22.9",
     "@babel/preset-env": "^7.22.9",
     "@changesets/cli": "^2.26.2",
-    "@commitlint/cli": "^17.6.6",
-    "@commitlint/config-conventional": "^17.6.6",
+    "@commitlint/cli": "^17.6.7",
+    "@commitlint/config-conventional": "^17.6.7",
     "@ianvs/prettier-plugin-sort-imports": "^4.0.2",
     "eslint": "^8.44.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -56,11 +56,11 @@
     "pinst": "^3.0.0",
     "prettier": "^2.8.8",
     "prettier-plugin-pkg": "^0.17.1",
-    "stylelint": "^15.10.1",
+    "stylelint": "^15.10.2",
     "stylelint-config-clean-order": "^5.0.1",
     "stylelint-config-prettier": "^9.0.5",
     "stylelint-config-standard": "^34.0.0",
-    "turbo": "^1.10.8"
+    "turbo": "^1.10.9"
   },
   "browserslist": {
     "production": [
