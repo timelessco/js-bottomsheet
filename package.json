@@ -46,7 +46,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.0.2",
     "eslint": "^8.44.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "gacp": "^3.0.3",
