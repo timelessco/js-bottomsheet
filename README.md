@@ -23,9 +23,29 @@ A pure Js snappable, scrollable, customisable bottomsheet!
 
 npm:
 
+bottomsheet:
 ```
 npm i js-bottomsheet
 ```
+
+anime js:
+
+```
+npm install animejs --save
+```
+
+cdn:
+
+bottomsheet:
+```
+  <script src="https://cdn.jsdelivr.net/npm/js-bottomsheet@1.2.5/lib/BottomSheet.umd.js"></script>
+```
+  
+animejs:
+```
+  <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.min.js"></script>
+```
+
 
 ## Usage
 
@@ -434,8 +454,8 @@ let bottomsheet1 = BottomSheet({
 
 ### destroy
 
-"When no longer needed, the event listeners can be removed from the triggers
-using this method."
+When no longer needed, the event listeners can be removed from the triggers
+using this method.
 
 eg:
 
