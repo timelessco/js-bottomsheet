@@ -103,8 +103,8 @@ importers:
   packages/js-bottomsheet:
     dependencies:
       '@use-gesture/vanilla':
-        specifier: ^10.2.27
-        version: 10.2.27
+        specifier: ^10.3.0
+        version: 10.3.0
       animejs:
         specifier: ^3.2.1
         version: 3.2.1
@@ -2335,14 +2335,14 @@ packages:
     resolution: {integrity: sha512-cJRQXpObxfNKkFAZbJl2yjWtJCqELQIdShsogr1d2MilP8dKD9TE/nEKHkJgUNHdGKCQaf9HbIynuV2csLGVLg==}
     dev: true
 
-  /@use-gesture/core@10.2.27:
-    resolution: {integrity: sha512-V4XV7hn9GAD2MYu8yBBVi5iuWBsAMfjPRMsEVzoTNGYH72tf0kFP+OKqGKc8YJFQIJx6yj+AOqxmEHOmx2/MEA==}
+  /@use-gesture/core@10.3.0:
+    resolution: {integrity: sha512-rh+6MND31zfHcy9VU3dOZCqGY511lvGcfyJenN4cWZe0u1BH6brBpBddLVXhF2r4BMqWbvxfsbL7D287thJU2A==}
     dev: false
 
-  /@use-gesture/vanilla@10.2.27:
-    resolution: {integrity: sha512-K/9bpGgEm5mqFsWmMCEIJyBhJ/cgC52oRgQTsM+JTxNGe5Vz9mvecH9MaSuyItXRlvOy2nbJqaK+h/TGRbparA==}
+  /@use-gesture/vanilla@10.3.0:
+    resolution: {integrity: sha512-hehZWLaNyNc+TWAbhJpj84yumD8ZBp/eet6HGg3xztPcchuNNTGEu5LEEdSg69SXHzS7exWE6j5VnsZ3VXVFxQ==}
     dependencies:
-      '@use-gesture/core': 10.2.27
+      '@use-gesture/core': 10.3.0
     dev: false
 
   /@vivaxy/git@4.2.1:
