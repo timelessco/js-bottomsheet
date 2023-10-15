@@ -9,28 +9,28 @@ importers:
   .:
     devDependencies:
       '@babel/core':
-        specifier: ^7.22.20
+        specifier: ^7.23.2
         version: 7.23.2
       '@babel/eslint-parser':
         specifier: ^7.22.15
         version: 7.22.15(@babel/core@7.23.2)(eslint@8.51.0)
       '@babel/preset-env':
-        specifier: ^7.22.20
+        specifier: ^7.23.2
         version: 7.23.2(@babel/core@7.23.2)
       '@changesets/cli':
         specifier: ^2.26.2
         version: 2.26.2
       '@commitlint/cli':
-        specifier: ^17.7.2
+        specifier: ^17.8.0
         version: 17.8.0
       '@commitlint/config-conventional':
-        specifier: ^17.7.0
+        specifier: ^17.8.0
         version: 17.8.0
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.1.1
         version: 4.1.1(prettier@2.8.8)
       eslint:
-        specifier: ^8.50.0
+        specifier: ^8.51.0
         version: 8.51.0
       eslint-config-airbnb-base:
         specifier: ^15.0.0
