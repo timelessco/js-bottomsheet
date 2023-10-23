@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.DEFAULT_NODE_VERSION }}
 
@@ -57,7 +57,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.DEFAULT_NODE_VERSION }}
 
@@ -101,7 +101,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.DEFAULT_NODE_VERSION }}
 
@@ -142,7 +142,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.DEFAULT_NODE_VERSION }}
 
