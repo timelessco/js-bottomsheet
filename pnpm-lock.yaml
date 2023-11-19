@@ -30,7 +30,7 @@ importers:
         specifier: ^4.1.1
         version: 4.1.1(prettier@2.8.8)
       eslint:
-        specifier: ^8.53.0
+        specifier: ^8.54.0
         version: 8.54.0
       eslint-config-airbnb-base:
         specifier: ^15.0.0
