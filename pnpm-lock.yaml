@@ -106,8 +106,8 @@ importers:
         specifier: ^10.3.0
         version: 10.3.0
       animejs:
-        specifier: ^3.2.1
-        version: 3.2.1
+        specifier: ^3.2.2
+        version: 3.2.2
     devDependencies:
       vite:
         specifier: ^5.0.4
@@ -2497,8 +2497,8 @@ packages:
       uri-js: 4.4.1
     dev: true
 
-  /animejs@3.2.1:
-    resolution: {integrity: sha512-sWno3ugFryK5nhiDm/2BKeFCpZv7vzerWUcUPyAZLDhMek3+S/p418ldZJbJXo5ZUOpfm2kP2XRO4NJcULMy9A==}
+  /animejs@3.2.2:
+    resolution: {integrity: sha512-Ao95qWLpDPXXM+WrmwcKbl6uNlC5tjnowlaRYtuVDHHoygjtIPfDUoK9NthrlZsQSKjZXlmji2TrBUAVbiH0LQ==}
     dev: false
 
   /ansi-align@3.0.1:
