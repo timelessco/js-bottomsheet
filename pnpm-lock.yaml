@@ -69,7 +69,7 @@ importers:
         specifier: ^16.1.0
         version: 16.1.0(typescript@5.3.3)
       stylelint-config-clean-order:
-        specifier: ^5.2.0
+        specifier: ^5.4.0
         version: 5.4.0(stylelint@16.1.0)
       stylelint-config-prettier:
         specifier: ^9.0.5
