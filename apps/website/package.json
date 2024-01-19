@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "browserslist-to-esbuild": "^1.2.0",
-    "vite": "^4.5.1",
+    "vite": "^4.5.2",
     "vite-plugin-top-level-await": "^1.4.1"
   },
   "browserslist": {
