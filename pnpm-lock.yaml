@@ -78,7 +78,7 @@ importers:
         specifier: ^36.0.0
         version: 36.0.0(stylelint@16.2.1)
       turbo:
-        specifier: ^1.11.3
+        specifier: ^1.12.2
         version: 1.12.2
 
   apps/website:
