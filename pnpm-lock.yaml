@@ -9,13 +9,13 @@ importers:
   .:
     devDependencies:
       '@babel/core':
-        specifier: ^7.23.9
+        specifier: ^7.24.0
         version: 7.24.0
       '@babel/eslint-parser':
         specifier: ^7.23.10
         version: 7.23.10(@babel/core@7.24.0)(eslint@8.57.0)
       '@babel/preset-env':
-        specifier: ^7.23.9
+        specifier: ^7.24.0
         version: 7.24.0(@babel/core@7.24.0)
       '@changesets/cli':
         specifier: ^2.27.1
