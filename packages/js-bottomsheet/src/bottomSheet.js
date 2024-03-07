@@ -196,9 +196,6 @@ function BottomSheet(props) {
         opacity: 0,
       });
     }, 30);
-    setTimeout(() => {
-      cleanUp();
-    }, 400);
     hideOverlay(overlay);
     onClose();
   }
@@ -909,23 +906,5 @@ function BottomSheet(props) {
   };
   return self;
 }
-// export async function replaceInnerContent(bottomsheetID, content) {
-//   content = typeof content !== "string" ? await content : content;
-//   let draggableItem;
-//   if (content && bottomsheetID && document.getElementById(`${bottomsheetID}`)) {
-//     draggableItem = document.getElementById(`${bottomsheetID}`).children[0];
-//     document.getElementById(`${bottomsheetID}`).innerHTML = "";
-//     if (
-//       draggableItem &&
-//       (draggableItem?.getAttribute("data-draggable") ||
-//         draggableItem.children[0] instanceof SVGElement)
-//     ) {
-//       document.getElementById(`${bottomsheetID}`).appendChild(draggableItem);
-//     }
-//     document
-//       .getElementById(`${bottomsheetID}`)
-//       .insertAdjacentHTML("beforeend", content);
-//   }
-// }
 
 export default BottomSheet;
