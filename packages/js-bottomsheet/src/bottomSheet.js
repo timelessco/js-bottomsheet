@@ -56,7 +56,6 @@ function BottomSheet(props) {
     footerContent = ``,
     resizeHoverEffect = false,
   } = props;
-
   let { content = "" } = props;
   let lastSetSnapPoint;
   let innerHt = window.innerHeight;
@@ -134,12 +133,12 @@ function BottomSheet(props) {
         });
       } else {
         targetBottomSheet.style.top = "50%";
-        targetBottomSheet.style.transform = `translateX(${
-          modalPosition[0]
-        }%) translateY(${modalPosition[1] + 10}%)`;
+        targetBottomSheet.style.transform = `translateX(${-modalPosition[0]}%) translateY(${
+          -modalPosition[1] + 10
+        }%)`;
 
         anime({
-          translateY: modalPosition[1],
+          translateY: -modalPosition[1],
           targets: targetBottomSheet,
           opacity: 1,
           easing: springConfig,

@@ -5,9 +5,9 @@
   // Editor Visuals
   "editor.renderLineHighlight": "all",
   "editor.minimap.enabled": false,
-  "editor.padding.top": 10,
+  "editor.padding.top": 178,
   "editor.tabSize": 2,
-  "editor.rulers": [80, 100, 120],
+  "editor.rulers": [80, 196, 124],
   "editor.wordWrap": "bounded",
   "editor.wordWrapColumn": 120,
   "editor.guides.bracketPairs": true,
@@ -15,7 +15,7 @@
   // Editor cursor
   "editor.cursorWidth": 5,
   "editor.cursorBlinking": "solid",
-  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.cursorSmoothCaretAnimation": "off",
 
   // Editor Indents
   "editor.renderWhitespace": "all",
@@ -25,12 +25,9 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": false,
   "editor.codeActionsOnSave": {
-    "source.addMissingImports": true,
-    // "source.organizeImports": true,
-    // "source.sortImports": true,
-    // "source.fixAll": true
-    "source.fixAll.eslint": true,
-    "source.fixAll.stylelint": true
+    "source.addMissingImports": "explicit",
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
 
