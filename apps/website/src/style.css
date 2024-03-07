@@ -509,7 +509,6 @@ button:focus-visible {
 }
 
 .flex {
-  overflow: scroll;
   display: flex;
   align-items: center;
   justify-content: space-between;
