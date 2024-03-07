@@ -71,6 +71,8 @@ function BottomSheet(props) {
     ? document?.querySelector(`#${targetid}`)
     : "";
 
+  let flag = 0;
+
   let currentSnapPoint = getCurrentSnapPoint(targetBottomSheet);
   const springConfig = `spring(1,100,24,15)`;
   const sideSheetSpringConfig = `spring(1,100,20,12)`;
@@ -433,7 +435,6 @@ function BottomSheet(props) {
       overlay,
     );
   }
-  const fl = 0;
   function handleSnapPoints(
     newBottomSheet,
     minSnapPoint,
@@ -443,6 +444,7 @@ function BottomSheet(props) {
     vy,
     offset,
     dy,
+    cancel,
   ) {
     let actualOffset = offset[1];
     if (maxSnapPoint === null) {
@@ -458,13 +460,15 @@ function BottomSheet(props) {
         value = actualOffset;
       }
       if (active) {
+        flag += 1;
         // anime({
         //   targets: newBottomSheet,
         //   translateY: `${value}px`,
-        //   easing: springConfig,
+        //   easing: `cubicBezier(0.42, 0.0, 1.0, 1.0)`,
         //   duration: 0,
         // });
-        newBottomSheet.style.transform = `translateY(${value}px)`;
+        if (flag === 1) cancel();
+        else newBottomSheet.style.transform = `translateY(${value}px)`;
       }
 
       if (!active) {
@@ -484,6 +488,10 @@ function BottomSheet(props) {
             lastSnapPoint,
             dy,
           );
+          flag = 0;
+          // setTimeout(() => {
+          //   flag = 0;
+          // }, 2000);
         }
       }
     } else {
@@ -499,13 +507,16 @@ function BottomSheet(props) {
         value = actualOffset;
       }
       if (active) {
+        flag += 1;
         // anime({
         //   targets: newBottomSheet,
         //   translateY: `${value}px`,
-        //   easing: springConfig,
+        //   easing: `cubicBezier(0.42, 0.0, 1.0, 1.0)`,
         //   duration: 0,
         // });
-        newBottomSheet.style.transform = `translateY(${value}px)`;
+        console.log(flag, "lkm");
+        if (flag === 1) cancel();
+        else newBottomSheet.style.transform = `translateY(${value}px)`;
       }
       if (!active) {
         if (
@@ -528,6 +539,7 @@ function BottomSheet(props) {
             false,
             overlay,
           );
+          flag = 0;
         }
       }
     }
@@ -551,6 +563,7 @@ function BottomSheet(props) {
             distance: [, dy],
             target,
             direction,
+            cancel,
           }) => {
             const minSnapPoint = 0;
             const maxSnapPoint = Infinity;
@@ -561,6 +574,7 @@ function BottomSheet(props) {
                 document.querySelector(`#${draggableId}`).contains(target)
               ) {
                 makeDraggable(targetBottomSheet);
+                // if (flag === 0 || !active)
                 handleSnapPoints(
                   targetBottomSheet,
                   minSnapPoint,
@@ -570,6 +584,7 @@ function BottomSheet(props) {
                   vy,
                   offset,
                   dy,
+                  cancel,
                 );
 
                 if (lastSetSnapPoint >= innerHt) {
@@ -586,6 +601,7 @@ function BottomSheet(props) {
                 makeScrollable(targetBottomSheet);
               } else {
                 makeDraggable(targetBottomSheet);
+                // if (flag === 0 || !active)
                 handleSnapPoints(
                   targetBottomSheet,
                   minSnapPoint,
@@ -595,6 +611,7 @@ function BottomSheet(props) {
                   vy,
                   offset,
                   dy,
+                  cancel,
                 );
               }
             } else if (
@@ -611,6 +628,7 @@ function BottomSheet(props) {
             } else {
               if (targetBottomSheet.scrollTop === 0)
                 makeDraggable(targetBottomSheet);
+              // if (flag === 0 || !active)
               handleSnapPoints(
                 targetBottomSheet,
                 null,
@@ -620,6 +638,7 @@ function BottomSheet(props) {
                 vy,
                 offset,
                 dy,
+                cancel,
               );
             }
           },
