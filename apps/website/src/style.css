@@ -1151,6 +1151,7 @@ img.x-icon {
 }
 
 .overlay.display {
+  z-index: 200;
   display: block;
   opacity: 0;
 }
