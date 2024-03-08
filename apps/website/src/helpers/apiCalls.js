@@ -4,7 +4,7 @@ export async function fetchAllShows() {
   )
     .then(res => res.json())
     .then(async json => {
-      const res = json.data[0].shows;
+      const res = json.data[1].shows;
       // .concat(json.data[7].shows);
       return res;
     });
