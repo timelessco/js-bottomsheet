@@ -1,6 +1,5 @@
 import BottomSheet from "js-bottomsheet";
 
-// eslint-disable-next-line import/no-unresolved
 import "js-bottomsheet/bottomsheet.css";
 import "scroll-snap-slider";
 import { fetchAllShows, getIndividualShows } from "./helpers/apiCalls";
