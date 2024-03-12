@@ -102,7 +102,6 @@ a:hover {
 }
 
 .bottomsheet {
-  z-index: 150 !important;
   font-family: "Inter V", sans-serif;
   border-radius: 14px 14px 0 0;
 }
