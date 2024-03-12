@@ -12,6 +12,7 @@
     "packages/*",
     "apps/*"
   ],
+  "packageManager": "pnpm@8.15.4",
   "keywords": [
     "bottomsheet",
     "js-bottomsheet",
