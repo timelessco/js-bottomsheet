@@ -388,10 +388,7 @@ button {
 .linear-grad {
   position: absolute;
   z-index: 10;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
 
   display: none;
 
@@ -584,10 +581,7 @@ input {
 
 .blur {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
 
   width: 100%;
   height: 100%;
@@ -652,6 +646,7 @@ input {
 .description {
   overflow: hidden;
   display: -webkit-box;
+  -webkit-box-orient: vertical;
 
   margin-top: 24px;
   margin-bottom: 24px;
@@ -664,13 +659,13 @@ input {
   letter-spacing: 0.025em;
   white-space: wrap;
 
-  -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
 }
 
 .cast-names {
   overflow: hidden;
   display: -webkit-box;
+  -webkit-box-orient: vertical;
 
   margin-top: 24px;
   margin-bottom: 24px;
@@ -683,7 +678,6 @@ input {
   letter-spacing: 0.025em;
   white-space: wrap;
 
-  -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
@@ -1107,10 +1101,7 @@ img.x-icon {
 .overlay {
   position: absolute;
   z-index: 100;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  inset: 0;
 
   height: 100%;
 
@@ -1245,7 +1236,7 @@ iframe {
   display: none;
 }
 
-@media screen and (min-width: 700px) {
+@media screen and (width >= 700px) {
   .universal {
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
