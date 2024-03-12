@@ -5,9 +5,9 @@
   // Editor Visuals
   "editor.renderLineHighlight": "all",
   "editor.minimap.enabled": false,
-  "editor.padding.top": 178,
+  "editor.padding.top": 10,
   "editor.tabSize": 2,
-  "editor.rulers": [80, 196, 124],
+  "editor.rulers": [80, 100, 120],
   "editor.wordWrap": "bounded",
   "editor.wordWrapColumn": 120,
   "editor.guides.bracketPairs": true,
