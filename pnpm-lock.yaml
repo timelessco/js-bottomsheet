@@ -21,13 +21,13 @@ importers:
         specifier: ^2.27.1
         version: 2.27.1
       '@commitlint/cli':
-        specifier: ^19.0.3
+        specifier: ^19.2.0
         version: 19.2.0(@types/node@20.11.28)(typescript@5.4.2)
       '@commitlint/config-conventional':
-        specifier: ^19.0.3
+        specifier: ^19.1.0
         version: 19.1.0
       '@ianvs/prettier-plugin-sort-imports':
-        specifier: ^4.1.1
+        specifier: ^4.2.1
         version: 4.2.1(prettier@2.8.8)
       eslint:
         specifier: ^8.57.0
