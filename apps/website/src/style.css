@@ -740,6 +740,8 @@ input {
 
 #maps-1,
 #recents-sheet {
+  z-index: 999;
+
   width: 100%;
   max-width: -webkit-fill-available;
 
