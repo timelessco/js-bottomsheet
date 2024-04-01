@@ -60,7 +60,7 @@
     "stylelint": "^16.3.1",
     "stylelint-config-clean-order": "^5.4.1",
     "stylelint-config-standard": "^36.0.0",
-    "turbo": "^1.13.0"
+    "turbo": "^1.13.1"
   },
   "browserslist": {
     "production": [
