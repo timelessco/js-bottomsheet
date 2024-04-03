@@ -38,9 +38,9 @@
     "test": "turbo run test"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.3",
+    "@babel/core": "^7.24.4",
     "@babel/eslint-parser": "^7.24.1",
-    "@babel/preset-env": "^7.24.3",
+    "@babel/preset-env": "^7.24.4",
     "@changesets/cli": "^2.27.1",
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
@@ -58,7 +58,7 @@
     "prettier": "^2.8.8",
     "prettier-plugin-pkg": "^0.17.1",
     "stylelint": "^16.3.1",
-    "stylelint-config-clean-order": "^5.4.1",
+    "stylelint-config-clean-order": "^5.4.2",
     "stylelint-config-standard": "^36.0.0",
     "turbo": "^1.13.2"
   },
