@@ -42,7 +42,7 @@
     "@babel/eslint-parser": "^7.24.1",
     "@babel/preset-env": "^7.24.4",
     "@changesets/cli": "^2.27.1",
-    "@commitlint/cli": "^19.2.2",
+    "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
     "eslint": "^8.57.0",
@@ -57,7 +57,7 @@
     "pinst": "^3.0.0",
     "prettier": "^2.8.8",
     "prettier-plugin-pkg": "^0.17.1",
-    "stylelint": "^16.3.1",
+    "stylelint": "^16.4.0",
     "stylelint-config-clean-order": "^5.4.2",
     "stylelint-config-standard": "^36.0.0",
     "turbo": "^1.13.3"
