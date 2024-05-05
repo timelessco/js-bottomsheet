@@ -57,7 +57,7 @@
     "pinst": "^3.0.0",
     "prettier": "^2.8.8",
     "prettier-plugin-pkg": "^0.17.1",
-    "stylelint": "^16.4.0",
+    "stylelint": "^16.5.0",
     "stylelint-config-clean-order": "^5.4.2",
     "stylelint-config-standard": "^36.0.0",
     "turbo": "^1.13.3"
