@@ -58,7 +58,7 @@
     "prettier": "^2.8.8",
     "prettier-plugin-pkg": "^0.17.1",
     "stylelint": "^16.6.1",
-    "stylelint-config-clean-order": "^5.4.2",
+    "stylelint-config-clean-order": "^6.0.0",
     "stylelint-config-standard": "^36.0.0",
     "turbo": "^1.13.4"
   },
