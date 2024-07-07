@@ -54,7 +54,7 @@ importers:
         specifier: ^15.2.7
         version: 15.2.7
       npm-run-all2:
-        specifier: ^6.2.1
+        specifier: ^6.2.2
         version: 6.2.2
       pinst:
         specifier: ^3.0.0
@@ -69,7 +69,7 @@ importers:
         specifier: ^16.6.1
         version: 16.6.1(typescript@5.5.3)
       stylelint-config-clean-order:
-        specifier: ^6.0.0
+        specifier: ^6.1.0
         version: 6.1.0(stylelint@16.6.1)
       stylelint-config-standard:
         specifier: ^36.0.1
