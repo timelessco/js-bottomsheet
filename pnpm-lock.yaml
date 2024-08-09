@@ -94,8 +94,8 @@ importers:
         specifier: ^4.5.3
         version: 4.5.3(@types/node@22.1.0)
       vite-plugin-top-level-await:
-        specifier: ^1.4.3
-        version: 1.4.3(vite@4.5.3)
+        specifier: ^1.4.4
+        version: 1.4.4(vite@4.5.3)
 
   packages/js-bottomsheet:
     dependencies:
@@ -6001,8 +6001,8 @@ packages:
     hasBin: true
     dev: true
 
-  /vite-plugin-top-level-await@1.4.3(vite@4.5.3):
-    resolution: {integrity: sha512-iMynzfuuBkVMtmtCgwCicJpGWFu4o1jGDXC8jC5rvGFY+dSCCYPYAtwqVGQwihpFUIBvMlrYge+JOkFgiGP7Aw==}
+  /vite-plugin-top-level-await@1.4.4(vite@4.5.3):
+    resolution: {integrity: sha512-QyxQbvcMkgt+kDb12m2P8Ed35Sp6nXP+l8ptGrnHV9zgYDUpraO0CPdlqLSeBqvY2DToR52nutDG7mIHuysdiw==}
     peerDependencies:
       vite: '>=2.8'
     dependencies:
