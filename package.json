@@ -52,7 +52,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "gacp": "^3.0.3",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
+    "lint-staged": "^15.2.11",
     "npm-run-all2": "^7.0.1",
     "pinst": "^3.0.0",
     "prettier": "^2.8.8",
