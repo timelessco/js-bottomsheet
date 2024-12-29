@@ -51,7 +51,7 @@ importers:
         specifier: ^9.1.7
         version: 9.1.7
       lint-staged:
-        specifier: ^15.2.11
+        specifier: ^15.3.0
         version: 15.3.0
       npm-run-all2:
         specifier: ^7.0.2
