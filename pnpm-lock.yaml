@@ -69,8 +69,8 @@ importers:
         specifier: ^16.12.0
         version: 16.12.0(typescript@5.7.2)
       stylelint-config-clean-order:
-        specifier: ^6.1.0
-        version: 6.1.0(stylelint@16.12.0)
+        specifier: ^7.0.0
+        version: 7.0.0(stylelint@16.12.0)
       stylelint-config-standard:
         specifier: ^36.0.1
         version: 36.0.1(stylelint@16.12.0)
@@ -5490,8 +5490,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /stylelint-config-clean-order@6.1.0(stylelint@16.12.0):
-    resolution: {integrity: sha512-Xe1U0stw57Evdcx+7q7XYAniyE7XAKv/bwfH9LcsFCcKTPZflzTiJLXGkQUsPMlA4cfMyxEebqm5bRN2doTD3w==}
+  /stylelint-config-clean-order@7.0.0(stylelint@16.12.0):
+    resolution: {integrity: sha512-R28w1xNliIbem3o+VIrNjAU8cMgxrGlDoXVqWW7lJ1OvSDsmNGj5aKSW6Xm7i5PK4E99T3Hs19BJFni5IbE56g==}
     peerDependencies:
       stylelint: '>=14'
     dependencies:
