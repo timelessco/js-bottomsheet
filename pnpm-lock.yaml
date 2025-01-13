@@ -27,8 +27,8 @@ importers:
         specifier: ^19.6.0
         version: 19.6.0
       '@ianvs/prettier-plugin-sort-imports':
-        specifier: ^4.4.0
-        version: 4.4.0(prettier@2.8.8)
+        specifier: ^4.4.1
+        version: 4.4.1(prettier@2.8.8)
       eslint:
         specifier: ^8.57.1
         version: 8.57.1
@@ -66,14 +66,14 @@ importers:
         specifier: ^0.17.1
         version: 0.17.1(prettier@2.8.8)
       stylelint:
-        specifier: ^16.13.0
-        version: 16.13.0(typescript@5.7.3)
+        specifier: ^16.13.1
+        version: 16.13.1(typescript@5.7.3)
       stylelint-config-clean-order:
         specifier: ^7.0.0
-        version: 7.0.0(stylelint@16.13.0)
+        version: 7.0.0(stylelint@16.13.1)
       stylelint-config-standard:
         specifier: ^37.0.0
-        version: 37.0.0(stylelint@16.13.0)
+        version: 37.0.0(stylelint@16.13.1)
       turbo:
         specifier: ^1.13.4
         version: 1.13.4
@@ -1841,8 +1841,8 @@ packages:
     deprecated: Use @eslint/object-schema instead
     dev: true
 
-  /@ianvs/prettier-plugin-sort-imports@4.4.0(prettier@2.8.8):
-    resolution: {integrity: sha512-f4/e+/ANGk3tHuwRW0uh2YuBR50I4h1ZjGQ+5uD8sWfinHTivQsnieR5cz24t8M6Vx4rYvZ5v/IEKZhYpzQm9Q==}
+  /@ianvs/prettier-plugin-sort-imports@4.4.1(prettier@2.8.8):
+    resolution: {integrity: sha512-F0/Hrcfpy8WuxlQyAWJTEren/uxKhYonOGY4OyWmwRdeTvkh9mMSCxowZLjNkhwi/2ipqCgtXwwOk7tW0mWXkA==}
     peerDependencies:
       '@vue/compiler-sfc': 2.7.x || 3.x
       prettier: 2 || 3
@@ -3882,8 +3882,8 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
-  /ignore@7.0.0:
-    resolution: {integrity: sha512-lcX8PNQygAa22u/0BysEY8VhaFRzlOkvdlKczDPnJvrkJD1EuqzEky5VYYKM2iySIuaVIDv9N190DfSreSLw2A==}
+  /ignore@7.0.1:
+    resolution: {integrity: sha512-D1gVletsbVOoiXF963rgZnfobGAbq7Lb+dz3fcBmlOmZg6hHkpbycLqL8PLNB8f4GVv6dOVYwhPL/r7hwiH0Fw==}
     engines: {node: '>= 4'}
     dev: true
 
@@ -5555,46 +5555,46 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /stylelint-config-clean-order@7.0.0(stylelint@16.13.0):
+  /stylelint-config-clean-order@7.0.0(stylelint@16.13.1):
     resolution: {integrity: sha512-R28w1xNliIbem3o+VIrNjAU8cMgxrGlDoXVqWW7lJ1OvSDsmNGj5aKSW6Xm7i5PK4E99T3Hs19BJFni5IbE56g==}
     peerDependencies:
       stylelint: '>=14'
     dependencies:
-      stylelint: 16.13.0(typescript@5.7.3)
-      stylelint-order: 6.0.4(stylelint@16.13.0)
+      stylelint: 16.13.1(typescript@5.7.3)
+      stylelint-order: 6.0.4(stylelint@16.13.1)
     dev: true
 
-  /stylelint-config-recommended@15.0.0(stylelint@16.13.0):
+  /stylelint-config-recommended@15.0.0(stylelint@16.13.1):
     resolution: {integrity: sha512-9LejMFsat7L+NXttdHdTq94byn25TD+82bzGRiV1Pgasl99pWnwipXS5DguTpp3nP1XjvLXVnEJIuYBfsRjRkA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       stylelint: ^16.13.0
     dependencies:
-      stylelint: 16.13.0(typescript@5.7.3)
+      stylelint: 16.13.1(typescript@5.7.3)
     dev: true
 
-  /stylelint-config-standard@37.0.0(stylelint@16.13.0):
+  /stylelint-config-standard@37.0.0(stylelint@16.13.1):
     resolution: {integrity: sha512-+6eBlbSTrOn/il2RlV0zYGQwRTkr+WtzuVSs1reaWGObxnxLpbcspCUYajVQHonVfxVw2U+h42azGhrBvcg8OA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       stylelint: ^16.13.0
     dependencies:
-      stylelint: 16.13.0(typescript@5.7.3)
-      stylelint-config-recommended: 15.0.0(stylelint@16.13.0)
+      stylelint: 16.13.1(typescript@5.7.3)
+      stylelint-config-recommended: 15.0.0(stylelint@16.13.1)
     dev: true
 
-  /stylelint-order@6.0.4(stylelint@16.13.0):
+  /stylelint-order@6.0.4(stylelint@16.13.1):
     resolution: {integrity: sha512-0UuKo4+s1hgQ/uAxlYU4h0o0HS4NiQDud0NAUNI0aa8FJdmYHA5ZZTFHiV5FpmE3071e9pZx5j0QpVJW5zOCUA==}
     peerDependencies:
       stylelint: ^14.0.0 || ^15.0.0 || ^16.0.1
     dependencies:
       postcss: 8.4.49
       postcss-sorting: 8.0.2(postcss@8.4.49)
-      stylelint: 16.13.0(typescript@5.7.3)
+      stylelint: 16.13.1(typescript@5.7.3)
     dev: true
 
-  /stylelint@16.13.0(typescript@5.7.3):
-    resolution: {integrity: sha512-muxVjMhZB8BrDFSKNva0dmvD2tM0o/szrvuZuXYcAnN9a8nQmbGLqNUOemSgumaCMCPQ+0USYyG3hA5vJjUC1Q==}
+  /stylelint@16.13.1(typescript@5.7.3):
+    resolution: {integrity: sha512-691JjSIIcP6f9QJFz0J0/AMG3lupE9RqYAgYCON3wiqp5nQiKqDYIsz321GeTOYNznoRPNh0Mf6VjzP1eBVz/Q==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     dependencies:
@@ -5616,7 +5616,7 @@ packages:
       globby: 11.1.0
       globjoin: 0.1.4
       html-tags: 3.3.1
-      ignore: 7.0.0
+      ignore: 7.0.1
       imurmurhash: 0.1.4
       is-plain-object: 5.0.0
       known-css-properties: 0.35.0
