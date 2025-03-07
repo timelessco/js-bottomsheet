@@ -36,7 +36,7 @@ importers:
         specifier: ^15.0.0
         version: 15.0.0(eslint-plugin-import@2.31.0)(eslint@8.57.1)
       eslint-config-prettier:
-        specifier: ^10.0.3
+        specifier: ^10.1.1
         version: 10.1.1(eslint@8.57.1)
       eslint-plugin-import:
         specifier: ^2.31.0
