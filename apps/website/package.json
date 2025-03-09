@@ -33,7 +33,7 @@
     "scroll-snap-slider": "SamrithaS/scroll-snap-slider"
   },
   "devDependencies": {
-    "browserslist-to-esbuild": "^1.2.0",
+    "browserslist-to-esbuild": "^2.1.1",
     "vite": "^4.5.9",
     "vite-plugin-top-level-await": "^1.5.0"
   },
