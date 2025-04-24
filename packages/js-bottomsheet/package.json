@@ -46,7 +46,7 @@
     "animejs": "^3.2.2"
   },
   "devDependencies": {
-    "vite": "^4.5.9"
+    "vite": "^6.3.3"
   },
   "publishConfig": {
     "access": "public"
