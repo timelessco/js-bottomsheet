@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@use-gesture/vanilla": "^10.3.1",
-    "animejs": "^3.2.2"
+    "animejs": "^4.0.2"
   },
   "devDependencies": {
     "vite": "^4.5.9"
