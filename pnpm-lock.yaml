@@ -12,14 +12,14 @@ importers:
         specifier: ^7.26.9
         version: 7.26.9
       '@babel/eslint-parser':
-        specifier: ^7.26.8
-        version: 7.26.8(@babel/core@7.26.9)(eslint@8.57.1)
+        specifier: ^7.27.0
+        version: 7.27.0(@babel/core@7.26.9)(eslint@8.57.1)
       '@babel/preset-env':
         specifier: ^7.26.9
         version: 7.26.9(@babel/core@7.26.9)
       '@changesets/cli':
-        specifier: ^2.28.1
-        version: 2.28.1
+        specifier: ^2.29.2
+        version: 2.29.2
       '@commitlint/cli':
         specifier: ^19.8.0
         version: 19.8.0(@types/node@22.13.10)(typescript@5.8.2)
@@ -51,8 +51,8 @@ importers:
         specifier: ^9.1.7
         version: 9.1.7
       lint-staged:
-        specifier: ^15.4.3
-        version: 15.4.3
+        specifier: ^15.5.1
+        version: 15.5.1
       npm-run-all2:
         specifier: ^7.0.2
         version: 7.0.2
@@ -63,17 +63,17 @@ importers:
         specifier: ^2.8.8
         version: 2.8.8
       prettier-plugin-pkg:
-        specifier: ^0.17.1
-        version: 0.17.1(prettier@2.8.8)
+        specifier: ^0.19.0
+        version: 0.19.0(prettier@2.8.8)
       stylelint:
-        specifier: ^16.15.0
-        version: 16.15.0(typescript@5.8.2)
+        specifier: ^16.19.1
+        version: 16.19.1(typescript@5.8.2)
       stylelint-config-clean-order:
         specifier: ^7.0.0
-        version: 7.0.0(stylelint@16.15.0)
+        version: 7.0.0(stylelint@16.19.1)
       stylelint-config-standard:
         specifier: ^37.0.0
-        version: 37.0.0(stylelint@16.15.0)
+        version: 37.0.0(stylelint@16.19.1)
       turbo:
         specifier: ^1.13.4
         version: 1.13.4
@@ -157,8 +157,8 @@ packages:
       - supports-color
     dev: true
 
-  /@babel/eslint-parser@7.26.8(@babel/core@7.26.9)(eslint@8.57.1):
-    resolution: {integrity: sha512-3tBctaHRW6xSub26z7n8uyOTwwUsCdvIug/oxBH9n6yCO5hMj2vwDJAo7RbBMKrM7P+W2j61zLKviJQFGOYKMg==}
+  /@babel/eslint-parser@7.27.0(@babel/core@7.26.9)(eslint@8.57.1):
+    resolution: {integrity: sha512-dtnzmSjXfgL/HDgMcmsLSzyGbEosi4DrGWoCNfuI+W4IkVJw6izpTe7LtOdwAXnkDqw5yweboYCTkM2rQizCng==}
     engines: {node: ^10.13.0 || ^12.13.0 || >=14.0.0}
     peerDependencies:
       '@babel/core': ^7.11.0
@@ -1170,12 +1170,12 @@ packages:
       '@babel/helper-validator-identifier': 7.25.9
     dev: true
 
-  /@changesets/apply-release-plan@7.0.10:
-    resolution: {integrity: sha512-wNyeIJ3yDsVspYvHnEz1xQDq18D9ifed3lI+wxRQRK4pArUcuHgCTrHv0QRnnwjhVCQACxZ+CBih3wgOct6UXw==}
+  /@changesets/apply-release-plan@7.0.12:
+    resolution: {integrity: sha512-EaET7As5CeuhTzvXTQCRZeBUcisoYPDDcXvgTE/2jmmypKp0RC7LxKj/yzqeh/1qFTZI7oDGFcL1PHRuQuketQ==}
     dependencies:
       '@changesets/config': 3.1.1
       '@changesets/get-version-range-type': 0.4.0
-      '@changesets/git': 3.0.2
+      '@changesets/git': 3.0.4
       '@changesets/should-skip-package': 0.1.2
       '@changesets/types': 6.1.0
       '@manypkg/get-packages': 1.1.3
@@ -1205,21 +1205,21 @@ packages:
       '@changesets/types': 6.1.0
     dev: true
 
-  /@changesets/cli@2.28.1:
-    resolution: {integrity: sha512-PiIyGRmSc6JddQJe/W1hRPjiN4VrMvb2VfQ6Uydy2punBioQrsxppyG5WafinKcW1mT0jOe/wU4k9Zy5ff21AA==}
+  /@changesets/cli@2.29.2:
+    resolution: {integrity: sha512-vwDemKjGYMOc0l6WUUTGqyAWH3AmueeyoJa1KmFRtCYiCoY5K3B68ErYpDB6H48T4lLI4czum4IEjh6ildxUeg==}
     hasBin: true
     dependencies:
-      '@changesets/apply-release-plan': 7.0.10
+      '@changesets/apply-release-plan': 7.0.12
       '@changesets/assemble-release-plan': 6.0.6
       '@changesets/changelog-git': 0.2.1
       '@changesets/config': 3.1.1
       '@changesets/errors': 0.2.0
       '@changesets/get-dependents-graph': 2.1.3
-      '@changesets/get-release-plan': 4.0.8
-      '@changesets/git': 3.0.2
+      '@changesets/get-release-plan': 4.0.10
+      '@changesets/git': 3.0.4
       '@changesets/logger': 0.1.1
       '@changesets/pre': 2.0.2
-      '@changesets/read': 0.6.3
+      '@changesets/read': 0.6.5
       '@changesets/should-skip-package': 0.1.2
       '@changesets/types': 6.1.0
       '@changesets/write': 0.4.0
@@ -1266,13 +1266,13 @@ packages:
       semver: 7.7.1
     dev: true
 
-  /@changesets/get-release-plan@4.0.8:
-    resolution: {integrity: sha512-MM4mq2+DQU1ZT7nqxnpveDMTkMBLnwNX44cX7NSxlXmr7f8hO6/S2MXNiXG54uf/0nYnefv0cfy4Czf/ZL/EKQ==}
+  /@changesets/get-release-plan@4.0.10:
+    resolution: {integrity: sha512-CCJ/f3edYaA3MqoEnWvGGuZm0uMEMzNJ97z9hdUR34AOvajSwySwsIzC/bBu3+kuGDsB+cny4FljG8UBWAa7jg==}
     dependencies:
       '@changesets/assemble-release-plan': 6.0.6
       '@changesets/config': 3.1.1
       '@changesets/pre': 2.0.2
-      '@changesets/read': 0.6.3
+      '@changesets/read': 0.6.5
       '@changesets/types': 6.1.0
       '@manypkg/get-packages': 1.1.3
     dev: true
@@ -1281,8 +1281,8 @@ packages:
     resolution: {integrity: sha512-hwawtob9DryoGTpixy1D3ZXbGgJu1Rhr+ySH2PvTLHvkZuQ7sRT4oQwMh0hbqZH1weAooedEjRsbrWcGLCeyVQ==}
     dev: true
 
-  /@changesets/git@3.0.2:
-    resolution: {integrity: sha512-r1/Kju9Y8OxRRdvna+nxpQIsMsRQn9dhhAZt94FLDeu0Hij2hnOozW8iqnHBgvu+KdnJppCveQwK4odwfw/aWQ==}
+  /@changesets/git@3.0.4:
+    resolution: {integrity: sha512-BXANzRFkX+XcC1q/d27NKvlJ1yf7PSAgi8JG6dt8EfbHFHi4neau7mufcSca5zRhwOL8j9s6EqsxmT+s+/E6Sw==}
     dependencies:
       '@changesets/errors': 0.2.0
       '@manypkg/get-packages': 1.1.3
@@ -1313,10 +1313,10 @@ packages:
       fs-extra: 7.0.1
     dev: true
 
-  /@changesets/read@0.6.3:
-    resolution: {integrity: sha512-9H4p/OuJ3jXEUTjaVGdQEhBdqoT2cO5Ts95JTFsQyawmKzpL8FnIeJSyhTDPW1MBRDnwZlHFEM9SpPwJDY5wIg==}
+  /@changesets/read@0.6.5:
+    resolution: {integrity: sha512-UPzNGhsSjHD3Veb0xO/MwvasGe8eMyNrR/sT9gR8Q3DhOQZirgKhhXv/8hVsI0QpPjR004Z9iFxoJU6in3uGMg==}
     dependencies:
-      '@changesets/git': 3.0.2
+      '@changesets/git': 3.0.4
       '@changesets/logger': 0.1.1
       '@changesets/parse': 0.4.1
       '@changesets/types': 6.1.0
@@ -2473,7 +2473,7 @@ packages:
   /cacheable@1.8.9:
     resolution: {integrity: sha512-FicwAUyWnrtnd4QqYAoRlNs44/a1jTL7XDKqm5gJ90wz1DQPlC7U2Rd1Tydpv+E7WAr4sQHuw8Q8M3nZMAyecQ==}
     dependencies:
-      hookified: 1.7.1
+      hookified: 1.8.2
       keyv: 5.3.1
     dev: true
 
@@ -3421,10 +3421,10 @@ packages:
       escape-string-regexp: 1.0.5
     dev: true
 
-  /file-entry-cache@10.0.7:
-    resolution: {integrity: sha512-txsf5fu3anp2ff3+gOJJzRImtrtm/oa9tYLN0iTuINZ++EyVR/nRrg2fKYwvG/pXDofcrvvb0scEbX3NyW/COw==}
+  /file-entry-cache@10.0.8:
+    resolution: {integrity: sha512-FGXHpfmI4XyzbLd3HQ8cbUcsFGohJpZtmQRHr8z8FxxtCe2PcpgIlVLwIgunqjvRmXypBETvwhV4ptJizA+Y1Q==}
     dependencies:
-      flat-cache: 6.1.7
+      flat-cache: 6.1.8
     dev: true
 
   /file-entry-cache@6.0.1:
@@ -3475,12 +3475,12 @@ packages:
       rimraf: 3.0.2
     dev: true
 
-  /flat-cache@6.1.7:
-    resolution: {integrity: sha512-qwZ4xf1v1m7Rc9XiORly31YaChvKt6oNVHuqqZcoED/7O+ToyNVGobKsIAopY9ODcWpEDKEBAbrSOCBHtNQvew==}
+  /flat-cache@6.1.8:
+    resolution: {integrity: sha512-R6MaD3nrJAtO7C3QOuS79ficm2pEAy++TgEUD8ii1LVlbcgZ9DtASLkt9B+RZSFCzm7QHDMlXPsqqB6W2Pfr1Q==}
     dependencies:
       cacheable: 1.8.9
       flatted: 3.3.3
-      hookified: 1.7.1
+      hookified: 1.8.2
     dev: true
 
   /flatted@3.3.3:
@@ -3840,8 +3840,8 @@ packages:
       function-bind: 1.1.2
     dev: true
 
-  /hookified@1.7.1:
-    resolution: {integrity: sha512-OXcdHsXeOiD7OJ5zvWj8Oy/6RCdLwntAX+wUrfemNcMGn6sux4xbEHi2QXwqePYhjQ/yvxxq2MvCRirdlHscBw==}
+  /hookified@1.8.2:
+    resolution: {integrity: sha512-5nZbBNP44sFCDjSoB//0N7m508APCgbQ4mGGo1KJGBYyCKNHfry1Pvd0JVHZIxjdnqn8nFRBAN/eFB6Rk/4w5w==}
     dev: true
 
   /html-tags@3.3.1:
@@ -4360,8 +4360,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /known-css-properties@0.35.0:
-    resolution: {integrity: sha512-a/RAk2BfKk+WFGhhOCAYqSiFLc34k8Mt/6NWRI4joER0EYUzXIcFivjjnoD3+XU1DggLn/tZc3DOAgke7l8a4A==}
+  /known-css-properties@0.36.0:
+    resolution: {integrity: sha512-A+9jP+IUmuQsNdsLdcg6Yt7voiMF/D4K83ew0OpJtpu+l34ef7LaohWV0Rc6KNvzw6ZDizkqfyB5JznZnzuKQA==}
     dev: true
 
   /latest-version@5.1.0:
@@ -4388,8 +4388,8 @@ packages:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
     dev: true
 
-  /lint-staged@15.4.3:
-    resolution: {integrity: sha512-FoH1vOeouNh1pw+90S+cnuoFwRfUD9ijY2GKy5h7HS3OR7JVir2N2xrsa0+Twc1B7cW72L+88geG5cW4wIhn7g==}
+  /lint-staged@15.5.1:
+    resolution: {integrity: sha512-6m7u8mue4Xn6wK6gZvSCQwBvMBR36xfY24nF5bMTf2MHDYG6S3yhJuOgdYVw99hsjyDt2d4z168b3naI8+NWtQ==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     dependencies:
@@ -5024,11 +5024,11 @@ packages:
       fast-diff: 1.3.0
     dev: true
 
-  /prettier-plugin-pkg@0.17.1(prettier@2.8.8):
-    resolution: {integrity: sha512-XPRRMQR5oseJXdfK8kQDj2LCV1UjmTuDlPbbJ8C2WLaATNhdvZLhQO0+NtWnRrQTP+erLR5cVxfcwyqF+3R8SA==}
-    engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
+  /prettier-plugin-pkg@0.19.0(prettier@2.8.8):
+    resolution: {integrity: sha512-wlBvVhAZQ+iOH8/4gWc1SxJbf5++xwKmnFkqHYUsmoQIg6hgdyL1055Z9FOWa6cumqL/QwqdOzY9aH4McdjKyw==}
+    engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      prettier: ^2.0.0
+      prettier: ^3.0.3
     dependencies:
       prettier: 2.8.8
     dev: true
@@ -5570,46 +5570,46 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /stylelint-config-clean-order@7.0.0(stylelint@16.15.0):
+  /stylelint-config-clean-order@7.0.0(stylelint@16.19.1):
     resolution: {integrity: sha512-R28w1xNliIbem3o+VIrNjAU8cMgxrGlDoXVqWW7lJ1OvSDsmNGj5aKSW6Xm7i5PK4E99T3Hs19BJFni5IbE56g==}
     peerDependencies:
       stylelint: '>=14'
     dependencies:
-      stylelint: 16.15.0(typescript@5.8.2)
-      stylelint-order: 6.0.4(stylelint@16.15.0)
+      stylelint: 16.19.1(typescript@5.8.2)
+      stylelint-order: 6.0.4(stylelint@16.19.1)
     dev: true
 
-  /stylelint-config-recommended@15.0.0(stylelint@16.15.0):
+  /stylelint-config-recommended@15.0.0(stylelint@16.19.1):
     resolution: {integrity: sha512-9LejMFsat7L+NXttdHdTq94byn25TD+82bzGRiV1Pgasl99pWnwipXS5DguTpp3nP1XjvLXVnEJIuYBfsRjRkA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       stylelint: ^16.13.0
     dependencies:
-      stylelint: 16.15.0(typescript@5.8.2)
+      stylelint: 16.19.1(typescript@5.8.2)
     dev: true
 
-  /stylelint-config-standard@37.0.0(stylelint@16.15.0):
+  /stylelint-config-standard@37.0.0(stylelint@16.19.1):
     resolution: {integrity: sha512-+6eBlbSTrOn/il2RlV0zYGQwRTkr+WtzuVSs1reaWGObxnxLpbcspCUYajVQHonVfxVw2U+h42azGhrBvcg8OA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       stylelint: ^16.13.0
     dependencies:
-      stylelint: 16.15.0(typescript@5.8.2)
-      stylelint-config-recommended: 15.0.0(stylelint@16.15.0)
+      stylelint: 16.19.1(typescript@5.8.2)
+      stylelint-config-recommended: 15.0.0(stylelint@16.19.1)
     dev: true
 
-  /stylelint-order@6.0.4(stylelint@16.15.0):
+  /stylelint-order@6.0.4(stylelint@16.19.1):
     resolution: {integrity: sha512-0UuKo4+s1hgQ/uAxlYU4h0o0HS4NiQDud0NAUNI0aa8FJdmYHA5ZZTFHiV5FpmE3071e9pZx5j0QpVJW5zOCUA==}
     peerDependencies:
       stylelint: ^14.0.0 || ^15.0.0 || ^16.0.1
     dependencies:
       postcss: 8.5.3
       postcss-sorting: 8.0.2(postcss@8.5.3)
-      stylelint: 16.15.0(typescript@5.8.2)
+      stylelint: 16.19.1(typescript@5.8.2)
     dev: true
 
-  /stylelint@16.15.0(typescript@5.8.2):
-    resolution: {integrity: sha512-OK6Rs7EPdcdmjqiDycadZY4fw3f5/TC1X6/tGjnF3OosbwCeNs7nG+79MCAtjEg7ckwqTJTsku08e0Rmaz5nUw==}
+  /stylelint@16.19.1(typescript@5.8.2):
+    resolution: {integrity: sha512-C1SlPZNMKl+d/C867ZdCRthrS+6KuZ3AoGW113RZCOL0M8xOGpgx7G70wq7lFvqvm4dcfdGFVLB/mNaLFChRKw==}
     engines: {node: '>=18.12.0'}
     hasBin: true
     dependencies:
@@ -5626,7 +5626,7 @@ packages:
       debug: 4.4.0
       fast-glob: 3.3.3
       fastest-levenshtein: 1.0.16
-      file-entry-cache: 10.0.7
+      file-entry-cache: 10.0.8
       global-modules: 2.0.0
       globby: 11.1.0
       globjoin: 0.1.4
@@ -5634,7 +5634,7 @@ packages:
       ignore: 7.0.3
       imurmurhash: 0.1.4
       is-plain-object: 5.0.0
-      known-css-properties: 0.35.0
+      known-css-properties: 0.36.0
       mathml-tag-names: 2.1.3
       meow: 13.2.0
       micromatch: 4.0.8
